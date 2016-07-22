@@ -76,7 +76,10 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
         switch (requestCode){
             case EDITOR_ACTIVITY:
                 if(resultCode == RESULT_OK){
-
+                    if(null != data){
+                        Contributor item =(Contributor) data.getSerializableExtra("item");
+                        Log.i(LOG_TAG, item.toString());
+                    }
                 }
                 break;
             default:

@@ -163,6 +163,10 @@ public class ContributorListFragment extends Fragment implements LoaderManager.L
 
     @Override
     public void addListener(ItemSelectedListener listener) {
+
+        if(null == listener)
+            return;
+
         if (!mListeners.contains(listener)) {
             mListeners.add(listener);
         }
@@ -170,6 +174,10 @@ public class ContributorListFragment extends Fragment implements LoaderManager.L
 
     @Override
     public void notifyListener(ItemSelectedEvent event) {
+
+        if(null == event)
+            return;
+
         for (Object item : mListeners) {
             ((ItemSelectedListener) item).onItemSelected(event);
         }
