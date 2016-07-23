@@ -47,10 +47,14 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        Intent intent = null;
         switch (id) {
             case R.id.action_contributors:
-                Intent intent = new Intent(this, ContributorListActivity.class);
+                intent = new Intent(this, ContributorListActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_settings:
+                intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
             default:

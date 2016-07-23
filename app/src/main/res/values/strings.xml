@@ -11,6 +11,7 @@
     <string name="title_contributor_editor_update">Update Contributor</string>
     <string name="title_save">Save</string>
     <string name="title_delete">Delete</string>
+    <string name="title_settings">Settings</string>
 
     <string name="message_contributor_no_data">No Contributor Available.</string>
 
@@ -21,4 +22,44 @@
     <string name="button_label_delete">Delete</string>
     <string name="button_label_save">Save</string>
     <string name="button_label_back">Cancel</string>
+
+    <string name="validation_currency_mandatory">Currency is mandatory</string>
+    <string name="validation_name_already_exists">Name already exists</string>
+    <string name="validation_name_mandatory">Name is mandatory</string>
+    <string name="validation_exchange_rate_mandatory">Exchange rate must be greater than 0</string>
+    <string name="validation_group_mandatory">Group is mandatory</string>
+    <string name="validation_contributors_mandatory">No contributor selected</string>
+    <string name="validation_categories_mandatory">No category selected</string>
+
+    <string name="log_error_adding_item">Error adding item</string>
+    <string name="log_error_deleting_item">Error deleting item</string>
+    <string name="log_error_updating_item">Error updating item</string>
+
+    <string name="log_info_adding_item">Adding %1$s.</string>
+    <string name="log_info_added_item">Number of %1$s added \'%2$d\', id \'%3$d\'.</string>
+    <string name="log_info_deleting_item">Deleting %1$s \'%2$d\'.</string>
+    <string name="log_info_deleted_item">Number of %1$s deleted \'%2$d\', id \'%3$d\'.</string>
+    <string name="log_info_updating_item">Updating %1$s \'%2$d\'.</string>
+    <string name="log_info_updated_item">Number of %1$s updated \'%2$d\', id \'%3$d\'.</string>
+
+    <string name="log_info_number_deleted_account">Number of deleted account %1$d</string>
+    <string name="log_info_deleting_account">Deleting account with id \'%1$s\'</string>
+    <string name="log_info_number_deleted_associated_contributor">Associated contributor deleted : %1$d</string>
+    <string name="log_info_number_added_associated_contributor">Associated contributor added : %1$d"</string>
+    <string name="log_info_number_deleted_associated_category">Associated category deleted : %1$d</string>
+    <string name="log_info_number_added_associated_category">Associated category added : %1$d"</string>
+
+    <string name="log_info_updating_account">Updating account with id \'%1$s\'</string>
+    <string name="log_info_number_updated_account">Number of updated account %1$d</string>
+
+    <!-- Label for the default currency preference [CHAR LIMIT=30] -->
+    <string name="pref_currency_label">Default Currency</string>
+
+    <!-- Key name for default currency preference in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_default_currency_key" translatable="false">default_currency</string>
+
+    <!-- Value in SharedPreferences for default currency option [CHAR LIMIT=NONE] -->
+    <string name="pref_CAD_currency" translatable="false">CAD</string>
+    <string name="pref_USD_currency" translatable="false">USD</string>
+    <string name="pref_EUR_currency" translatable="false">EUR</string>
 </resources>

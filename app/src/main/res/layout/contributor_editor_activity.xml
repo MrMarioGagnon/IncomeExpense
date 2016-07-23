@@ -7,14 +7,10 @@
     android:fitsSystemWindows="true"
     tools:context="com.mg.incomeexpense.contributor.ContributorEditorActivity">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/contributor_list_fragment_container"
-        android:name="com.mg.incomeexpense.contributor.ContributorEditorFragment"
+        android:id="@+id/contributor_editor_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:layout="@layout/contributor_editor_fragment" />
+        android:layout_height="match_parent"/>
 
 </android.support.design.widget.CoordinatorLayout>

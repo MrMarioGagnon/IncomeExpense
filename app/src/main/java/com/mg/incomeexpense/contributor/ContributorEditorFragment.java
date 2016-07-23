@@ -1,29 +1,22 @@
 package com.mg.incomeexpense.contributor;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.core.ItemSelectedListener;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
-import com.mg.incomeexpense.data.IncomeExpenseContract;
+import com.mg.incomeexpense.core.ObjectValidator;
+import com.mg.incomeexpense.core.ValidationStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +24,29 @@ import java.util.List;
 /**
  * Created by mario on 2016-07-19.
  */
-public class ContributorEditorFragment extends Fragment implements ItemStateChangeHandler{
+public class ContributorEditorFragment extends Fragment implements ItemStateChangeHandler {
 
     private static final String LOG_TAG = ContributorEditorFragment.class.getSimpleName();
 
     private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private Contributor mContributor = null;
+    private EditText mEditTextName;
+    private TextView mTextViewValidationErrorMessage;
+    private ObjectValidator mObjectValidator = null;
+    private ArrayList<String> mNames;
+
+    public ObjectValidator getObjectValidator() {
+
+        if (null == mObjectValidator) {
+            mObjectValidator = ContributorValidator.create(getActivity(), mNames);
+        }
+
+        return mObjectValidator;
+    }
+
+    public void setObjectValidator(ObjectValidator mObjectValidator) {
+        this.mObjectValidator = mObjectValidator;
+    }
 
     public ContributorEditorFragment() {
         // Required empty public constructor
@@ -49,11 +59,16 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
         setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
-        assert bundle!= null;
+        if (null == bundle)
+            throw new NullPointerException("A bundle is mandatory");
 
         mContributor = (Contributor) bundle.getSerializable("item");
-        assert mContributor != null;
+        if (null == mContributor)
+            throw new NullPointerException("A contributor is mandatory");
 
+        mNames = (ArrayList<String>) bundle.getSerializable("names");
+        if(null == mNames)
+            throw new NullPointerException("A list of contributors name is mandatory");
     }
 
     @Override
@@ -61,6 +76,12 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.contributor_editor_fragment, container, false);
+        mEditTextName = (EditText) rootView.findViewById(R.id.edittext_contributor_name);
+        mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
+
+        if (null == savedInstanceState) {
+            mEditTextName.setText(mContributor.getName());
+        }
 
         return rootView;
     }
@@ -68,7 +89,6 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_contributor_editor, menu);
-        Log.i(LOG_TAG, "In onCreateOptionsMenu");
 
         if (mContributor.isNew()) {
             MenuItem mi = menu.findItem(R.id.action_delete);
@@ -84,19 +104,28 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_save:
             case R.id.action_delete:
-                Intent intent = new Intent();
-                intent.putExtra("item", mContributor);
-//                setResult(RESULT_OK, intent);
-  //              finish();
+                mContributor.setDead(true);
+                notifyListener(new ItemStateChangeEvent(mContributor));
+                break;
+            case R.id.action_save:
+                mContributor.setName(mEditTextName.getText().toString());
+                ValidationStatus validationStatus = getObjectValidator().Validate(mContributor);
+
+                if (validationStatus.isValid()) {
+                    notifyListener(new ItemStateChangeEvent(mContributor));
+                } else {
+                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
+                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                }
                 break;
             case android.R.id.home:
-    //            setResult(RESULT_CANCELED);
+                notifyListener(new ItemStateChangeEvent());
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+
         return true;
 
     }
@@ -104,7 +133,7 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
     @Override
     public void addListener(ItemStateChangeListener listener) {
 
-        if(null == listener)
+        if (null == listener)
             return;
 
         if (!mListeners.contains(listener)) {
@@ -115,7 +144,7 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
 
     @Override
     public void notifyListener(ItemStateChangeEvent event) {
-        if(null == event)
+        if (null == event)
             return;
 
         for (Object item : mListeners) {

@@ -16,25 +16,23 @@ public class ItemStateChangeEvent {
         return mItem;
     }
 
-    public ItemStateChangeEvent(ObjectBase item, Boolean isCancelled){
-        initialize(item, isCancelled);
-    }
-
-    public ItemStateChangeEvent(ObjectBase item){
-        initialize(item, false);
-    }
-
-    private void initialize(ObjectBase item, Boolean isCancelled){
-        if((!isCancelled) && item == null){
+    public ItemStateChangeEvent(ObjectBase item)
+    {
+        if(item == null){
             throw new NullPointerException("Parameter item of type ObjectBase is mandatory.");
         }
 
-        if((!isCancelled) && item.getId() == null && (!item.isNew())){
+        if(item.getId() == null && !item.isNew()){
             throw new NullPointerException("Item id is null but item is not new.");
         }
 
         mItem = item;
-        mIsCancelled = isCancelled;
+        mIsCancelled = false;
 
     }
+
+    public ItemStateChangeEvent(){
+        mIsCancelled = true;
+    }
+
 }
