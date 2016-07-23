@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 public class IncomeExpenseProvider extends ContentProvider {
 
     private static final int ACCOUNT = 200;
+
     private static final int ACCOUNT_WITH_ID = 201;
     private static final int CONTRIBUTOR = 300;
     private static final int CONTRIBUTOR_WITH_ID = 301;
