@@ -12,7 +12,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = IncomeExpenseDbHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "incexp.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public IncomeExpenseDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,12 +26,21 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.ContributorEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL" +
                 " );";
 
+        final String SQL_CREATE_ACCOUNT_TABLE = "CREATE TABLE " + IncomeExpenseContract.AccountEntry.TABLE_NAME + " (" +
+                IncomeExpenseContract.AccountEntry._ID + " INTEGER PRIMARY KEY," +
+                IncomeExpenseContract.AccountEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL," +
+                IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY + " TEXT NOT NULL," +
+                IncomeExpenseContract.AccountEntry.COLUMN_CLOSE + " INTEGER NOT NULL DEFAULT 0" +
+                " );";
+
         db.execSQL(SQL_CREATE_CONTRIBUTOR_TABLE);
+        db.execSQL(SQL_CREATE_ACCOUNT_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(LOG_TAG, String.format("Upgrading database from version %1$d to %2$d, which will destroy all old data.", oldVersion, newVersion) );
         db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.ContributorEntry.TABLE_NAME));
+        db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.AccountEntry.TABLE_NAME));
     }
 }
