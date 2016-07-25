@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.mg.incomeexpense.account.AccountListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_contributors:
                 intent = new Intent(this, ContributorListActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_accounts:
+                intent = new Intent(this, AccountListActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_settings:

@@ -2,8 +2,10 @@ package com.mg.incomeexpense.account;
 
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.core.Tools;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,15 +17,13 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     private String mCurrency;
     private Boolean mIsClose;
-
-//    private List<Contributor> mContributors;
-//    private List<Category> mCategories;
+    private List<Contributor> mContributors;
 
     private Account() {
 
     }
 
-    public static Account create(Long id, String name, String currency, Boolean isClose, List<Contributor> contributors/*, List<Category> categories*/) {
+    public static Account create(Long id, String name, String currency, Boolean isClose, List<Contributor> contributors) {
 
         Account newInstance = new Account();
         newInstance.mNew = false;
@@ -32,8 +32,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mName = name;
         newInstance.mCurrency = currency;
         newInstance.mIsClose = isClose;
-//        newInstance.mContributors = contributors;
-//        newInstance.mCategories = categories;
+        newInstance.mContributors = contributors;
 
         return newInstance;
     }
@@ -45,8 +44,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mDirty = true;
         newInstance.mName = "";
         newInstance.mCurrency = "";
-//        newInstance.mContributors = new ArrayList<>();
-//        newInstance.mCategories = new ArrayList<>();
+        newInstance.mContributors = new ArrayList<>();
 
         return newInstance;
 
@@ -123,9 +121,9 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         return getName().compareToIgnoreCase(instanceToCompare.getName());
     }
 
-//    public String getContributorsForDisplay(){
-//        return Tools.join(mContributors, ",");
-//    }
+    public String getContributorsForDisplay(){
+        return Tools.join(mContributors, ",");
+    }
 //    public String getCategoriesForDisplay(){
 //        return Tools.join(mCategories, ",");
 //    }

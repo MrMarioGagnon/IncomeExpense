@@ -23,6 +23,9 @@ public class IncomeExpenseProvider extends ContentProvider {
     private static final String sContributorIdSelection =
             IncomeExpenseContract.ContributorEntry.TABLE_NAME +
                     "." + IncomeExpenseContract.ContributorEntry.COLUMN_ID + " = ? ";
+    private static final String sAccountIdSelection =
+            IncomeExpenseContract.AccountEntry.TABLE_NAME +
+                    "." + IncomeExpenseContract.AccountEntry.COLUMN_ID + " = ? ";
 
     private IncomeExpenseDbHelper mOpenHelper;
 
@@ -36,6 +39,8 @@ public class IncomeExpenseProvider extends ContentProvider {
 
         matcher.addURI(authority, IncomeExpenseContract.PATH_CONTRIBUTOR, CONTRIBUTOR);
         matcher.addURI(authority, IncomeExpenseContract.PATH_CONTRIBUTOR + "/#", CONTRIBUTOR_WITH_ID);
+        matcher.addURI(authority, IncomeExpenseContract.PATH_ACCOUNT, ACCOUNT);
+        matcher.addURI(authority, IncomeExpenseContract.PATH_ACCOUNT + "/#", ACCOUNT_WITH_ID);
 
         return matcher;
     }
@@ -51,6 +56,26 @@ public class IncomeExpenseProvider extends ContentProvider {
         selectionArgs = new String[]{String.valueOf(id)};
 
         return mOpenHelper.getReadableDatabase().query(IncomeExpenseContract.ContributorEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+    }
+
+    private Cursor getAccountById(Uri uri, String[] projection) {
+
+        long id = IncomeExpenseContract.AccountEntry.getIdFromUri(uri);
+
+        String[] selectionArgs;
+        String selection;
+
+        selection = sAccountIdSelection;
+        selectionArgs = new String[]{String.valueOf(id)};
+
+        return mOpenHelper.getReadableDatabase().query(IncomeExpenseContract.AccountEntry.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
@@ -85,6 +110,20 @@ public class IncomeExpenseProvider extends ContentProvider {
             case CONTRIBUTOR_WITH_ID:
                 retCursor = getContributorById(uri, projection);
                 break;
+            case ACCOUNT:
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        IncomeExpenseContract.AccountEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case ACCOUNT_WITH_ID:
+                retCursor = getAccountById(uri, projection);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -103,6 +142,10 @@ public class IncomeExpenseProvider extends ContentProvider {
                 return IncomeExpenseContract.ContributorEntry.CONTENT_TYPE;
             case CONTRIBUTOR_WITH_ID:
                 return IncomeExpenseContract.ContributorEntry.CONTENT_ITEM_TYPE;
+            case ACCOUNT:
+                return IncomeExpenseContract.AccountEntry.CONTENT_TYPE;
+            case ACCOUNT_WITH_ID:
+                return IncomeExpenseContract.AccountEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -121,6 +164,14 @@ public class IncomeExpenseProvider extends ContentProvider {
                 long _id = db.insert(IncomeExpenseContract.ContributorEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = IncomeExpenseContract.ContributorEntry.buildInstanceUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case ACCOUNT: {
+                long _id = db.insert(IncomeExpenseContract.AccountEntry.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = IncomeExpenseContract.AccountEntry.buildInstanceUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -145,6 +196,10 @@ public class IncomeExpenseProvider extends ContentProvider {
                 rowsDeleted = db.delete(
                         IncomeExpenseContract.ContributorEntry.TABLE_NAME, selection, selectionArgs);
                 break;
+            case ACCOUNT:
+                rowsDeleted = db.delete(
+                        IncomeExpenseContract.AccountEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -164,6 +219,10 @@ public class IncomeExpenseProvider extends ContentProvider {
         switch (match) {
             case CONTRIBUTOR:
                 rowsUpdated = db.update(IncomeExpenseContract.ContributorEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case ACCOUNT:
+                rowsUpdated = db.update(IncomeExpenseContract.AccountEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             default:

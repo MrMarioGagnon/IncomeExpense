@@ -1,6 +1,12 @@
 package com.mg.incomeexpense.core;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
+
+import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,9 +16,12 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by mario on 2016-07-21.

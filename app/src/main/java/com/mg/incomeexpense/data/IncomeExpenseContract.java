@@ -31,6 +31,7 @@ public class IncomeExpenseContract {
         public static final String COLUMN_ID = _ID;
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_CURRENCY = "currency";
+        public static final String COLUMN_CONTRIBUTORS = "contributors";
         public static final String COLUMN_CLOSE = "close";
 
         public static Uri buildInstanceUri(long id) {

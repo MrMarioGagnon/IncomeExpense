@@ -6,14 +6,19 @@
 
     <string name="title_contributor_list">Contributors</string>
     <string name="title_contributor_editor">Contributor</string>
-
     <string name="title_contributor_editor_add">Add Contributor</string>
     <string name="title_contributor_editor_update">Update Contributor</string>
+    <string name="title_account_list">Accounts</string>
+    <string name="title_account_editor">Contributor</string>
+    <string name="title_account_editor_add">Add Account</string>
+    <string name="title_account_editor_update">Update Account</string>
     <string name="title_save">Save</string>
     <string name="title_delete">Delete</string>
     <string name="title_settings">Settings</string>
 
     <string name="message_contributor_no_data">No Contributor Available.</string>
+    <string name="message_account_no_data">No Account Available.</string>
+
 
     <string name="label_name">Name:</string>
 
