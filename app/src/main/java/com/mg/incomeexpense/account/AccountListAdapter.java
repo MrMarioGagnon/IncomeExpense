@@ -2,6 +2,7 @@ package com.mg.incomeexpense.account;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +24,7 @@ public class AccountListAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        int layoutId = R.layout.account_list_item;
-
-        View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
-
+        View view = LayoutInflater.from(context).inflate(R.layout.account_list_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
 
@@ -38,14 +36,14 @@ public class AccountListAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        String name = cursor.getString(AccountListFragment.COL_NAME);
-        viewHolder.textViewName.setText(name);
+        Account account = Account.create(cursor, context.getContentResolver());
 
-        String currency = cursor.getString(AccountListFragment.COL_CURRENCY);
-        viewHolder.textViewCurrency.setText(currency);
-
-        String contributors = cursor.getString(AccountListFragment.COL_CONTRIBUTOR);
-        viewHolder.textViewContributors.setText(contributors);
+        viewHolder.textViewName.setText(account.getName());
+        viewHolder.textViewCurrency.setText(account.getCurrency());
+        viewHolder.textViewContributors.setText(account.getContributorsForDisplay());
+        if(account.getIsClose()){
+            view.setBackgroundColor(Color.RED);
+        }
 
     }
 

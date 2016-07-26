@@ -69,7 +69,7 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
 
     @Override
     public String toString() {
-        return String.format("[Contributor] Id:%d, Name:%s", mId, mName);
+        return mName;
     }
 
     @Override

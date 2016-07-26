@@ -1,12 +1,21 @@
 package com.mg.incomeexpense.account;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.support.v7.util.SortedList;
+
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
+import com.mg.incomeexpense.data.IdToItemConvertor;
+import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Created by mario on 2016-07-23.
@@ -21,6 +30,26 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     private Account() {
 
+    }
+
+    public static Account create(Cursor cursor, ContentResolver contentResolver){
+        Account newInstance = new Account();
+        newInstance.mNew = false;
+        newInstance.mDirty = false;
+
+        Long id = cursor.getLong( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_ID));
+        String name = cursor.getString( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_NAME) );
+        String currency = cursor.getString( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY) );
+        Integer close = cursor.getInt( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE) );
+        String contributors = cursor.getString( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
+
+        newInstance.mId = id;
+        newInstance.mName = name;
+        newInstance.mCurrency = currency;
+        newInstance.mIsClose = close == 1 ? true: false;
+        newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
+
+        return newInstance;
     }
 
     public static Account create(Long id, String name, String currency, Boolean isClose, List<Contributor> contributors) {
@@ -124,9 +153,6 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     public String getContributorsForDisplay(){
         return Tools.join(mContributors, ",");
     }
-//    public String getCategoriesForDisplay(){
-//        return Tools.join(mCategories, ",");
-//    }
 
 //    public void addContributor(Contributor contributor){
 //        mDirty = true;
