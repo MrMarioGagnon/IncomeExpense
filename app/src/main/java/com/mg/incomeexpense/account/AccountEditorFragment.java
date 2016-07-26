@@ -1,4 +1,4 @@
-package com.mg.incomeexpense.contributor;
+package com.mg.incomeexpense.account;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.contributor.ContributorValidator;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
@@ -24,12 +26,12 @@ import java.util.List;
 /**
  * Created by mario on 2016-07-19.
  */
-public class ContributorEditorFragment extends Fragment implements ItemStateChangeHandler {
+public class AccountEditorFragment extends Fragment implements ItemStateChangeHandler {
 
-    private static final String LOG_TAG = ContributorEditorFragment.class.getSimpleName();
+    private static final String LOG_TAG = AccountEditorFragment.class.getSimpleName();
 
     private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
-    private Contributor mContributor = null;
+    private Account mAccount = null;
     private EditText mEditTextName;
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
@@ -38,7 +40,7 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
     public ObjectValidator getObjectValidator() {
 
         if (null == mObjectValidator) {
-            mObjectValidator = ContributorValidator.create(getActivity(), mNames);
+            mObjectValidator = AccountValidator.create(getActivity(), mNames);
         }
 
         return mObjectValidator;
@@ -48,7 +50,7 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
         this.mObjectValidator = mObjectValidator;
     }
 
-    public ContributorEditorFragment() {
+    public AccountEditorFragment() {
         // Required empty public constructor
     }
 
@@ -62,25 +64,25 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
         if (null == bundle)
             throw new NullPointerException("A bundle is mandatory");
 
-        mContributor = (Contributor) bundle.getSerializable("item");
-        if (null == mContributor)
-            throw new NullPointerException("A contributor is mandatory");
+        mAccount = (Account) bundle.getSerializable("item");
+        if (null == mAccount)
+            throw new NullPointerException("An account is mandatory");
 
         mNames = (ArrayList<String>) bundle.getSerializable("names");
         if(null == mNames)
-            throw new NullPointerException("A list of contributors name is mandatory");
+            throw new NullPointerException("A list of accounts name is mandatory");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.contributor_editor_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.account_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_contributor_name);
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
 
         if (null == savedInstanceState) {
-            mEditTextName.setText(mContributor.getName());
+            mEditTextName.setText(mAccount.getName());
         }
 
         return rootView;
@@ -90,7 +92,7 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_editor, menu);
 
-        if (mContributor.isNew()) {
+        if (mAccount.isNew()) {
             MenuItem mi = menu.findItem(R.id.action_delete);
             if (null != mi) {
                 mi.setVisible(false);
@@ -105,15 +107,15 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
 
         switch (id) {
             case R.id.action_delete:
-                mContributor.setDead(true);
-                notifyListener(new ItemStateChangeEvent(mContributor));
+                mAccount.setDead(true);
+                notifyListener(new ItemStateChangeEvent(mAccount));
                 break;
             case R.id.action_save:
-                mContributor.setName(mEditTextName.getText().toString());
-                ValidationStatus validationStatus = getObjectValidator().Validate(mContributor);
+                mAccount.setName(mEditTextName.getText().toString());
+                ValidationStatus validationStatus = getObjectValidator().Validate(mAccount);
 
                 if (validationStatus.isValid()) {
-                    notifyListener(new ItemStateChangeEvent(mContributor));
+                    notifyListener(new ItemStateChangeEvent(mAccount));
                 } else {
                     mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
