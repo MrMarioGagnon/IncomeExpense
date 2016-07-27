@@ -4,6 +4,15 @@
     <string name="action_contributors">Contributors</string>
     <string name="action_accounts">Accounts</string>
 
+    <string name="error_unable_to_fetch_all_contributor">Unable to fetch all contributor.</string>
+
+    <string name="dialog_title_contributor_setter">Contributor Setter</string>
+    <string name="dialog_title_category_setter">Category Setter</string>
+
+
+    <string name="button_label_ok">Ok</string>
+    <string name="button_label_cancel">Cancel</string>
+
     <string name="title_contributor_list">Contributors</string>
     <string name="title_contributor_editor">Contributor</string>
     <string name="title_contributor_editor_add">Add Contributor</string>
@@ -70,4 +79,8 @@
     <string name="pref_CAD_currency" translatable="false">CAD</string>
     <string name="pref_USD_currency" translatable="false">USD</string>
     <string name="pref_EUR_currency" translatable="false">EUR</string>
+
+    <string name="account_active">Account Active</string>
+    <string name="account_close">Account Close</string>
+
 </resources>

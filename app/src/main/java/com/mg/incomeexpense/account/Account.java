@@ -73,6 +73,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mDirty = true;
         newInstance.mName = "";
         newInstance.mCurrency = "";
+        newInstance.mIsClose = false;
         newInstance.mContributors = new ArrayList<>();
 
         return newInstance;
@@ -154,33 +155,12 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         return Tools.join(mContributors, ",");
     }
 
-//    public void addContributor(Contributor contributor){
-//        mDirty = true;
-//        mContributors.add(contributor);
-//    }
-
-//    public void clearContributor(){
-//        mDirty = true;
-//        mContributors.clear();
-//    }
-
-//    public List<Contributor> getContributors(){
-//        return mContributors;
-//    }
-//
-//    public void addCategory(Category category){
-//        mDirty = true;
-//        mCategories.add(category);
-//    }
-//
-//    public void clearCategory(){
-//        mDirty = true;
-//        mCategories.clear();
-//    }
-//
-//    public List<Category> getCategories(){
-//        return mCategories;
-//    }
-
+    public String getContributorsIds(){
+        List<String> a = new ArrayList<>();
+        for(Contributor item : mContributors){
+            a.add(item.getId().toString());
+        }
+        return Tools.join(a, ";");
+    }
 
 }

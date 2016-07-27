@@ -5,9 +5,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.contributor.Contributor;
-import com.mg.incomeexpense.contributor.ContributorEditorFragment;
-import com.mg.incomeexpense.contributor.ContributorRepositorySynchronizer;
 import com.mg.incomeexpense.core.ItemRepositorySynchronizerMessageBuilder;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
@@ -44,6 +41,7 @@ public class AccountEditorActivity extends AppCompatActivity implements ItemStat
             }
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableAccountName(getContentResolver(), account));
+            bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver()));
 
             AccountEditorFragment fragment = new AccountEditorFragment();
             fragment.addListener(this);

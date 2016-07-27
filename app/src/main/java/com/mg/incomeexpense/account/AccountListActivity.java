@@ -28,12 +28,12 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
 
             Account account = Account.createNew();
 
-//            Intent intent = new Intent(AccountListActivity.this, AccountEditorActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("item", account);
-//            intent.putExtras(bundle);
-//
-//            AccountListActivity.this.startActivityForResult(intent,EDITOR_ACTIVITY);
+            Intent intent = new Intent(AccountListActivity.this, AccountEditorActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("item", account);
+            intent.putExtras(bundle);
+
+            AccountListActivity.this.startActivityForResult(intent,EDITOR_ACTIVITY);
         }
     };
 
@@ -56,12 +56,12 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
     @Override
     public void onItemSelected(ItemSelectedEvent event) {
 
-//        Intent intent = new Intent(this, AccountEditorActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("item", event.getItem());
-//        intent.putExtras(bundle);
-//
-//        startActivityForResult(intent,EDITOR_ACTIVITY);
+        Intent intent = new Intent(this, AccountEditorActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", event.getItem());
+        intent.putExtras(bundle);
+
+        startActivityForResult(intent,EDITOR_ACTIVITY);
 
     }
 

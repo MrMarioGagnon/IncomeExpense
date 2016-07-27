@@ -77,11 +77,9 @@ public class IncomeExpenseRequestWrapper {
 
         TreeSet<Contributor> contributors = new TreeSet<>();
 
-        Uri uri = IncomeExpenseContract.ContributorEntry.CONTENT_URI;
-
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(uri, null, null, null, null);
+            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, null);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));

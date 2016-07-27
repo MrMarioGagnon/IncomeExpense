@@ -122,15 +122,7 @@ public class AccountListFragment extends Fragment implements LoaderManager.Loade
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (null != cursor) {
 
-                    long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_ID));
-                    String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_NAME));
-                    String currency = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY));
-                    String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
-                    int close = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE));
-                    Boolean isClose = close == 0 ? true : false;
-                    List<Contributor> items = IdToItemConvertor.ConvertIdsToContributors(AccountListFragment.this.getActivity().getContentResolver(), IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors,";");
-
-                    Account account = Account.create(id, name,currency,isClose,items);
+                    Account account = Account.create(cursor,AccountListFragment.this.getActivity().getContentResolver());
 
                     AccountListFragment.this.notifyListener(new ItemSelectedEvent(account));
 
