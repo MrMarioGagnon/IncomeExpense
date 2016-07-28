@@ -2,7 +2,7 @@ package com.mg.incomeexpense.account;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.support.v7.util.SortedList;
+import android.util.Log;
 
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
@@ -12,15 +12,15 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Created by mario on 2016-07-23.
  */
 public class Account extends ObjectBase implements Serializable, Comparable<Account> {
+
+    private static final String LOG_TAG = Account.class.getSimpleName();
 
     private String mName;
 
@@ -32,21 +32,21 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     }
 
-    public static Account create(Cursor cursor, ContentResolver contentResolver){
+    public static Account create(Cursor cursor, ContentResolver contentResolver) {
         Account newInstance = new Account();
         newInstance.mNew = false;
         newInstance.mDirty = false;
 
-        Long id = cursor.getLong( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_ID));
-        String name = cursor.getString( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_NAME) );
-        String currency = cursor.getString( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY) );
-        Integer close = cursor.getInt( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE) );
-        String contributors = cursor.getString( cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
+        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_ID));
+        String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_NAME));
+        String currency = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY));
+        Integer close = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE));
+        String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
 
         newInstance.mId = id;
         newInstance.mName = name;
         newInstance.mCurrency = currency;
-        newInstance.mIsClose = close == 1 ? true: false;
+        newInstance.mIsClose = close == 1 ? true : false;
         newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
 
         return newInstance;
@@ -78,6 +78,22 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
         return newInstance;
 
+    }
+
+    public List<Contributor> getContributors() {
+        return mContributors;
+    }
+
+    public void setContributors(List<Contributor> contributors) {
+        Contributor[] a1 = new Contributor[mContributors.size()];
+        mContributors.toArray(a1);
+        Contributor[] a2 = new Contributor[contributors.size()];
+        contributors.toArray(a2);
+
+        if (!Arrays.equals(a1, a2)) {
+            mDirty = true;
+            this.mContributors = contributors;
+        }
     }
 
     public String getName() {
@@ -151,13 +167,13 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         return getName().compareToIgnoreCase(instanceToCompare.getName());
     }
 
-    public String getContributorsForDisplay(){
+    public String getContributorsForDisplay() {
         return Tools.join(mContributors, ",");
     }
 
-    public String getContributorsIds(){
+    public String getContributorsIds() {
         List<String> a = new ArrayList<>();
-        for(Contributor item : mContributors){
+        for (Contributor item : mContributors) {
             a.add(item.getId().toString());
         }
         return Tools.join(a, ";");

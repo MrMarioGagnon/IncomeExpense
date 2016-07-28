@@ -10,6 +10,7 @@ import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
 /**
@@ -73,13 +74,13 @@ public class IncomeExpenseRequestWrapper {
         return names;
     }
 
-    public static TreeSet<Contributor> getAvailableContributors(ContentResolver contentResolver) {
+    public static ArrayList<Contributor> getAvailableContributors(ContentResolver contentResolver) {
 
-        TreeSet<Contributor> contributors = new TreeSet<>();
+        ArrayList<Contributor> contributors = new ArrayList<>();
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, null);
+            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, "name asc");
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));

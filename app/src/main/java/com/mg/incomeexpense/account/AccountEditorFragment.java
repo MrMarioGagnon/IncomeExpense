@@ -3,6 +3,7 @@ package com.mg.incomeexpense.account;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.contributor.Contributor;
-import com.mg.incomeexpense.contributor.ContributorValidator;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
@@ -29,7 +29,6 @@ import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
 
 /**
  * Created by mario on 2016-07-19.
@@ -52,28 +51,18 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
     private View.OnClickListener mOnContributorImageButtonClickListener;
     private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
     private TextView mTextViewContributors;
-    private SortedSet<Contributor> mContributors;
-    private boolean[] mSelectedContributor;
-
-    public ObjectValidator getObjectValidator() {
-
-        if (null == mObjectValidator) {
-            mObjectValidator = AccountValidator.create(getActivity(), mNames);
-        }
-
-        return mObjectValidator;
-    }
-
-    public void setObjectValidator(ObjectValidator mObjectValidator) {
-        this.mObjectValidator = mObjectValidator;
-    }
+    private List<Contributor> mAvailableContributors;
+    private List<Contributor> mSelectedContributors;
 
     public AccountEditorFragment() {
+
+        mSelectedContributors = new ArrayList<>();
+
         mOnSwitchClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Switch s = (Switch)v;
+                Switch s = (Switch) v;
 
                 s.setText(s.isChecked() ? getString(R.string.account_close) : getString(R.string.account_active));
 
@@ -90,19 +79,31 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
         mContributorMultipleChoiceEventHandler = new MultipleChoiceEventHandler() { // Creating an anonymous Class Object
             @Override
             public void execute(boolean[] idSelected) {
-                Contributor[] a = new Contributor[mContributors.size()];
-                mContributors.toArray(a);
-
+                mSelectedContributors.clear();
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < idSelected.length; i++) {
                     if (idSelected[i]) {
-                        sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), a[i].getName()));
+                        Contributor contributor = mAvailableContributors.get(i);
+                        mSelectedContributors.add(contributor);
+                        sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), contributor.getName()));
                     }
                 }
                 mTextViewContributors.setText(sb.toString());
-                mSelectedContributor = idSelected;
             }
         };
+    }
+
+    public ObjectValidator getObjectValidator() {
+
+        if (null == mObjectValidator) {
+            mObjectValidator = AccountValidator.create(getActivity(), mNames);
+        }
+
+        return mObjectValidator;
+    }
+
+    public void setObjectValidator(ObjectValidator mObjectValidator) {
+        this.mObjectValidator = mObjectValidator;
     }
 
     @Override
@@ -120,13 +121,14 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
             throw new NullPointerException("An account is mandatory");
 
         mNames = (ArrayList<String>) bundle.getSerializable("names");
-        if(null == mNames)
+        if (null == mNames)
             throw new NullPointerException("A list of accounts name is mandatory");
 
-        mContributors = (SortedSet<Contributor>) bundle.getSerializable("contributors");
-        if(null == mContributors)
+        mAvailableContributors = (List<Contributor>) bundle.getSerializable("contributors");
+        if (null == mAvailableContributors)
             throw new NullPointerException("A list of contributors is mandatory");
 
+        mSelectedContributors.addAll(mAccount.getContributors());
         mSpinnerCurrencyAdapter = ArrayAdapter.createFromResource(
                 getActivity(), R.array.pref_currency_values,
                 android.R.layout.simple_spinner_item);
@@ -155,6 +157,8 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
             mEditTextName.setText(mAccount.getName());
             mSwitchClose.setChecked(mAccount.getIsClose());
             mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
+            mTextViewContributors.setText(mAccount.getContributorsForDisplay());
+            mSpinnerCurrency.setSelection(((ArrayAdapter<String>) mSpinnerCurrency.getAdapter()).getPosition(mAccount.getCurrency()), false);
         }
 
         return rootView;
@@ -164,7 +168,6 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
     public void onResume() {
         super.onResume();
 
-    //    mSpinnerCurrency.setOnItemSelectedListener(mOnItemSelectedListener);
         mSwitchClose.setOnClickListener(mOnSwitchClickListener);
 
     }
@@ -195,23 +198,10 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
                 mAccount.setName(mEditTextName.getText().toString());
                 mAccount.setCurrency((String) mSpinnerCurrency
                         .getSelectedItem());
-                mAccount.setIsClose( mSwitchClose.isChecked()  );
+                mAccount.setIsClose(mSwitchClose.isChecked());
 
-                // if not null, Contributors Dialog Box was call
-                if (mSelectedContributor != null) {
-                    Contributor[] a = new Contributor[mContributors.size()];
-                    mContributors.toArray(a);
 
-                    StringBuffer sb = new StringBuffer();
-                    for (int i = 0; i < mSelectedContributor.length; i++) {
-                        if (mSelectedContributor[i]) {
-                            if(sb.length() == 0)
-                                sb.append(a[i].getId());
-                            else
-                                sb.append(String.format(";%d",a[i].getId()));
-                        }
-                    }
-                }
+                mAccount.setContributors(mSelectedContributors);
 
                 ValidationStatus validationStatus = getObjectValidator().Validate(mAccount);
 
@@ -260,9 +250,9 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
 
         try {
 
-            CharSequence[] contributorArray = new CharSequence[mContributors.size()];
+            CharSequence[] contributorArray = new CharSequence[mAvailableContributors.size()];
             int i = 0;
-            for (Contributor contributor : mContributors) {
+            for (Contributor contributor : mAvailableContributors) {
                 contributorArray[i++] = contributor.getName();
             }
 
@@ -270,7 +260,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
                     this.getContext(),
                     contributorArray,
                     mContributorMultipleChoiceEventHandler,
-                    buildContributorsCheckedArray(mContributors, mAccount.getContributorsForDisplay()),
+                    buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors),
                     getString(R.string.dialog_title_contributor_setter));
 
             dialog.setOwnerActivity(this.getActivity());
@@ -284,16 +274,16 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
 
     }
 
-    private boolean[] buildContributorsCheckedArray(SortedSet<Contributor> contributors,
-                                                    String contributorsName) {
+    private boolean[] buildContributorsCheckedArray(List<Contributor> availableContributors,
+                                                    List<Contributor> selectedContributors) {
 
-        boolean[] checked = new boolean[contributors.size()];
+        boolean[] checked = new boolean[availableContributors.size()];
 
-        int i = 0;
-        for (Contributor contributor : contributors) {
-
-            checked[i] = contributorsName.contains(contributor.getName());
-            i++;
+        for (Contributor contributor : selectedContributors) {
+            int index = availableContributors.indexOf(contributor);
+            if (index >= 0) {
+                checked[index] = true;
+            }
         }
 
         return checked;
