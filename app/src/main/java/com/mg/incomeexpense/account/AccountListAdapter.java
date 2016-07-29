@@ -3,7 +3,10 @@ package com.mg.incomeexpense.account;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +46,18 @@ public class AccountListAdapter extends CursorAdapter {
         viewHolder.textViewContributors.setText(account.getContributorsForDisplay());
         if(account.getIsClose()){
             view.setBackgroundColor(Color.RED);
+        }else{
+//            Log.i(LOG_TAG, "INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
+//            TypedValue a = new TypedValue();
+//            context.getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
+//            if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+//                // windowBackground is a color
+//                int color = a.data;
+//            } else {
+//                // windowBackground is not a color, probably a drawable
+//                Drawable d = context.getResources().getDrawable(a.resourceId);
+//            }
         }
-
     }
 
     public static class ViewHolder {

@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_contributors">Contributors</string>
     <string name="action_accounts">Accounts</string>
+    <string name="action_payment_methods">Payment Methods</string>
 
     <string name="error_unable_to_fetch_all_contributor">Unable to fetch all contributor.</string>
 
@@ -27,6 +28,7 @@
 
     <string name="message_contributor_no_data">No Contributor Available.</string>
     <string name="message_account_no_data">No Account Available.</string>
+    <string name="message_payment_method_no_data">No Payment Method Available.</string>
 
 
     <string name="label_name">Name:</string>

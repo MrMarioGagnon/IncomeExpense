@@ -3,6 +3,7 @@ package com.mg.incomeexpense.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +22,8 @@ import com.mg.incomeexpense.core.ItemSelectedListener;
 public class AccountListActivity extends AppCompatActivity implements ItemSelectedListener {
 
     private static final String LOG_TAG = AccountListActivity.class.getSimpleName();
-    private static final int EDITOR_ACTIVITY = 1;
+    private static final int EDITOR_ACTIVITY_ADD = 1;
+    private static final int EDITOR_ACTIVITY_UPDATE = 2;
     private final OnClickListener mFabOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -33,7 +35,7 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
             bundle.putSerializable("item", account);
             intent.putExtras(bundle);
 
-            AccountListActivity.this.startActivityForResult(intent,EDITOR_ACTIVITY);
+            AccountListActivity.this.startActivityForResult(intent,EDITOR_ACTIVITY_ADD);
         }
     };
 
@@ -61,7 +63,7 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
         bundle.putSerializable("item", event.getItem());
         intent.putExtras(bundle);
 
-        startActivityForResult(intent,EDITOR_ACTIVITY);
+        startActivityForResult(intent,EDITOR_ACTIVITY_UPDATE);
 
     }
 
@@ -73,7 +75,7 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
             extras = data.getExtras();
 
         switch (requestCode){
-            case EDITOR_ACTIVITY:
+            case EDITOR_ACTIVITY_UPDATE:
                 if(resultCode == RESULT_OK){
                     if(null != data){
                         Account item =(Account) data.getSerializableExtra("item");
