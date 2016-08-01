@@ -1,8 +1,11 @@
-package com.mg.incomeexpense.account;
+package com.mg.incomeexpense.paymentmethod;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
@@ -16,25 +19,27 @@ import java.util.Map;
 /**
  * Created by mario on 2016-07-23.
  */
-public class AccountValidator implements ObjectValidator {
+public class PaymentMethodValidator implements ObjectValidator {
 
+    private static final String LOG_TAG = PaymentMethodValidator.class.getSimpleName();
     private final List<String> mNames;
     private final Map<Integer, String> mValidationMessages;
 
-    public AccountValidator(List<String> names, Map<Integer, String> validationMessages) {
+    public PaymentMethodValidator(@NonNull List<String> names, @NonNull Map<Integer, String> validationMessages) {
         mNames = names;
         mValidationMessages = validationMessages;
     }
 
-    public static AccountValidator create(Context context, List<String> names) {
+    public static PaymentMethodValidator create(Context context, List<String> names) {
 
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_name_mandatory, context.getString(R.string.validation_name_mandatory));
         messages.put(R.string.validation_name_already_exists, context.getString(R.string.validation_name_already_exists));
         messages.put(R.string.validation_currency_mandatory, context.getString(R.string.validation_currency_mandatory));
+        messages.put(R.string.validation_exchange_rate_mandatory, context.getString(R.string.validation_exchange_rate_mandatory));
         messages.put(R.string.validation_contributors_mandatory, context.getString(R.string.validation_contributors_mandatory));
 
-        return new AccountValidator(names, messages);
+        return new PaymentMethodValidator(names, messages);
     }
 
     private boolean isNameExists(String name) {
@@ -43,17 +48,18 @@ public class AccountValidator implements ObjectValidator {
 
     }
 
-    public ValidationStatus Validate(ObjectBase objectToValidate){
+    public ValidationStatus Validate(@NonNull ObjectBase objectToValidate){
 
         List<String> messages = new ArrayList<>();
 
-        if (!(objectToValidate instanceof Account)) {
+        if (!(objectToValidate instanceof PaymentMethod)) {
             return ValidationStatus.create("Wrong object type.");
         }
 
-        Account account = (Account) objectToValidate;
-        String name = account.getName().trim();
-        String currency = account.getCurrency().trim();
+        PaymentMethod paymentMethod = (PaymentMethod) objectToValidate;
+        String name = paymentMethod.getName().trim();
+        String currency = paymentMethod.getCurrency().trim();
+        Double exchangeRate = paymentMethod.getExchangeRate();
 
         if (name.length() == 0) {
             messages.add(mValidationMessages.get(R.string.validation_name_mandatory));
@@ -65,7 +71,12 @@ public class AccountValidator implements ObjectValidator {
             messages.add(mValidationMessages.get(R.string.validation_currency_mandatory));
         }
 
-        if (account.getContributors().size() == 0) {
+        Log.d(LOG_TAG, exchangeRate.toString());
+        if(exchangeRate <= 0){
+            messages.add(mValidationMessages.get(R.string.validation_exchange_rate_mandatory));
+        }
+
+        if (paymentMethod.getContributors().size() == 0) {
             messages.add((mValidationMessages.get(R.string.validation_contributors_mandatory)));
         }
 
@@ -73,4 +84,3 @@ public class AccountValidator implements ObjectValidator {
     }
 
 }
-

@@ -1,0 +1,81 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView android:layout_width="fill_parent" android:id="@+id/textViewValidationErrorMessage"
+            android:layout_height="wrap_content" android:textColor="@android:color/white"
+            android:background="@android:color/holo_red_dark"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_name"/>
+
+        <EditText
+            android:id="@+id/edittext_payment_method_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_payment_method_name"
+            android:inputType="text|textNoSuggestions"
+            android:imeOptions="actionGo"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_currency"/>
+
+        <Spinner android:id="@+id/spinner_currency"
+            android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edittext_exchange_rate"
+            android:hint="exchange rate"
+            android:inputType="numberDecimal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_contributors"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textview_contributors"
+                android:text="Sample text"
+                android:layout_weight="1"/>
+
+            <ImageButton
+                android:id="@+id/imagebutton_contributors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_person_black_24dp"/>
+
+        </LinearLayout>
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Switch"
+            android:id="@+id/switch_close"/>
+
+    </LinearLayout>
+</ScrollView>
