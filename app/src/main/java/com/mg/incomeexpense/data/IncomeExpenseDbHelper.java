@@ -12,7 +12,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = IncomeExpenseDbHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "incexp.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
 
     public IncomeExpenseDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

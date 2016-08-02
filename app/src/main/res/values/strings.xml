@@ -27,6 +27,8 @@
     <string name="title_settings">Settings</string>
     <string name="title_payment_method_editor_add">Payment Method Account</string>
     <string name="title_payment_method_editor_update">Payment Method Account</string>
+    <string name="title_payment_method_list">Payment Methods</string>
+    <string name="title_payment_method_editor">Payment Method</string>
 
 
     <string name="message_contributor_no_data">No Contributor Available.</string>
@@ -37,6 +39,7 @@
     <string name="label_name">Name:</string>
     <string name="label_currency">Currency:</string>
     <string name="label_contributors">Contributors:</string>
+    <string name="label_exchange_rate">Exchange Rate:</string>
 
     <string name="hint_contributor_name">Contributor name</string>
     <string name="hint_account_name">Account name</string>

@@ -1,10 +1,14 @@
 package com.mg.incomeexpense.core;
 
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 
+import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
@@ -27,6 +31,12 @@ import java.util.List;
  * Created by mario on 2016-07-21.
  */
 public class Tools {
+
+    public static String getDefaultCurrency(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String defaultCurrency =  preferences.getString(context.getString(R.string.pref_default_currency_key), context.getString(R.string.pref_CAD_currency));
+        return defaultCurrency;
+    }
 
     private static String _now(String stringFormat) {
 

@@ -36,12 +36,12 @@ public class PaymentMethodListAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        Account account = Account.create(cursor, context.getContentResolver());
+        PaymentMethod paymentMethod = PaymentMethod.create(cursor, context.getContentResolver());
 
-        viewHolder.textViewName.setText(account.getName());
-        viewHolder.textViewCurrency.setText(account.getCurrency());
-        viewHolder.textViewContributors.setText(account.getContributorsForDisplay());
-        if(account.getIsClose()){
+        viewHolder.textViewName.setText(paymentMethod.getName());
+        viewHolder.textViewCurrency.setText(paymentMethod.getCurrency());
+        viewHolder.textViewContributors.setText(paymentMethod.getContributorsForDisplay());
+        if(paymentMethod.getIsClose()){
             view.setBackgroundColor(Color.RED);
         }else{
             // TODO Manage background color
@@ -54,7 +54,7 @@ public class PaymentMethodListAdapter extends CursorAdapter {
         public final TextView textViewContributors;
 
         public ViewHolder(View view) {
-            textViewName = (TextView) view.findViewById(R.id.textView_account_name);
+            textViewName = (TextView) view.findViewById(R.id.textView_payment_method_name);
             textViewCurrency = (TextView) view.findViewById(R.id.textView_currency);
             textViewContributors = (TextView) view.findViewById(R.id.textView_contributors);
         }

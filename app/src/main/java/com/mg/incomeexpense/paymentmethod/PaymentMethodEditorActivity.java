@@ -11,6 +11,7 @@ import com.mg.incomeexpense.account.AccountRepositorySynchronizer;
 import com.mg.incomeexpense.core.ItemRepositorySynchronizerMessageBuilder;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
@@ -25,7 +26,7 @@ public class PaymentMethodEditorActivity extends AppCompatActivity implements It
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.account_editor_activity);
+        setContentView(R.layout.payment_method_editor_activity);
 
         if (null == savedInstanceState) {
 
@@ -42,6 +43,11 @@ public class PaymentMethodEditorActivity extends AppCompatActivity implements It
             if (actionBar != null) {
                 actionBar.setTitle(getString(paymentMethod.isNew() ? R.string.title_payment_method_editor_add : R.string.title_payment_method_editor_update));
             }
+
+            if(paymentMethod.isNew()){
+                paymentMethod.setCurrency(Tools.getDefaultCurrency(this));
+            }
+
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailablePaymentMethodName(getContentResolver(), paymentMethod));
             bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver()));

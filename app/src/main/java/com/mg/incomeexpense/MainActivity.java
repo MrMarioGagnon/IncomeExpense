@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.mg.incomeexpense.account.AccountListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
+import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_settings:
                 intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_payment_methods:
+                intent = new Intent(this, PaymentMethodListActivity.class);
                 startActivity(intent);
                 return true;
             default:

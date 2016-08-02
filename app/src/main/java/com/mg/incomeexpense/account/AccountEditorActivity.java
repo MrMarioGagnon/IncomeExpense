@@ -1,6 +1,8 @@
 package com.mg.incomeexpense.account;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -8,6 +10,7 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ItemRepositorySynchronizerMessageBuilder;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
@@ -38,6 +41,11 @@ public class AccountEditorActivity extends AppCompatActivity implements ItemStat
 
             if (actionBar != null) {
                 actionBar.setTitle(getString(account.isNew() ? R.string.title_account_editor_add : R.string.title_account_editor_update));
+
+                if(account.isNew()){
+                    account.setCurrency(Tools.getDefaultCurrency(this));
+                }
+
             }
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableAccountName(getContentResolver(), account));
