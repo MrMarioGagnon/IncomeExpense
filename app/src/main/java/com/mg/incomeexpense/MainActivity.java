@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.mg.incomeexpense.account.AccountListActivity;
+import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
 
@@ -65,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_payment_methods:
                 intent = new Intent(this, PaymentMethodListActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_category:
+                intent = new Intent(this, CategoryListActivity.class);
                 startActivity(intent);
                 return true;
             default:

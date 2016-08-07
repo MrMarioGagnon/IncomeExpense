@@ -12,7 +12,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = IncomeExpenseDbHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "incexp.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public IncomeExpenseDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,9 +43,16 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.PaymentMethodEntry.COLUMN_CLOSE + " INTEGER NOT NULL DEFAULT 0" +
                 " );";
 
+        final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + IncomeExpenseContract.CategoryEntry.TABLE_NAME + " (" +
+                IncomeExpenseContract.CategoryEntry._ID + " INTEGER PRIMARY KEY," +
+                IncomeExpenseContract.CategoryEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL," +
+                IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY + " TEXT NOT NULL" +
+                " );";
+
         db.execSQL(SQL_CREATE_CONTRIBUTOR_TABLE);
         db.execSQL(SQL_CREATE_ACCOUNT_TABLE);
         db.execSQL(SQL_CREATE_PAYMENT_METHOD_TABLE);
+        db.execSQL(SQL_CREATE_CATEGORY_TABLE);
     }
 
     @Override
@@ -54,5 +61,6 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
         db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.ContributorEntry.TABLE_NAME));
         db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.AccountEntry.TABLE_NAME));
         db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.PaymentMethodEntry.TABLE_NAME));
+        db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.CategoryEntry.TABLE_NAME));
     }
 }

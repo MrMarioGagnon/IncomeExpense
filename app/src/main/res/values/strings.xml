@@ -4,6 +4,7 @@
     <string name="action_contributors">Contributors</string>
     <string name="action_accounts">Accounts</string>
     <string name="action_payment_methods">Payment Methods</string>
+    <string name="action_categories">Categories</string>
 
     <string name="error_unable_to_fetch_all_contributor">Unable to fetch all contributor.</string>
 
@@ -29,6 +30,8 @@
     <string name="title_payment_method_editor_update">Payment Method Account</string>
     <string name="title_payment_method_list">Payment Methods</string>
     <string name="title_payment_method_editor">Payment Method</string>
+    <string name="title_category_list">Categories</string>
+
 
 
     <string name="message_contributor_no_data">No Contributor Available.</string>

@@ -18,8 +18,13 @@
         android:title="@string/action_payment_methods"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_category"
         android:orderInCategory="400"
+        android:title="@string/action_categories"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="500"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
