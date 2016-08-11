@@ -1,14 +1,14 @@
 package com.mg.incomeexpense.category;
 
-import android.content.Context;
+import android.app.Activity;
 import android.database.Cursor;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.util.ArrayList;
@@ -19,20 +19,23 @@ import java.util.List;
  */
 public class CategoryListAdapter extends BaseExpandableListAdapter {
 
+    private final LayoutInflater inf;
     private Category[] mCategories = null;
 
-    public CategoryListAdapter(Context context){
-        refresh(context);
-    }
-
-    private void refresh(Context context) {
-        Cursor cursor = context.getContentResolver().query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null, null);
+    public CategoryListAdapter(Activity activity){
+        inf = LayoutInflater.from(activity);
+        Cursor cursor = activity.getContentResolver().query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null, null);
 
         List<Category> categories = new ArrayList<>();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             categories.add( Category.create( cursor ));
         }
-        mCategories = categories.toArray( new Category[categories.size()] );
+        mCategories = new Category[categories.size()];
+        categories.toArray( mCategories );
+    }
+
+    public Category[] getCategories(){
+        return mCategories;
     }
 
     @Override
@@ -72,16 +75,41 @@ public class CategoryListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        TextView textView = getGenericView(parent.getContext());
-        textView.setText(getGroup(groupPosition).toString());
-        return textView;
+        ViewHolder holder;
+
+        if (convertView == null) {
+            convertView = inf.inflate(R.layout.category_list_header_fragment, parent, false);
+
+            holder = new ViewHolder();
+            holder.text = (TextView) convertView.findViewById(R.id.lblListHeader);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.text.setText(getGroup(groupPosition).toString());
+
+        return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        TextView textView = getGenericView(parent.getContext());
-        textView.setText(getChild(groupPosition, childPosition).toString());
-        return textView;
+
+        ViewHolder holder;
+        if(convertView == null){
+            convertView = inf.inflate(R.layout.category_list_detail_fragment, parent, false);
+            holder = new ViewHolder();
+
+            holder.text = (TextView) convertView.findViewById(R.id.lblListItem);
+            convertView.setTag(holder);
+        }else{
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.text.setText( getChild(groupPosition, childPosition).toString()  );
+
+        return convertView;
+
     }
 
     @Override
@@ -89,17 +117,21 @@ public class CategoryListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public TextView getGenericView(Context context) {
-        // Layout parameters for the ExpandableListView
-        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 64);
+//    public TextView getGenericView(Context context) {
+//        // Layout parameters for the ExpandableListView
+//        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT, 64);
+//
+//        TextView textView = new TextView(context);
+//        textView.setLayoutParams(lp);
+//        // Center the text vertically
+//        textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+//        // Set the text starting position
+//        textView.setPadding(60, 0, 0, 0);
+//        return textView;
+//    }
 
-        TextView textView = new TextView(context);
-        textView.setLayoutParams(lp);
-        // Center the text vertically
-        textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-        // Set the text starting position
-        textView.setPadding(60, 0, 0, 0);
-        return textView;
+    private class ViewHolder {
+        TextView text;
     }
 }

@@ -1,4 +1,7 @@
 <resources>
+
+    <string name="dialog_title_select_to_edit">Select to edit</string>
+
     <string name="app_name">IncomeExpense</string>
     <string name="action_settings">Settings</string>
     <string name="action_contributors">Contributors</string>
@@ -31,8 +34,9 @@
     <string name="title_payment_method_list">Payment Methods</string>
     <string name="title_payment_method_editor">Payment Method</string>
     <string name="title_category_list">Categories</string>
-
-
+    <string name="title_category_editor">Categories</string>
+    <string name="title_category_editor_add">Add Category</string>
+    <string name="title_category_editor_update">Update Category</string>
 
     <string name="message_contributor_no_data">No Contributor Available.</string>
     <string name="message_account_no_data">No Account Available.</string>
@@ -47,6 +51,8 @@
     <string name="hint_contributor_name">Contributor name</string>
     <string name="hint_account_name">Account name</string>
     <string name="hint_payment_method_name">Payment Method name</string>
+    <string name="hint_enter_category">Enter Category</string>
+    <string name="hint_enter_sub_category">Enter Sub Category</string>
 
     <string name="button_label_delete">Delete</string>
     <string name="button_label_save">Save</string>
@@ -59,6 +65,7 @@
     <string name="validation_group_mandatory">Group is mandatory</string>
     <string name="validation_contributors_mandatory">No contributor selected</string>
     <string name="validation_categories_mandatory">No category selected</string>
+    <string name="validation_sub_category_mandatory">Sub categories are mandatory</string>
 
     <string name="log_error_adding_item">Error adding item</string>
     <string name="log_error_deleting_item">Error deleting item</string>

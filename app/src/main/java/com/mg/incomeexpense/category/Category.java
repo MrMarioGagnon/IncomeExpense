@@ -121,6 +121,13 @@ public class Category extends ObjectBase implements Serializable {
 
     }
 
+    public int getSubCategoryCount(){
+        if(null == mSubCategories)
+            return 0;
+
+        return this.mSubCategories.length;
+    }
+
     @Override
     public String toString() {
         return getName();

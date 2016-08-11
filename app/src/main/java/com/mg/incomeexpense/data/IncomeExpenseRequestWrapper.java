@@ -48,6 +48,33 @@ public class IncomeExpenseRequestWrapper {
         return names;
     }
 
+    public static ArrayList<String> getAvailableCategoryName(@NonNull ContentResolver contentResolver, ObjectBase category) {
+
+        ArrayList<String> names = new ArrayList<>();
+
+        Uri uri = IncomeExpenseContract.CategoryEntry.CONTENT_URI;
+
+        Cursor cursor = null;
+        try {
+
+            String selection = String.format("%1$s !=?", IncomeExpenseContract.CategoryEntry.COLUMN_ID);
+            // Si category est new le id va etre null, donc remplacer par -1
+            String[] selectionArgument = new String[]{category.isNew() ? "-1" : category.getId().toString()};
+
+            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.CategoryEntry.COLUMN_NAME}, selection, selectionArgument, null);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
+                names.add(name.toUpperCase());
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return names;
+    }
+
     public static ArrayList<String> getAvailableContributorName(ContentResolver contentResolver, Contributor contributor) {
 
         ArrayList<String> names = new ArrayList<>();
