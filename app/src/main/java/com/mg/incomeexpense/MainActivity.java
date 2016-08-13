@@ -14,8 +14,13 @@ import com.mg.incomeexpense.account.AccountListActivity;
 import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
+import com.mg.incomeexpense.transaction.Transaction;
+import com.mg.incomeexpense.transaction.TransactionEditorActivity;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final int EDITOR_ACTIVITY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +35,26 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                ShowTransactionEditor();
+
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                       .setAction("Action", null).show();
             }
         });
+    }
+
+    private void ShowTransactionEditor(){
+
+        Transaction transaction = Transaction.createNew();
+
+        Intent intent = new Intent(this, TransactionEditorActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", transaction);
+        intent.putExtras(bundle);
+
+        startActivityForResult(intent,EDITOR_ACTIVITY);
+
     }
 
     @Override

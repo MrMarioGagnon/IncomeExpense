@@ -18,9 +18,8 @@
             android:layout_marginBottom="20dp">
 
             <TextView android:layout_width="fill_parent" android:id="@+id/textViewValidationErrorMessage"
-                android:layout_height="wrap_content" android:textColor="@android:color/white"
-                android:background="@android:color/holo_red_dark"
-                android:visibility="gone" />
+                style="@style/ErrorBoxStyle"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/edittext_category_name"

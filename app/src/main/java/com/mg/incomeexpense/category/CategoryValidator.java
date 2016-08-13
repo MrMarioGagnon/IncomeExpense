@@ -3,7 +3,6 @@ package com.mg.incomeexpense.category;
 import android.content.Context;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
@@ -32,7 +31,7 @@ public class CategoryValidator implements ObjectValidator {
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_name_mandatory, context.getString(R.string.validation_name_mandatory));
         messages.put(R.string.validation_name_already_exists, context.getString(R.string.validation_name_already_exists));
-        messages.put(R.string.validation_sub_category_mandatory, context.getString(R.string.validation_sub_category_mandatory));
+        messages.put(R.string.validation_sub_categories_mandatory, context.getString(R.string.validation_sub_categories_mandatory));
 
 
         return new CategoryValidator(names, messages);
@@ -62,7 +61,7 @@ public class CategoryValidator implements ObjectValidator {
         }
 
         if (category.getSubCategoryCount() == 0) {
-            messages.add((mValidationMessages.get(R.string.validation_sub_category_mandatory)));
+            messages.add((mValidationMessages.get(R.string.validation_sub_categories_mandatory)));
         }
 
         return ValidationStatus.create(Tools.join(messages, "\n"));

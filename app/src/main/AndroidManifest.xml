@@ -59,6 +59,11 @@
             android:parentActivityName=".category.CategoryListActivity" >
         </activity>
         <activity
+            android:name=".transaction.TransactionEditorActivity"
+            android:label="@string/title_transaction_editor"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
             android:name=".SettingsActivity"
             android:label="@string/title_settings"
             android:parentActivityName=".MainActivity"

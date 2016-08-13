@@ -37,6 +37,10 @@
     <string name="title_category_editor">Categories</string>
     <string name="title_category_editor_add">Add Category</string>
     <string name="title_category_editor_update">Update Category</string>
+    <string name="title_transaction_editor">Transactions</string>
+    <string name="title_transaction_editor_add">Add Transaction</string>
+    <string name="title_transaction_editor_update">Update Transaction</string>
+
 
     <string name="message_contributor_no_data">No Contributor Available.</string>
     <string name="message_account_no_data">No Account Available.</string>
@@ -58,14 +62,22 @@
     <string name="button_label_save">Save</string>
     <string name="button_label_back">Cancel</string>
 
-    <string name="validation_currency_mandatory">Currency is mandatory</string>
+    <string name="validation_currency_mandatory">no currency selected</string>
     <string name="validation_name_already_exists">Name already exists</string>
     <string name="validation_name_mandatory">Name is mandatory</string>
     <string name="validation_exchange_rate_mandatory">Exchange rate must be greater than 0</string>
     <string name="validation_group_mandatory">Group is mandatory</string>
     <string name="validation_contributors_mandatory">No contributor selected</string>
-    <string name="validation_categories_mandatory">No category selected</string>
-    <string name="validation_sub_category_mandatory">Sub categories are mandatory</string>
+    <string name="validation_category_mandatory">No category selected</string>
+    <string name="validation_sub_categories_mandatory">Sub categories are mandatory</string>
+    <string name="validation_account_mandatory">No account selected</string>
+    <string name="validation_sub_category_mandatory">No sub-category selected</string>
+    <string name="validation_type_mandatory">No type selected</string>
+    <string name="validation_date_mandatory">No date selected</string>
+    <string name="validation_amount_mandatory">No amount selected</string>
+    <string name="validation_payment_method_mandatory">No payment method selected</string>
+
+
 
     <string name="log_error_adding_item">Error adding item</string>
     <string name="log_error_deleting_item">Error deleting item</string>
@@ -101,5 +113,8 @@
 
     <string name="account_active">Account Active</string>
     <string name="account_close">Account Close</string>
+
+    <string name="text_view_account">Account</string>
+    <string name="text_view_category">Category</string>
 
 </resources>

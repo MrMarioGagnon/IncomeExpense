@@ -1,10 +1,8 @@
 package com.mg.incomeexpense.category;
 
-import android.content.ContentResolver;
 import android.database.Cursor;
 
 import com.mg.incomeexpense.core.ObjectBase;
-import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
@@ -14,6 +12,13 @@ import java.util.Arrays;
  * Created by mario on 2016-08-05.
  */
 public class Category extends ObjectBase implements Serializable {
+
+    private String mName;
+    private String[] mSubCategories;
+    private String mSelectedSubCategory;
+
+    private Category() {
+    }
 
     public static Category create(Cursor cursor) {
         Category newInstance = new Category();
@@ -52,23 +57,53 @@ public class Category extends ObjectBase implements Serializable {
         return category;
     }
 
-    private String mName;
+    public String getSelectedSubCategory() {
+        return mSelectedSubCategory;
+    }
 
-    private String[] mSubCategories;
+    public String getSelectedCategory(){
+        return String.format("%1$d|%2$s", getId().toString(), getSelectedSubCategory());
+    }
 
-    private Category() {
+    public void setSelectedSubCategory(String selectedSubCategory) {
+        mSelectedSubCategory = selectedSubCategory;
     }
 
     public Long getId() {
         return mId;
     }
 
+    public void setId(Long id) {
+        mId = id;
+    }
+
     public String getName() {
         return mName;
     }
 
+    public void setName(String name) {
+
+        if (null == mName || !mName.equals(name)) {
+            mName = name;
+            mDirty = true;
+        }
+
+    }
+
     public String[] getSubCategories() {
         return mSubCategories;
+    }
+
+    public void setSubCategories(String[] subCategories) {
+
+        // Make sure sub categories are ordered
+        Arrays.sort(subCategories);
+        if (null == mSubCategories
+                || !Arrays.equals(mSubCategories, subCategories)) {
+            mSubCategories = subCategories;
+            mDirty = true;
+        }
+
     }
 
     public String getSubCategoriesAsString() {
@@ -96,33 +131,8 @@ public class Category extends ObjectBase implements Serializable {
 
     }
 
-    public void setId(Long id) {
-        mId = id;
-    }
-
-    public void setName(String name) {
-
-        if (null == mName || !mName.equals(name)) {
-            mName = name;
-            mDirty = true;
-        }
-
-    }
-
-    public void setSubCategories(String[] subCategories) {
-
-        // Make sure sub categories are ordered
-        Arrays.sort(subCategories);
-        if (null == mSubCategories
-                || !Arrays.equals(mSubCategories, subCategories)) {
-            mSubCategories = subCategories;
-            mDirty = true;
-        }
-
-    }
-
-    public int getSubCategoryCount(){
-        if(null == mSubCategories)
+    public int getSubCategoryCount() {
+        if (null == mSubCategories)
             return 0;
 
         return this.mSubCategories.length;
@@ -140,18 +150,18 @@ public class Category extends ObjectBase implements Serializable {
 
         Category category = (Category) o;
 
-        if (!mId.equals(category.mId)) return false;
         if (!mName.equals(category.mName)) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(mSubCategories, category.mSubCategories);
+        if (!Arrays.equals(mSubCategories, category.mSubCategories)) return false;
+        return mSelectedSubCategory.equals(category.mSelectedSubCategory);
 
     }
 
     @Override
     public int hashCode() {
-        int result = mId.hashCode();
-        result = 31 * result + mName.hashCode();
+        int result = mName.hashCode();
         result = 31 * result + Arrays.hashCode(mSubCategories);
+        result = 31 * result + mSelectedSubCategory.hashCode();
         return result;
     }
 }

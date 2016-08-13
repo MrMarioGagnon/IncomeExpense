@@ -49,10 +49,24 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY + " TEXT NOT NULL" +
                 " );";
 
+        final String SQL_CREATE_TRANSACTION_TABLE = "CREATE TABLE " + IncomeExpenseContract.TransactionEntry.TABLE_NAME + " (" +
+                IncomeExpenseContract.TransactionEntry._ID + " INTEGER PRIMARY KEY," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID + " INTEGER NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY + " TEXT NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_TYPE + " INTEGER NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_DATE + " TEXT NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT + " NUMERIC NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY + " TEXT NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE + " NUMERIC NOT NULL DEFAULT 1," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID + " INTEGER NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_NOTE + " TEXT" +
+                " );";
+
         db.execSQL(SQL_CREATE_CONTRIBUTOR_TABLE);
         db.execSQL(SQL_CREATE_ACCOUNT_TABLE);
         db.execSQL(SQL_CREATE_PAYMENT_METHOD_TABLE);
         db.execSQL(SQL_CREATE_CATEGORY_TABLE);
+        db.execSQL(SQL_CREATE_TRANSACTION_TABLE);
     }
 
     @Override
@@ -62,5 +76,6 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
         db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.AccountEntry.TABLE_NAME));
         db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.PaymentMethodEntry.TABLE_NAME));
         db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.CategoryEntry.TABLE_NAME));
+        db.execSQL(String.format("DROP TABLE IF EXISTS %1$s", IncomeExpenseContract.TransactionEntry.TABLE_NAME));
     }
 }

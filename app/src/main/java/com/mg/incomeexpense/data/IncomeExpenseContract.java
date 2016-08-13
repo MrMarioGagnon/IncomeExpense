@@ -140,7 +140,7 @@ public class IncomeExpenseContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRANSACTION;
 
         // Table name
-        public static final String TABLE_NAME = "transaction";
+        public static final String TABLE_NAME = "transaction_";
 
         public static final String COLUMN_ID = _ID;
         public static final String COLUMN_ACCOUNT_ID = "accountId";

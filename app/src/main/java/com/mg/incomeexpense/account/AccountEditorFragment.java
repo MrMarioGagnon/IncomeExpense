@@ -1,7 +1,10 @@
 package com.mg.incomeexpense.account;
 
 import android.app.Dialog;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -208,6 +211,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mAccount));
                 } else {
+
                     mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
                 }
