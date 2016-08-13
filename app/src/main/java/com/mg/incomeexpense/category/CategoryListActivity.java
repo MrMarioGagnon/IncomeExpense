@@ -137,6 +137,7 @@ public class CategoryListActivity extends AppCompatActivity implements ItemSelec
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        ((CategoryListAdapter)mAdapter).refresh(this);
 //        Bundle extras = null;
 //        if(null != data)
 //            extras = data.getExtras();

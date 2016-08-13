@@ -14,14 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.contributor.Contributor;
-import com.mg.incomeexpense.contributor.ContributorListAdapter;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
 import com.mg.incomeexpense.core.ItemSelectedHandler;
 import com.mg.incomeexpense.core.ItemSelectedListener;
-import com.mg.incomeexpense.core.ObjectBase;
-import com.mg.incomeexpense.core.Tools;
-import com.mg.incomeexpense.data.IdToItemConvertor;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.util.ArrayList;

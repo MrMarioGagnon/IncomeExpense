@@ -52,8 +52,6 @@ public class Category extends ObjectBase implements Serializable {
         return category;
     }
 
-    private Long mId;
-
     private String mName;
 
     private String[] mSubCategories;
@@ -113,6 +111,8 @@ public class Category extends ObjectBase implements Serializable {
 
     public void setSubCategories(String[] subCategories) {
 
+        // Make sure sub categories are ordered
+        Arrays.sort(subCategories);
         if (null == mSubCategories
                 || !Arrays.equals(mSubCategories, subCategories)) {
             mSubCategories = subCategories;

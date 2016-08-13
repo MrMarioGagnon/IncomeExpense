@@ -48,7 +48,7 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
     private ArrayList<String> mNames;
-    private int mLayoutPosition = 1;
+    private int mLayoutPosition = 0;
     private LinearLayout mLinearLayoutSubCategory;
 
     public CategoryEditorFragment() {
@@ -69,7 +69,6 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
         public void onClick(View v) {
 
             View view = createSubCategoryView(null);
-
             mLinearLayoutSubCategory.addView(view, mLayoutPosition);
             mLayoutPosition++;
 
@@ -116,7 +115,7 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
         View rootView = inflater.inflate(R.layout.category_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_category_name);
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
-        mLinearLayoutSubCategory = (LinearLayout) rootView.findViewById(R.id.linearLayoutMain);
+        mLinearLayoutSubCategory = (LinearLayout) rootView.findViewById(R.id.linear_layout_sub_category);
         Button buttonAddSubCategory = (Button)rootView.findViewById(R.id.button_add_sub_category);
         buttonAddSubCategory.setOnClickListener(mAddSubCategoryClickListener);
 
@@ -158,6 +157,7 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
         editText = (EditText) view.findViewById(R.id.editTextName);
         editText.setText(name);
         editText.setFilters(new InputFilter[] { new LetterDigitFilter() });
+        editText.requestFocus();
 
         ImageButton imageButtonEdit = (ImageButton) view
                 .findViewById(R.id.imageButtonEdit);
@@ -196,6 +196,26 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
                 break;
             case R.id.action_save:
                 mCategory.setName(mEditTextName.getText().toString());
+                // Get sub items from layout and update mCategory
+
+                ViewGroup subCategoryView = mLinearLayoutSubCategory;
+                EditText editTextSubCategory;
+                String subCategoryName;
+                List<String> subCategories = new ArrayList();
+                for (int i = 0; i < subCategoryView.getChildCount(); i++) {
+                    View view = subCategoryView.getChildAt(i);
+                        editTextSubCategory = (EditText) view
+                                .findViewById(R.id.editTextName);
+                        subCategoryName = editTextSubCategory.getText().toString();
+
+                        if (subCategoryName.trim().length() != 0) {
+                            subCategories.add(subCategoryName);
+                        }
+                }
+
+                String[] subs = new String[ subCategories.size() ];
+                subCategories.toArray(subs);
+                mCategory.setSubCategories(subs);
 
                 ValidationStatus validationStatus = getObjectValidator().Validate(mCategory);
 

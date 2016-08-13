@@ -24,6 +24,11 @@ public class CategoryListAdapter extends BaseExpandableListAdapter {
 
     public CategoryListAdapter(Activity activity){
         inf = LayoutInflater.from(activity);
+
+        refresh(activity);
+    }
+
+    public void refresh(Activity activity){
         Cursor cursor = activity.getContentResolver().query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null, null);
 
         List<Category> categories = new ArrayList<>();
@@ -32,6 +37,7 @@ public class CategoryListAdapter extends BaseExpandableListAdapter {
         }
         mCategories = new Category[categories.size()];
         categories.toArray( mCategories );
+
     }
 
     public Category[] getCategories(){

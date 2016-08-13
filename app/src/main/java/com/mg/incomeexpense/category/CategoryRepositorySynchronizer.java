@@ -32,8 +32,8 @@ public class CategoryRepositorySynchronizer {
     public ObjectBase Save(@NonNull ObjectBase item) {
 
         // region Precondition
-        if (!(item instanceof Account)) {
-            throw new IllegalArgumentException("Parameter item must be an instance of Account");
+        if (!(item instanceof Category)) {
+            throw new IllegalArgumentException("Parameter item must be an instance of Category");
         }
 
         if ((!item.isNew()) && item.getId() == null) {
