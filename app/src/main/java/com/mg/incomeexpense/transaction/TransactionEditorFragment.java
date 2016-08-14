@@ -9,16 +9,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.account.AccountValidator;
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
@@ -27,6 +31,7 @@ import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
+import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,16 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     private Transaction mTransaction = null;
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
+
+    private Spinner mSpinnerAccount;
+    private AccountSpinnerAdapter mAccountSpinnerAdapter;
+
+    private Spinner mSpinnerPaymentMethod;
+    private PaymentMethodSpinnerAdapter mPaymentMethodSpinnerAdapter;
+
+    private List<Account> mAccounts;
+    private List<Category> mCategories;
+    private List<PaymentMethod> mPaymentMethods;
 
 //    private EditText mEditTextName;
 
@@ -123,6 +138,19 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         if (null == mTransaction)
             throw new NullPointerException("An transaction is mandatory");
 
+        mAccounts = (ArrayList<Account>)bundle.getSerializable("accounts");
+        mCategories = (ArrayList<Category>)bundle.getSerializable("categories");
+        mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
+
+        mAccountSpinnerAdapter = new AccountSpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_item,
+                mAccounts);
+
+        mPaymentMethodSpinnerAdapter = new PaymentMethodSpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_item,
+                mPaymentMethods);
+
+
 //        mNames = (ArrayList<String>) bundle.getSerializable("names");
 //        if (null == mNames)
 //            throw new NullPointerException("A list of accounts name is mandatory");
@@ -143,6 +171,45 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
+
+        mSpinnerAccount = (Spinner) rootView.findViewById(R.id.spinner_account);
+        mSpinnerAccount.setAdapter(mAccountSpinnerAdapter); // Set the custom adapter to the spinner
+        // You can create an anonymous listener to handle the event when is selected an spinner item
+        mSpinnerAccount.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
+                // Here you get the current item (a User object) that is selected by its position
+                Account user = mAccountSpinnerAdapter.getItem(position);
+                // Here you can do the action you want to...
+                Toast.makeText(getActivity(), "ID: " + user.getId() + "\nName: " + user.getName(),
+                        Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapter) {  }
+        });
+
+        mSpinnerPaymentMethod = (Spinner) rootView.findViewById(R.id.spinner_payment_method);
+        mSpinnerPaymentMethod.setAdapter(mPaymentMethodSpinnerAdapter); // Set the custom adapter to the spinner
+        // You can create an anonymous listener to handle the event when is selected an spinner item
+        mSpinnerPaymentMethod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
+                // Here you get the current item (a User object) that is selected by its position
+                Account user = mAccountSpinnerAdapter.getItem(position);
+                // Here you can do the action you want to...
+                Toast.makeText(getActivity(), "ID: " + user.getId() + "\nName: " + user.getName(),
+                        Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapter) {  }
+        });
+
+
+
 //        mEditTextName = (EditText) rootView.findViewById(R.id.edittext_account_name);
 //        mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
 //        mSpinnerCurrency.setAdapter(mSpinnerCurrencyAdapter);

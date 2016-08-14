@@ -116,5 +116,12 @@
 
     <string name="text_view_account">Account</string>
     <string name="text_view_category">Category</string>
+    <string name="text_view_type">Type</string>
+    <string name="text_view_date">Date</string>
+    <string name="text_view_amount">Amount</string>
+    <string name="text_view_currency">Currency</string>
+    <string name="text_view_exchange_rate">Exchange Rate</string>
+    <string name="text_view_payment_method">Payment Method</string>
+    <string name="text_view_note">Note</string>
 
 </resources>

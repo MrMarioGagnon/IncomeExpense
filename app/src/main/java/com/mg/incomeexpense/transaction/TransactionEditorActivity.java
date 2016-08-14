@@ -8,8 +8,8 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ItemRepositorySynchronizerMessageBuilder;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
-import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
+import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
 /**
  * Created by mario on 2016-07-19.
@@ -38,12 +38,11 @@ public class TransactionEditorActivity extends AppCompatActivity implements Item
 
             if (actionBar != null) {
                 actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add : R.string.title_transaction_editor_update));
-
-                if (transaction.isNew()) {
-                    transaction.setCurrency(Tools.getDefaultCurrency(this));
-                }
-
             }
+
+            bundle.putSerializable("accounts", IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver()));
+            bundle.putSerializable("categories", IncomeExpenseRequestWrapper.getAvailableCategories(getContentResolver()));
+            bundle.putSerializable("paymentMethods", IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getContentResolver()));
 
             TransactionEditorFragment fragment = new TransactionEditorFragment();
             fragment.addListener(this);

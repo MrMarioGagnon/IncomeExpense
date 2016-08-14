@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
@@ -129,7 +131,6 @@ public class IncomeExpenseRequestWrapper {
         return names;
     }
 
-
     public static ArrayList<Contributor> getAvailableContributors(ContentResolver contentResolver) {
 
         ArrayList<Contributor> contributors = new ArrayList<>();
@@ -149,6 +150,63 @@ public class IncomeExpenseRequestWrapper {
         }
 
         return contributors;
+    }
+
+    public static ArrayList<Account> getAvailableAccounts(ContentResolver contentResolver) {
+
+        ArrayList<Account> assets = new ArrayList<>();
+
+        Cursor cursor = null;
+        try {
+            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null,null);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                assets.add(Account.create(cursor, contentResolver));
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return assets;
+    }
+
+    public static ArrayList<Category> getAvailableCategories(ContentResolver contentResolver) {
+
+        ArrayList<Category> assets = new ArrayList<>();
+
+        Cursor cursor = null;
+        try {
+            cursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null,null);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                assets.add(Category.create(cursor, contentResolver));
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return assets;
+    }
+
+    public static ArrayList<PaymentMethod> getAvailablePaymentMethods(ContentResolver contentResolver) {
+
+        ArrayList<PaymentMethod> assets = new ArrayList<>();
+
+        Cursor cursor = null;
+        try {
+            cursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, null, null, null,null);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                assets.add(PaymentMethod.create(cursor, contentResolver));
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return assets;
     }
 
 }

@@ -29,9 +29,14 @@ public class TransactionValidator implements ObjectValidator {
 
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_account_mandatory, context.getString(R.string.validation_account_mandatory));
-        messages.put(R.string.validation_name_already_exists, context.getString(R.string.validation_name_already_exists));
-        messages.put(R.string.validation_sub_categories_mandatory, context.getString(R.string.validation_sub_categories_mandatory));
-
+        messages.put(R.string.validation_category_mandatory, context.getString(R.string.validation_category_mandatory));
+        messages.put(R.string.validation_sub_category_mandatory, context.getString(R.string.validation_sub_category_mandatory));
+        messages.put(R.string.validation_type_mandatory, context.getString(R.string.validation_type_mandatory));
+        messages.put(R.string.validation_date_mandatory, context.getString(R.string.validation_date_mandatory));
+        messages.put(R.string.validation_amount_mandatory, context.getString(R.string.validation_amount_mandatory));
+        messages.put(R.string.validation_currency_mandatory, context.getString(R.string.validation_currency_mandatory));
+        messages.put(R.string.validation_exchange_rate_mandatory, context.getString(R.string.validation_exchange_rate_mandatory));
+        messages.put(R.string.validation_payment_method_mandatory, context.getString(R.string.validation_payment_method_mandatory));
 
         return new TransactionValidator(messages);
     }
@@ -39,6 +44,7 @@ public class TransactionValidator implements ObjectValidator {
     public ValidationStatus Validate(ObjectBase objectToValidate) {
 
         List<String> messages = new ArrayList<>();
+        String message;
 
         if (!(objectToValidate instanceof Transaction)) {
             return ValidationStatus.create("Wrong object type.");
@@ -47,40 +53,49 @@ public class TransactionValidator implements ObjectValidator {
         Transaction transaction = (Transaction) objectToValidate;
 
         if (transaction.getAccount() == null) {
-            messages.add(mValidationMessages.get(R.string.validation_account_mandatory));
+            message = mValidationMessages.get(R.string.validation_account_mandatory);
+            messages.add(message);
         }
 
         Category category = transaction.getCategory();
         if (category == null) {
-            messages.add(mValidationMessages.get(R.string.validation_category_mandatory));
+            message = mValidationMessages.get(R.string.validation_category_mandatory);
+            messages.add(message);
         } else {
             if (category.getSelectedSubCategory() == null || category.getSelectedSubCategory().trim().length() == 0) {
-                messages.add(mValidationMessages.get(R.string.validation_sub_category_mandatory));
+                message = mValidationMessages.get(R.string.validation_sub_category_mandatory);
+                messages.add(message);
             }
         }
 
         if (transaction.getType() == null) {
-            messages.add(mValidationMessages.get(R.string.validation_type_mandatory));
+            message = mValidationMessages.get(R.string.validation_type_mandatory);
+            messages.add(message);
         }
 
         if (transaction.getDate() == null || transaction.getDate().trim().length() == 0) {
-            messages.add(mValidationMessages.get(R.string.validation_date_mandatory));
+            message = mValidationMessages.get(R.string.validation_date_mandatory);
+            messages.add(message);
         }
 
         if (transaction.getAmount() == null || transaction.getAmount() <= 0.0) {
-            messages.add(mValidationMessages.get(R.string.validation_amount_mandatory));
+            message = mValidationMessages.get(R.string.validation_amount_mandatory);
+            messages.add(message);
         }
 
         if (transaction.getCurrency() == null || transaction.getCurrency().trim().length() == 0) {
-            messages.add(mValidationMessages.get(R.string.validation_currency_mandatory));
+            message = mValidationMessages.get(R.string.validation_currency_mandatory);
+            messages.add(message);
         }
 
         if (transaction.getExchangeRate() == null || transaction.getExchangeRate() <= 0.0) {
-            messages.add(mValidationMessages.get(R.string.validation_exchange_rate_mandatory));
+            message = mValidationMessages.get(R.string.validation_exchange_rate_mandatory);
+            messages.add(message);
         }
 
         if (transaction.getPaymentMethod() == null) {
-            messages.add(mValidationMessages.get(R.string.validation_payment_method_mandatory));
+            message = mValidationMessages.get(R.string.validation_payment_method_mandatory);
+            messages.add(message);
         }
 
         return ValidationStatus.create(Tools.join(messages, "\n"));

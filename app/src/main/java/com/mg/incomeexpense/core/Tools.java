@@ -148,8 +148,12 @@ public class Tools {
             return "";
         Iterator<T> iter = objs.iterator();
         StringBuffer buffer = new StringBuffer(iter.next().toString());
-        while (iter.hasNext())
-            buffer.append(delimiter).append(iter.next().toString());
+        T o;
+        while (iter.hasNext()) {
+            o = iter.next();
+            if(o != null)
+                buffer.append(delimiter).append(o.toString());
+        }
         return buffer.toString();
     }
 

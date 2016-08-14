@@ -1,8 +1,10 @@
 package com.mg.incomeexpense.category;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
 
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.data.IdToItemConvertor;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
@@ -18,6 +20,22 @@ public class Category extends ObjectBase implements Serializable {
     private String mSelectedSubCategory;
 
     private Category() {
+    }
+
+    public static Category create(Cursor cursor, ContentResolver contentResolver) {
+        Category newInstance = new Category();
+        newInstance.mNew = false;
+        newInstance.mDirty = false;
+
+        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_ID));
+        String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
+        String subCategories = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY));
+
+        newInstance.mId = id;
+        newInstance.mName = name;
+        newInstance.mSubCategories = subCategories.split("|");
+
+        return newInstance;
     }
 
     public static Category create(Cursor cursor) {
