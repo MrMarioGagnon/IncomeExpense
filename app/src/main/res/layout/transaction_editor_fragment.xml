@@ -65,7 +65,7 @@
                 android:id="@+id/image_view_category"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_storage_white_24dp"/>
+                android:src="@drawable/ic_chevron_right_white_24dp"/>
 
         </LinearLayout>
 
@@ -84,12 +84,29 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_type"/>
 
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New Switch"
-                    android:id="@+id/switchType"
-                    android:layout_gravity="center_horizontal" />
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioGroupType"
+                        android:checkedButton="@+id/radioButtonExpense"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/radio_button_expense"
+                            android:id="@+id/radioButtonExpense" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/radio_button_income"
+                            android:id="@+id/radioButtonIncome"/>
+
+                    </RadioGroup>
+
+
 
             </LinearLayout>
 
@@ -110,26 +127,22 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_date"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/text_view_date"/>
+                    android:inputType="date"
+                    android:ems="10"
+                    android:id="@+id/edit_text_date" />
+
 
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/image_view_date"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_insert_invitation_white_24dp"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linear_layout_amount"
             style="@style/TransactionEditorSectionStyle">
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -142,20 +155,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_amount"/>
 
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/text_view_amount"/>
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/edit_text_amount"/>
 
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/image_view_amount"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_insert_invitation_white_24dp"/>
 
         </LinearLayout>
 
@@ -174,20 +181,10 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_currency"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/text_view_currency"/>
+                <Spinner android:id="@+id/spinner_currency"
+                    android:layout_width="fill_parent" android:layout_height="wrap_content"/>
 
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/image_view_currency"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_insert_invitation_white_24dp"/>
 
         </LinearLayout>
 
@@ -206,20 +203,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_exchange_rate"/>
 
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/text_view_exchange_rate"/>
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/edit_text_exchange_rate"/>
 
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/image_view_exchange_rate"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_insert_invitation_white_24dp"/>
 
         </LinearLayout>
 
@@ -260,20 +251,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_note"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/text_view_note"/>
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:id="@+id/edit_text_note" />
 
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/image_view_note"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_insert_invitation_white_24dp"/>
 
         </LinearLayout>
 

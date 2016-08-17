@@ -76,7 +76,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     }
 
     public void setAccount(Account account) {
-        if (!mAccount.equals(account)) {
+        if (mAccount == null || !mAccount.equals(account)) {
             mDirty = true;
             mAccount = account;
         }
@@ -87,7 +87,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     }
 
     public void setAmount(Double amount) {
-        if (!mAmount.equals(amount)) {
+        if (mAmount == null || !mAmount.equals(amount)) {
             mDirty = true;
             mAmount = amount;
         }
@@ -98,7 +98,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     }
 
     public void setCategory(Category category) {
-        if (!mCategory.equals(category)) {
+        if (mCategory == null || !mCategory.equals(category)) {
             mDirty = true;
             mCategory = category;
         }
@@ -131,7 +131,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     }
 
     public void setExchangeRate(Double exchangeRate) {
-        if (!mExchangeRate.equals(exchangeRate)) {
+        if (mExchangeRate == null || !mExchangeRate.equals(exchangeRate)) {
             mDirty = true;
             mExchangeRate = exchangeRate;
         }
@@ -153,7 +153,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        if (!mPaymentMethod.equals(paymentMethod)) {
+        if (mPaymentMethod == null || !mPaymentMethod.equals(paymentMethod)) {
             mDirty = true;
             mPaymentMethod = paymentMethod;
         }
@@ -164,7 +164,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     }
 
     public void setType(TransactionType type) {
-        if (!mType.equals(type)) {
+        if (mType == null || !mType.equals(type)) {
             mDirty = true;
             mType = type;
         }

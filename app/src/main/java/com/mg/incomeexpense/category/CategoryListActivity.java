@@ -101,6 +101,17 @@ public class CategoryListActivity extends AppCompatActivity implements ItemSelec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_list_activity);
 
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            Boolean hideHomeButton =  bundle.getBoolean("hideHomeButton");
+            if(hideHomeButton != null && hideHomeButton){
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
+            }
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
         if (fab != null) {
             fab.setOnClickListener(mFabAddOnClickListener);
@@ -113,10 +124,7 @@ public class CategoryListActivity extends AppCompatActivity implements ItemSelec
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.category_list_fragment_container);
 
-//        ItemSelectedHandler f = (ItemSelectedHandler) fragment;
-//        if(null != f){
-//            f.addListener(this);
-//        }
+        ((CategoryListFragment)fragment).addListener(this);
 
         mAdapter = ((CategoryListFragment)fragment).getAdapter();
 
@@ -125,13 +133,10 @@ public class CategoryListActivity extends AppCompatActivity implements ItemSelec
     @Override
     public void onItemSelected(ItemSelectedEvent event) {
 
-//        Intent intent = new Intent(this, AccountEditorActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("item", event.getItem());
-//        intent.putExtras(bundle);
-//
-//        startActivityForResult(intent,EDITOR_ACTIVITY_UPDATE);
-
+        Intent intent = new Intent();
+        intent.putExtra("item", event.getItem() );
+        setResult(RESULT_OK, intent );
+        finish();
     }
 
     @Override

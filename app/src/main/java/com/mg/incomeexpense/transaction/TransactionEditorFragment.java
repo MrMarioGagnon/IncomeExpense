@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.transaction;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,17 +25,20 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.account.AccountValidator;
 import com.mg.incomeexpense.category.Category;
+import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -42,6 +47,7 @@ import java.util.List;
 public class TransactionEditorFragment extends Fragment implements ItemStateChangeHandler {
 
     private static final String LOG_TAG = TransactionEditorFragment.class.getSimpleName();
+    private static final int CATEGORY_LIST_ACTIVITY = 1;
 
     private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private Transaction mTransaction = null;
@@ -54,23 +60,23 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     private Spinner mSpinnerPaymentMethod;
     private PaymentMethodSpinnerAdapter mPaymentMethodSpinnerAdapter;
 
+    private Spinner mSpinnerCurrency;
+    private ArrayAdapter<CharSequence> mSpinnerCurrencyAdapter;
+
+    private EditText mEditTextDate;
+    private RadioGroup mRadioGroupType;
+
+    private EditText mEditTextAmount;
+    private EditText mEditTextExchangeRate;
+    private EditText mEditTextNote;
+
+    private ImageView mImageViewCategory;
+
+    private TextView mTextViewCategory;
+
     private List<Account> mAccounts;
     private List<Category> mCategories;
     private List<PaymentMethod> mPaymentMethods;
-
-//    private EditText mEditTextName;
-
-//    private ArrayList<String> mNames;
-//    private Spinner mSpinnerCurrency;
-//    private ArrayAdapter<CharSequence> mSpinnerCurrencyAdapter;
-//    private Switch mSwitchClose;
-//    private View.OnClickListener mOnSwitchClickListener;
-//    private ImageButton mImageButtonContributors;
-//    private View.OnClickListener mOnContributorImageButtonClickListener;
-//    private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
-//    private TextView mTextViewContributors;
-//    private List<Contributor> mAvailableContributors;
-//    private List<Contributor> mSelectedContributors;
 
     public TransactionEditorFragment() {
 
@@ -143,32 +149,25 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
 
         mAccountSpinnerAdapter = new AccountSpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_dropdown_item,
                 mAccounts);
 
         mPaymentMethodSpinnerAdapter = new PaymentMethodSpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_dropdown_item,
                 mPaymentMethods);
 
-
-//        mNames = (ArrayList<String>) bundle.getSerializable("names");
-//        if (null == mNames)
-//            throw new NullPointerException("A list of accounts name is mandatory");
-//
-//        mAvailableContributors = (List<Contributor>) bundle.getSerializable("contributors");
-//        if (null == mAvailableContributors)
-//            throw new NullPointerException("A list of contributors is mandatory");
-//
-//        mSelectedContributors.addAll(mTransaction.getContributors());
-//        mSpinnerCurrencyAdapter = ArrayAdapter.createFromResource(
-//                getActivity(), R.array.pref_currency_values,
-//                android.R.layout.simple_spinner_item);
-//        mSpinnerCurrencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerCurrencyAdapter = ArrayAdapter.createFromResource(
+                getActivity(), R.array.pref_currency_values,
+                android.R.layout.simple_spinner_dropdown_item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        int year;
+        int month;
+        int day;
 
         View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
 
@@ -190,6 +189,8 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             public void onNothingSelected(AdapterView<?> adapter) {  }
         });
 
+        mRadioGroupType = (RadioGroup) rootView.findViewById(R.id.radioGroupType);
+
         mSpinnerPaymentMethod = (Spinner) rootView.findViewById(R.id.spinner_payment_method);
         mSpinnerPaymentMethod.setAdapter(mPaymentMethodSpinnerAdapter); // Set the custom adapter to the spinner
         // You can create an anonymous listener to handle the event when is selected an spinner item
@@ -208,22 +209,38 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             public void onNothingSelected(AdapterView<?> adapter) {  }
         });
 
-
-
-//        mEditTextName = (EditText) rootView.findViewById(R.id.edittext_account_name);
-//        mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
-//        mSpinnerCurrency.setAdapter(mSpinnerCurrencyAdapter);
-//
-//        mSwitchClose = (Switch) rootView.findViewById(R.id.switch_close);
+        mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
+        mSpinnerCurrency.setAdapter(mSpinnerCurrencyAdapter);
 
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
 
-//        mImageButtonContributors = (ImageButton) rootView.findViewById(R.id.imagebutton_contributors);
-//        mImageButtonContributors.setOnClickListener(mOnContributorImageButtonClickListener);
-//
-//        mTextViewContributors = (TextView) rootView.findViewById(R.id.textview_contributors);
+        mEditTextDate = (EditText) rootView.findViewById(R.id.edit_text_date);
+
+        mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
+        mEditTextExchangeRate = (EditText) rootView.findViewById(R.id.edit_text_exchange_rate);
+        mEditTextNote = (EditText) rootView.findViewById(R.id.edit_text_note);
+
+        mImageViewCategory = (ImageView) rootView.findViewById(R.id.image_view_category);
+        mImageViewCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowCategoryList();
+            }
+        });
+        mTextViewCategory = (TextView) rootView.findViewById(R.id.text_view_category_name);
 
         if (null == savedInstanceState) {
+
+            if(mTransaction.isNew()){
+                // get the current date
+                Calendar c = Calendar.getInstance();
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+                mEditTextDate.setText(String.format("%d-%02d-%02d", year, month + 1,
+                        day));
+            }
+
 //            mEditTextName.setText(mTransaction.getName());
 //            mSwitchClose.setChecked(mTransaction.getIsClose());
 //            mSwitchClose.setText(mTransaction.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
@@ -232,6 +249,35 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         }
 
         return rootView;
+    }
+
+    private void ShowCategoryList() {
+
+        Intent intent = new Intent(getActivity(), CategoryListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("hideHomeButton", true);
+        intent.putExtras(bundle);
+        startActivityForResult(intent,CATEGORY_LIST_ACTIVITY);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+
+        switch(requestCode){
+            case CATEGORY_LIST_ACTIVITY:
+                if(data != null){
+                    Category category = (Category)data.getSerializableExtra("item");
+
+                    if(category != null){
+                        mTextViewCategory.setText(category.getSelectedCategoryToDisplay());
+                        mTextViewCategory.setTag(category);
+                    }
+
+                }
+                break;
+        }
     }
 
     @Override
@@ -265,13 +311,37 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 notifyListener(new ItemStateChangeEvent(mTransaction));
                 break;
             case R.id.action_save:
-//                mTransaction.setName(mEditTextName.getText().toString());
-//                mTransaction.setCurrency((String) mSpinnerCurrency
-//                        .getSelectedItem());
-//                mTransaction.setIsClose(mSwitchClose.isChecked());
-//
-//
-//                mTransaction.setContributors(mSelectedContributors);
+
+                Account account = (Account) mSpinnerAccount.getSelectedItem();
+                mTransaction.setAccount(account);
+
+                Category category = (Category)mTextViewCategory.getTag();
+                if(category != null){
+                    mTransaction.setCategory(category);
+                }
+
+                int selectedRadioButtonId = mRadioGroupType.getCheckedRadioButtonId();
+                mTransaction.setType( selectedRadioButtonId == R.id.radioButtonExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income);
+
+                PaymentMethod paymentMethod = (PaymentMethod) mSpinnerPaymentMethod.getSelectedItem();
+                mTransaction.setPaymentMethod(paymentMethod);
+
+                String currency = (String)mSpinnerCurrency.getSelectedItem();
+                mTransaction.setCurrency(currency);
+
+                String date = mEditTextDate.getText().toString();
+                mTransaction.setDate(date);
+
+                String amount = mEditTextAmount.getText().toString();
+                if(amount.trim().length() > 0)
+                    mTransaction.setAmount( Double.parseDouble(amount) );
+
+                String exchangeRate = mEditTextExchangeRate.getText().toString();
+                if(exchangeRate.trim().length() > 0)
+                    mTransaction.setExchangeRate( Double.parseDouble(exchangeRate) );
+
+                String note = mEditTextNote.getText().toString();
+                mTransaction.setNote(note);
 
                 ValidationStatus validationStatus = getObjectValidator().Validate(mTransaction);
 
@@ -316,6 +386,8 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
     }
 
+
+
     private void showContributorSetterDialog() {
 
 //        try {
@@ -344,19 +416,4 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
     }
 
-    private boolean[] buildContributorsCheckedArray(List<Contributor> availableContributors,
-                                                    List<Contributor> selectedContributors) {
-
-        boolean[] checked = new boolean[availableContributors.size()];
-
-        for (Contributor contributor : selectedContributors) {
-            int index = availableContributors.indexOf(contributor);
-            if (index >= 0) {
-                checked[index] = true;
-            }
-        }
-
-        return checked;
-
-    }
 }

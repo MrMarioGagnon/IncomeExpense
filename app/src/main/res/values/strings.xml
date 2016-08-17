@@ -123,5 +123,7 @@
     <string name="text_view_exchange_rate">Exchange Rate</string>
     <string name="text_view_payment_method">Payment Method</string>
     <string name="text_view_note">Note</string>
+    <string name="radio_button_expense">Expense</string>
+    <string name="radio_button_income">Income</string>
 
 </resources>

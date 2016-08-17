@@ -15,6 +15,8 @@ import java.util.Arrays;
  */
 public class Category extends ObjectBase implements Serializable {
 
+    private static final String LOG_TAG = Category.class.getSimpleName();
+
     private String mName;
     private String[] mSubCategories;
     private String mSelectedSubCategory;
@@ -80,7 +82,11 @@ public class Category extends ObjectBase implements Serializable {
     }
 
     public String getSelectedCategory(){
-        return String.format("%1$d|%2$s", getId().toString(), getSelectedSubCategory());
+        return String.format("%1$d|%2$s", getId(), getSelectedSubCategory());
+    }
+
+    public String getSelectedCategoryToDisplay(){
+        return String.format("%1$s:%2$s", getName(), getSelectedSubCategory());
     }
 
     public void setSelectedSubCategory(String selectedSubCategory) {
