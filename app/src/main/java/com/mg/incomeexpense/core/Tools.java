@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.contributor.Contributor;
@@ -174,4 +176,24 @@ public class Tools {
         return Double.valueOf(twoDForm.format(d));
     }
 
+    public static <T> void setSpinner(final T o, final Spinner s){
+        SpinnerAdapter adapter = s.getAdapter();
+
+        if(o == null && adapter.getCount() == 0)
+            return;
+
+        if(o==null) {
+            s.setSelection(0);
+            return;
+        }
+
+        T item;
+        for(int i = 0; i < adapter.getCount() ; i++){
+            item = (T)adapter.getItem(i);
+            if(o.equals(item)){
+                s.setSelection(i);
+                break;
+            }
+        }
+    }
 }

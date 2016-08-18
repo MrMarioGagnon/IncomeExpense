@@ -1,40 +1,44 @@
 package com.mg.incomeexpense;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.mg.incomeexpense.account.Account;
+
+import java.util.List;
 
 /**
  * Created by mario on 2016-08-16.
  */
 public class PagerAdapter extends FragmentStatePagerAdapter {
-    int mNumOfTabs;
 
-    public PagerAdapter(FragmentManager fm, int NumOfTabs) {
+    List<Account> mAccount;
+
+    public PagerAdapter(FragmentManager fm, List<Account> accounts) {
         super(fm);
-        this.mNumOfTabs = NumOfTabs;
+        mAccount = accounts;
     }
 
     @Override
     public Fragment getItem(int position) {
 
-        switch (position) {
-            case 0:
-                TabFragment1 tab1 = new TabFragment1();
-                return tab1;
-            case 1:
-                TabFragment2 tab2 = new TabFragment2();
-                return tab2;
-            case 2:
-                TabFragment3 tab3 = new TabFragment3();
-                return tab3;
-            default:
-                return null;
-        }
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", mAccount.get(position));
+
+        TabFragment1 tab = new TabFragment1();
+        tab.setArguments(bundle);
+
+        return tab;
     }
 
     @Override
     public int getCount() {
-        return mNumOfTabs;
+        return mAccount.size();
+    }
+
+    public Account getAccount(int i){
+        return mAccount.get(i);
     }
 }

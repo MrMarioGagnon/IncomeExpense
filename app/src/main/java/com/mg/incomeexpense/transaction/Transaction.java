@@ -59,7 +59,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mDirty = true;
         newInstance.mAccount = null;
         newInstance.mCategory = null;
-        newInstance.mType = null;
+        newInstance.mType = TransactionType.Expense;
         newInstance.mDate = Tools.now();
         newInstance.mAmount = 0.0;
         newInstance.mCurrency = "";

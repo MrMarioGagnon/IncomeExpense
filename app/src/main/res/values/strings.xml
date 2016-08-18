@@ -40,7 +40,12 @@
     <string name="title_transaction_editor">Transactions</string>
     <string name="title_transaction_editor_add">Add Transaction</string>
     <string name="title_transaction_editor_update">Update Transaction</string>
-
+    <string name="title_today">Today</string>
+    <string name="title_this_week">This Week</string>
+    <string name="title_this_month">This Month</string>
+    <string name="title_this_year">This Year</string>
+    <string name="title_income">Income</string>
+    <string name="title_expense">Expense</string>
 
     <string name="message_contributor_no_data">No Contributor Available.</string>
     <string name="message_account_no_data">No Account Available.</string>
@@ -125,5 +130,7 @@
     <string name="text_view_note">Note</string>
     <string name="radio_button_expense">Expense</string>
     <string name="radio_button_income">Income</string>
+
+
 
 </resources>

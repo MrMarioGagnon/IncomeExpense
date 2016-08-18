@@ -15,8 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +67,8 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
     private EditText mEditTextDate;
     private RadioGroup mRadioGroupType;
+    private RadioButton mRadioButtonExpense;
+    private RadioButton mRadioButtonIncome;
 
     private EditText mEditTextAmount;
     private EditText mEditTextExchangeRate;
@@ -229,6 +233,9 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         });
         mTextViewCategory = (TextView) rootView.findViewById(R.id.text_view_category_name);
 
+        mRadioButtonExpense = (RadioButton) rootView.findViewById(R.id.radioButtonExpense);
+        mRadioButtonIncome = (RadioButton) rootView.findViewById(R.id.radioButtonIncome);
+
         if (null == savedInstanceState) {
 
             if(mTransaction.isNew()){
@@ -237,15 +244,26 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 year = c.get(Calendar.YEAR);
                 month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
-                mEditTextDate.setText(String.format("%d-%02d-%02d", year, month + 1,
+                mTransaction.setDate(String.format("%d-%02d-%02d", year, month + 1,
                         day));
+                mTransaction.setCurrency(Tools.getDefaultCurrency(getActivity()));
             }
 
-//            mEditTextName.setText(mTransaction.getName());
-//            mSwitchClose.setChecked(mTransaction.getIsClose());
-//            mSwitchClose.setText(mTransaction.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
-//            mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
-//            mSpinnerCurrency.setSelection(((ArrayAdapter<String>) mSpinnerCurrency.getAdapter()).getPosition(mTransaction.getCurrency()), false);
+            Tools.setSpinner(mTransaction.getAccount(),mSpinnerAccount);
+            if(mTransaction.getCategory() != null)
+                mTextViewCategory.setText(mTransaction.getCategory().getSelectedCategoryToDisplay());
+            if(mTransaction.getType() == Transaction.TransactionType.Expense){
+                mRadioButtonExpense.setChecked(true);
+            }else{
+                mRadioButtonIncome.setChecked(true);
+            }
+            mEditTextDate.setText(mTransaction.getDate());
+            mEditTextAmount.setText(mTransaction.getAmount().toString());
+            Tools.setSpinner(mTransaction.getCurrency(), mSpinnerCurrency);
+            mEditTextExchangeRate.setText(mTransaction.getExchangeRate().toString());
+            Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
+            mEditTextNote.setText(mTransaction.getNote());
+
         }
 
         return rootView;

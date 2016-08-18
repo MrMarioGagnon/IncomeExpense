@@ -36,7 +36,7 @@ public class IncomeExpenseRequestWrapper {
             // Si account est new le id va etre null, donc remplacer par -1
             String[] selectionArgument = new String[]{account.isNew() ? "-1" : account.getId().toString()};
 
-            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.AccountEntry.COLUMN_NAME}, selection, selectionArgument, null);
+            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.AccountEntry.COLUMN_NAME}, selection, selectionArgument, IncomeExpenseContract.AccountEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_NAME));
                 names.add(name.toUpperCase());
@@ -63,7 +63,7 @@ public class IncomeExpenseRequestWrapper {
             // Si category est new le id va etre null, donc remplacer par -1
             String[] selectionArgument = new String[]{category.isNew() ? "-1" : category.getId().toString()};
 
-            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.CategoryEntry.COLUMN_NAME}, selection, selectionArgument, null);
+            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.CategoryEntry.COLUMN_NAME}, selection, selectionArgument, IncomeExpenseContract.CategoryEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
                 names.add(name.toUpperCase());
@@ -90,7 +90,7 @@ public class IncomeExpenseRequestWrapper {
             // Si contributor est new le id va etre null, donc remplacer par -1
             String[] selectionArgument = new String[]{contributor.isNew() ? "-1" : contributor.getId().toString()};
 
-            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.ContributorEntry.COLUMN_NAME}, selection, selectionArgument, null);
+            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.ContributorEntry.COLUMN_NAME}, selection, selectionArgument, IncomeExpenseContract.ContributorEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
                 names.add(name.toUpperCase());
@@ -117,7 +117,7 @@ public class IncomeExpenseRequestWrapper {
             // Si contributor est new le id va etre null, donc remplacer par -1
             String[] selectionArgument = new String[]{paymentMethod.isNew() ? "-1" : paymentMethod.getId().toString()};
 
-            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME}, selection, selectionArgument, null);
+            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME}, selection, selectionArgument, IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME));
                 names.add(name.toUpperCase());
@@ -137,7 +137,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, "name asc");
+            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.ContributorEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
@@ -158,7 +158,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null,null);
+            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null,IncomeExpenseContract.AccountEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(Account.create(cursor, contentResolver));
             }
@@ -177,7 +177,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null,null);
+            cursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null,IncomeExpenseContract.CategoryEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(Category.create(cursor, contentResolver));
             }
@@ -196,7 +196,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, null, null, null,null);
+            cursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, null, null, null,IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(PaymentMethod.create(cursor, contentResolver));
             }

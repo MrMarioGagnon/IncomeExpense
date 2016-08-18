@@ -7,17 +7,22 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.account.AccountListActivity;
 import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
+import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
 import com.mg.incomeexpense.transaction.Transaction;
 import com.mg.incomeexpense.transaction.TransactionEditorActivity;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,15 +36,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
+        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver());
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        TabLayout.Tab tab;
+        for(Account account : accounts) {
+            tab = tabLayout.newTab();
+            tab.setText(account.getName());
+            tab.setTag(account.getId());
+            tabLayout.addTab(tab);
+        }
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
+                (getSupportFragmentManager(), accounts);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -60,23 +70,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddTransaction);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                ShowTransactionEditor();
+                Account account =  ((PagerAdapter)viewPager.getAdapter()).getAccount( tabLayout.getSelectedTabPosition() );
 
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                       .setAction("Action", null).show();
+                ShowTransactionEditor(account);
+
             }
         });
     }
 
-    private void ShowTransactionEditor(){
+    private void ShowTransactionEditor(Account account){
 
         Transaction transaction = Transaction.createNew();
+        transaction.setAccount(account);
 
         Intent intent = new Intent(this, TransactionEditorActivity.class);
         Bundle bundle = new Bundle();
