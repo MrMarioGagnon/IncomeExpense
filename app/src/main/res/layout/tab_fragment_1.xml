@@ -17,11 +17,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_today"/>
+                android:layout_weight="1"
+                android:text="@string/title_today" />
+
+            <TextView
+                android:id="@+id/text_view_today_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_today_date"/>
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -32,22 +40,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_expense"/>
+                android:text="@string/title_expense" />
+
+            <TextView
+                android:id="@+id/text_view_today_expense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_today_expense"/>
+                android:text="@string/title_income" />
 
             <TextView
+                android:id="@+id/text_view_today_income"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_income"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/text_view_today_income"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -66,11 +74,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_this_week"/>
+                android:layout_weight="1"
+                android:text="@string/title_this_week" />
+
+            <TextView
+                android:id="@+id/text_view_this_week_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_week_date"/>
+                android:layout_weight="1" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -81,25 +98,24 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_expense"/>
+                android:text="@string/title_expense" />
+
+            <TextView
+                android:id="@+id/text_view_this_week_expense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_week_expense"/>
+                android:text="@string/title_income" />
 
             <TextView
+                android:id="@+id/text_view_this_week_income"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_income"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_week_income"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
@@ -116,11 +132,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_this_month"/>
+                android:layout_weight="1"
+                android:text="@string/title_this_month" />
+
+            <TextView
+                android:id="@+id/text_view_this_month_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_month_date"/>
+                android:layout_weight="1" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -131,22 +156,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_expense"/>
+                android:text="@string/title_expense" />
+
+            <TextView
+                android:id="@+id/text_view_this_month_expense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_month_expense"/>
+                android:text="@string/title_income" />
 
             <TextView
+                android:id="@+id/text_view_this_month_income"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_income"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_month_income"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -164,11 +189,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_this_year"/>
+                android:layout_weight="1"
+                android:text="@string/title_this_year" />
+
+            <TextView
+                android:id="@+id/text_view_this_year_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_year_date"/>
+                android:layout_weight="1" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -179,22 +213,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_expense"/>
+                android:text="@string/title_expense" />
+
+            <TextView
+                android:id="@+id/text_view_this_year_expense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_year_expense"/>
+                android:text="@string/title_income" />
 
             <TextView
+                android:id="@+id/text_view_this_year_income"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_income"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/text_view_this_year_income"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

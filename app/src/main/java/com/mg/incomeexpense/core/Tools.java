@@ -52,6 +52,16 @@ public class Tools {
 
     }
 
+    public static String formatDate(Date date, String stringFormat){
+
+        SimpleDateFormat format = new SimpleDateFormat(stringFormat);
+
+        String parsed = null;
+        parsed = format.format(date);
+        return parsed;
+
+    }
+
     public static <T> T coalesce(T... items) {
         for (T i : items)
             if (i != null)
