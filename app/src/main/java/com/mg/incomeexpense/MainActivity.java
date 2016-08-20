@@ -7,11 +7,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TabHost;
 
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.account.AccountListActivity;
@@ -20,6 +18,7 @@ import com.mg.incomeexpense.contributor.ContributorListActivity;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
 import com.mg.incomeexpense.transaction.Transaction;
+import com.mg.incomeexpense.transaction.TransactionDashboardPagerAdapter;
 import com.mg.incomeexpense.transaction.TransactionEditorActivity;
 
 import java.util.List;
@@ -32,14 +31,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver());
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         TabLayout.Tab tab;
-        for(Account account : accounts) {
+        for (Account account : accounts) {
             tab = tabLayout.newTab();
             tab.setText(account.getName());
             tab.setTag(account.getId());
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final PagerAdapter adapter = new PagerAdapter
+        final TransactionDashboardPagerAdapter adapter = new TransactionDashboardPagerAdapter
                 (getSupportFragmentManager(), accounts);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Account account =  ((PagerAdapter)viewPager.getAdapter()).getAccount( tabLayout.getSelectedTabPosition() );
+                Account account = ((TransactionDashboardPagerAdapter) viewPager.getAdapter()).getAccount(tabLayout.getSelectedTabPosition());
 
                 ShowTransactionEditor(account);
 
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void ShowTransactionEditor(Account account){
+    private void ShowTransactionEditor(Account account) {
 
         Transaction transaction = Transaction.createNew();
         transaction.setAccount(account);
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         bundle.putSerializable("item", transaction);
         intent.putExtras(bundle);
 
-        startActivityForResult(intent,EDITOR_ACTIVITY);
+        startActivityForResult(intent, EDITOR_ACTIVITY);
 
     }
 

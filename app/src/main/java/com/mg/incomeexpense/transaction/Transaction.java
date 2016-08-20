@@ -7,6 +7,8 @@ import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
+import com.mg.incomeexpense.data.IdToItemConvertor;
+import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.io.Serializable;
@@ -37,17 +39,65 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mNew = false;
         newInstance.mDirty = false;
 
-//        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_ID));
-//        String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_NAME));
-//        String currency = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY));
-//        Integer close = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE));
-//        String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
-//
-//        newInstance.mId = id;
-//        newInstance.mName = name;
-//        newInstance.mCurrency = currency;
-//        newInstance.mIsClose = close == 1 ? true : false;
-//        newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
+        /*
+        Account
+        Category
+        Type
+        Date
+        Amount
+        Currency
+        ExchangeRate
+        PaymentMethod
+        Note
+         */
+
+        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ID));
+        Long accountId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID));
+        String categoryId = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY));
+        int type = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE));
+        String date = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_DATE));
+        Double amount = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT));
+        String currency = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY));
+        Double exchangeRate = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE));
+        Long paymentMethodId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID));
+        String note = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_NOTE));
+
+        Cursor subItemCursor = contentResolver.query( IncomeExpenseContract.AccountEntry.buildInstanceUri(accountId), null, null, null, null );
+        Account account = null;
+        if(subItemCursor != null){
+            if(subItemCursor.moveToFirst()){
+                account = Account.create(subItemCursor, contentResolver);
+            }
+        }
+
+        String[] categoryParts = categoryId.split("|");
+        subItemCursor = contentResolver.query( IncomeExpenseContract.CategoryEntry.buildInstanceUri(Integer.getInteger(categoryParts[0])), null, null, null, null );
+        Category category = null;
+        if(subItemCursor != null){
+            if(subItemCursor.moveToFirst()){
+                category = Category.create(subItemCursor, contentResolver);
+                category.setSelectedSubCategory(categoryParts[1]);
+            }
+        }
+
+        subItemCursor = contentResolver.query( IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(paymentMethodId), null, null, null, null );
+        PaymentMethod paymentMethod = null;
+        if(subItemCursor != null){
+            if(subItemCursor.moveToFirst()){
+                paymentMethod = PaymentMethod.create(subItemCursor, contentResolver);
+            }
+        }
+
+        newInstance.mId = id;
+        newInstance.mAccount = account;
+        newInstance.mCategory = category;
+        newInstance.mType = type == 0? TransactionType.Expense: TransactionType.Income;
+        newInstance.mDate = date;
+        newInstance.mAmount = amount;
+        newInstance.mCurrency = currency;
+        newInstance.mExchangeRate = exchangeRate;
+        newInstance.mPaymentMethod = paymentMethod;
+        newInstance.mNote = note;
 
         return newInstance;
     }

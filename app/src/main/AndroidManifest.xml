@@ -72,6 +72,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mg.incomeexpense.MainActivity" />
         </activity>
+        <activity
+            android:name=".transaction.TransactionListActivity"
+            android:label="@string/title_transaction_list"
+            android:parentActivityName=".MainActivity" >
+        </activity>
 
         <provider
             android:authorities="com.mg.incomeexpense"

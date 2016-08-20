@@ -1,17 +1,18 @@
-package com.mg.incomeexpense;
+package com.mg.incomeexpense.transaction;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.format.DateUtils;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.Tools;
@@ -22,10 +23,28 @@ import java.util.Date;
 /**
  * Created by mario on 2016-08-16.
  */
-public class TabFragment1 extends Fragment
+public class DashboardFragment extends Fragment
 {
 
+    private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
+
     private Account mAccount;
+    private View.OnClickListener mOnClickSectionListener;
+
+    public DashboardFragment() {
+
+        mOnClickSectionListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowTransactionList();
+            }
+        };
+    }
+
+    private void ShowTransactionList() {
+        Intent intent = new Intent(getActivity(), TransactionListActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,12 +60,9 @@ public class TabFragment1 extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab_fragment_1, container, false);
+        View rootView = inflater.inflate(R.layout.transaction_dashboard_fragment, container, false);
 
         Calendar calendar = Calendar.getInstance();
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int lastDayCurrentMonth = calendar.getMaximum(Calendar.DAY_OF_MONTH);
         String fromDate;
         String toDate;
 
@@ -67,6 +83,17 @@ public class TabFragment1 extends Fragment
         fromDate = Tools.formatDate( DateUtil.getFirstDateOfYear( new Date() ).getTime(), "yyyy-MM-dd" );
         toDate = Tools.formatDate( DateUtil.getLastDateOfYear( new Date() ).getTime(), "yyyy-MM-dd" );
         textViewThisYear.setText( String.format("%1$s - %2$s", fromDate, toDate)  );
+
+        LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_today);
+        linearLayout.setOnClickListener(mOnClickSectionListener);
+
+
+        linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_this_week);
+        linearLayout.setOnClickListener(mOnClickSectionListener);
+        linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_this_month);
+        linearLayout.setOnClickListener(mOnClickSectionListener);
+        linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_this_year);
+        linearLayout.setOnClickListener(mOnClickSectionListener);
 
 
         return rootView;
