@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="com.mg.incomeexpense.transaction.TransactionListActivity">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    <!--fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/transaction_list_fragment_container"
@@ -15,7 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:layout="@layout/transaction_list_fragment" />
+        tools:layout="@layout/transaction_list_fragment" /-->
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/transaction_list_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

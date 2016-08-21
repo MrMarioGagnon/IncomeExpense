@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
 import com.mg.incomeexpense.core.ItemSelectedHandler;
 import com.mg.incomeexpense.core.ItemSelectedListener;
@@ -72,6 +73,7 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
     private int mPosition = ListView.INVALID_POSITION;
     private ListView mListView;
 
+    private Account mSelectedAccount;
 
     public TransactionListFragment() {
         // Required empty public constructor
@@ -81,6 +83,10 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            mSelectedAccount = (Account)bundle.getSerializable("account");
+        }
         // Add this line in order for this fragment to handle menu events.
         //setHasOptionsMenu(true);
 
@@ -164,11 +170,19 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
 
         Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
 
+        String selection = null;
+        String[] selectionArgs = null;
+
+        if(mSelectedAccount!=null){
+            selection = String.format("%1$s=?",IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
+            selectionArgs = new String[]{mSelectedAccount.getId().toString()};
+        }
+
         return new CursorLoader(getActivity(),
                 uri,
                 TRANSACTION_COLUMNS,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 sortOrder);
     }
 

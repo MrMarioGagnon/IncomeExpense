@@ -9,10 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.account.AccountEditorActivity;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
-import com.mg.incomeexpense.core.ItemSelectedHandler;
 import com.mg.incomeexpense.core.ItemSelectedListener;
 
 /**
@@ -35,7 +32,7 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
             bundle.putSerializable("item", transaction);
             intent.putExtras(bundle);
 
-            TransactionListActivity.this.startActivityForResult(intent,EDITOR_ACTIVITY_ADD);
+            TransactionListActivity.this.startActivityForResult(intent, EDITOR_ACTIVITY_ADD);
         }
     };
 
@@ -44,15 +41,21 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transaction_list_activity);
 
+        Bundle bundle = getIntent().getExtras();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(mFabOnClickListener);
         }
 
-        ItemSelectedHandler f = (ItemSelectedHandler) getSupportFragmentManager().findFragmentById(R.id.transaction_list_fragment_container);
-        if(null != f){
-            f.addListener(this);
-        }
+        TransactionListFragment fragment = new TransactionListFragment();
+        fragment.addListener(this);
+        fragment.setArguments(bundle);
+        fragment.setRetainInstance(true);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.transaction_list_fragment_container, fragment)
+                .commit();
+
     }
 
     @Override
@@ -63,7 +66,7 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
         bundle.putSerializable("item", event.getItem());
         intent.putExtras(bundle);
 
-        startActivityForResult(intent,EDITOR_ACTIVITY_UPDATE);
+        startActivityForResult(intent, EDITOR_ACTIVITY_UPDATE);
 
     }
 
@@ -71,14 +74,14 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         Bundle extras = null;
-        if(null != data)
+        if (null != data)
             extras = data.getExtras();
 
-        switch (requestCode){
+        switch (requestCode) {
             case EDITOR_ACTIVITY_UPDATE:
-                if(resultCode == RESULT_OK){
-                    if(null != data){
-                        Transaction item =(Transaction) data.getSerializableExtra("item");
+                if (resultCode == RESULT_OK) {
+                    if (null != data) {
+                        Transaction item = (Transaction) data.getSerializableExtra("item");
                         Log.i(LOG_TAG, item.toString());
                     }
                 }

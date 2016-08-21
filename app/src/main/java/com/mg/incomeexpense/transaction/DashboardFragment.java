@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.transaction;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.Tools;
+import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +33,15 @@ public class DashboardFragment extends Fragment
     private Account mAccount;
     private View.OnClickListener mOnClickSectionListener;
 
+    private TextView mTextViewTodayExpense;
+    private TextView mTextViewTodayIncome;
+    private TextView mTextViewThisWeekExpense;
+    private TextView mTextViewThisWeekIncome;
+    private TextView mTextViewThisMonthExpense;
+    private TextView mTextViewThisMonthIncome;
+    private TextView mTextViewThisYearExpense;
+    private TextView mTextViewThisYearIncome;
+
     public DashboardFragment() {
 
         mOnClickSectionListener = new View.OnClickListener() {
@@ -42,7 +53,10 @@ public class DashboardFragment extends Fragment
     }
 
     private void ShowTransactionList() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("account", mAccount);
         Intent intent = new Intent(getActivity(), TransactionListActivity.class);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -87,6 +101,14 @@ public class DashboardFragment extends Fragment
         LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_today);
         linearLayout.setOnClickListener(mOnClickSectionListener);
 
+        mTextViewTodayExpense = (TextView)rootView.findViewById(R.id.text_view_today_expense);
+        mTextViewTodayIncome = (TextView)rootView.findViewById(R.id.text_view_today_income);
+        mTextViewThisWeekExpense = (TextView)rootView.findViewById(R.id.text_view_this_week_expense);
+        mTextViewThisWeekIncome = (TextView)rootView.findViewById(R.id.text_view_this_week_income);
+        mTextViewThisMonthExpense = (TextView)rootView.findViewById(R.id.text_view_this_month_expense);
+        mTextViewThisMonthIncome = (TextView)rootView.findViewById(R.id.text_view_this_month_income);
+        mTextViewThisYearExpense = (TextView)rootView.findViewById(R.id.text_view_this_year_expense);
+        mTextViewThisYearIncome = (TextView)rootView.findViewById(R.id.text_view_this_year_income);
 
         linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_this_week);
         linearLayout.setOnClickListener(mOnClickSectionListener);
@@ -95,9 +117,44 @@ public class DashboardFragment extends Fragment
         linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_this_year);
         linearLayout.setOnClickListener(mOnClickSectionListener);
 
+        new GetData().execute("");
 
         return rootView;
 
 
     }
+
+    /*
+    http://stackoverflow.com/questions/9671546/asynctask-android-example
+     */
+    private class GetData extends AsyncTask<String, Void, DashboardData>{
+
+        @Override
+        protected DashboardData doInBackground(String... params) {
+
+            DashboardData d = IncomeExpenseRequestWrapper.getDashboardData(getActivity().getContentResolver(), mAccount, new Date());
+
+            return d;
+        }
+
+        @Override
+        protected void onPostExecute(DashboardData data) {
+            mTextViewTodayExpense.setText(data.today.toString());
+            mTextViewTodayIncome.setText(data.today.toString());
+            mTextViewThisWeekExpense.setText(data.thisWeek.toString());
+            mTextViewThisWeekIncome.setText(data.thisWeek.toString());
+            mTextViewThisMonthExpense.setText(data.thisMonth.toString());
+            mTextViewThisMonthIncome.setText(data.thisMonth.toString());
+            mTextViewThisYearExpense.setText(data.thisYear.toString());
+            mTextViewThisYearIncome.setText(data.thisYear.toString());
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+    }
+
 }
+

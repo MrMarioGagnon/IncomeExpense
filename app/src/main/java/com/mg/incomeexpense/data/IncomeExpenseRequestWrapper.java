@@ -4,17 +4,18 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
+import com.mg.incomeexpense.transaction.DashboardData;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.Date;
 
 /**
  * Created by mario on 2016-07-23.
@@ -158,7 +159,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null,IncomeExpenseContract.AccountEntry.COLUMN_NAME);
+            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.AccountEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(Account.create(cursor, contentResolver));
             }
@@ -177,7 +178,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null,IncomeExpenseContract.CategoryEntry.COLUMN_NAME);
+            cursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.CategoryEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(Category.create(cursor, contentResolver));
             }
@@ -196,7 +197,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, null, null, null,IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME);
+            cursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(PaymentMethod.create(cursor, contentResolver));
             }
@@ -207,6 +208,62 @@ public class IncomeExpenseRequestWrapper {
         }
 
         return assets;
+    }
+
+    public static DashboardData getDashboardData(ContentResolver contentResolver, Account account, Date date) {
+
+        String[] projection = new String[]{IncomeExpenseContract.TransactionEntry.COLUMN_TYPE,
+                IncomeExpenseContract.TransactionEntry.COLUMN_DATE,
+                IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT,
+                IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE};
+
+        String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
+        String[] selectionArgs = new String[]{account.getId().toString()};
+
+        DashboardData dashboardData = new DashboardData();
+
+        Integer sFirstDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfYear(date).getTime(), "yyyyMMdd"));
+        Integer sLastDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfYear(date).getTime(), "yyyyMMdd"));
+        Integer sFirstDateMonth = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfMonth(date).getTime(), "yyyyMMdd"));
+        Integer sLastDateMonth = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfMonth(date).getTime(), "yyyyMMdd"));
+        Integer sFirstDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfWeek(date).getTime(), "yyyyMMdd"));
+        Integer sLastDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfWeek(date).getTime(), "yyyyMMdd"));
+        Integer sToday = Integer.parseInt(Tools.formatDate(date, "yyyyMMdd"));
+
+        Cursor cursor = null;
+        try {
+            cursor = contentResolver.query(IncomeExpenseContract.TransactionEntry.CONTENT_URI, projection, selection, selectionArgs, null);
+            Integer cursorDate;
+            Double cursorAmount;
+            Double cursorExchangeRate;
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                cursorDate = Integer.parseInt(cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_DATE)).replace("-", ""));
+                cursorAmount = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT));
+                cursorExchangeRate = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE));
+
+                if (cursorDate >= sFirstDateYear && cursorDate <= sLastDateYear) {
+
+                    dashboardData.thisYear += cursorAmount * cursorExchangeRate;
+
+                    if (cursorDate >= sFirstDateMonth && cursorDate <= sLastDateMonth) {
+                        dashboardData.thisMonth += cursorAmount * cursorExchangeRate;
+                    }
+
+                    if (cursorDate >= sFirstDateWeek && cursorDate <= sLastDateWeek) {
+                        dashboardData.thisWeek += cursorAmount * cursorExchangeRate;
+                    }
+
+                    if (cursorDate == sToday)
+                        dashboardData.today += cursorAmount * cursorExchangeRate;
+                }
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return dashboardData;
     }
 
 }
