@@ -35,6 +35,10 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
     private ObjectValidator mObjectValidator = null;
     private ArrayList<String> mNames;
 
+    public ContributorEditorFragment() {
+        // Required empty public constructor
+    }
+
     public ObjectValidator getObjectValidator() {
 
         if (null == mObjectValidator) {
@@ -46,10 +50,6 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
 
     public void setObjectValidator(ObjectValidator mObjectValidator) {
         this.mObjectValidator = mObjectValidator;
-    }
-
-    public ContributorEditorFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
             throw new NullPointerException("A contributor is mandatory");
 
         mNames = (ArrayList<String>) bundle.getSerializable("names");
-        if(null == mNames)
+        if (null == mNames)
             throw new NullPointerException("A list of contributors name is mandatory");
     }
 

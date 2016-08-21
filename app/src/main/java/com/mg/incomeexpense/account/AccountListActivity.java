@@ -3,15 +3,12 @@ package com.mg.incomeexpense.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.contributor.Contributor;
-import com.mg.incomeexpense.contributor.ContributorEditorActivity;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
 import com.mg.incomeexpense.core.ItemSelectedHandler;
 import com.mg.incomeexpense.core.ItemSelectedListener;
@@ -35,7 +32,7 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
             bundle.putSerializable("item", account);
             intent.putExtras(bundle);
 
-            AccountListActivity.this.startActivityForResult(intent,EDITOR_ACTIVITY_ADD);
+            AccountListActivity.this.startActivityForResult(intent, EDITOR_ACTIVITY_ADD);
         }
     };
 
@@ -50,7 +47,7 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
         }
 
         ItemSelectedHandler f = (ItemSelectedHandler) getSupportFragmentManager().findFragmentById(R.id.account_list_fragment_container);
-        if(null != f){
+        if (null != f) {
             f.addListener(this);
         }
     }
@@ -63,7 +60,7 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
         bundle.putSerializable("item", event.getItem());
         intent.putExtras(bundle);
 
-        startActivityForResult(intent,EDITOR_ACTIVITY_UPDATE);
+        startActivityForResult(intent, EDITOR_ACTIVITY_UPDATE);
 
     }
 
@@ -71,14 +68,14 @@ public class AccountListActivity extends AppCompatActivity implements ItemSelect
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         Bundle extras = null;
-        if(null != data)
+        if (null != data)
             extras = data.getExtras();
 
-        switch (requestCode){
+        switch (requestCode) {
             case EDITOR_ACTIVITY_UPDATE:
-                if(resultCode == RESULT_OK){
-                    if(null != data){
-                        Account item =(Account) data.getSerializableExtra("item");
+                if (resultCode == RESULT_OK) {
+                    if (null != data) {
+                        Account item = (Account) data.getSerializableExtra("item");
                         Log.i(LOG_TAG, item.toString());
                     }
                 }

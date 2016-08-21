@@ -19,6 +19,7 @@ import java.util.Map;
 public class ContributorValidator implements ObjectValidator {
     private final List<String> mNames;
     private final Map<Integer, String> mValidationMessages;
+
     public ContributorValidator(List<String> names, Map<Integer, String> validationMessages) {
 
         mNames = names;

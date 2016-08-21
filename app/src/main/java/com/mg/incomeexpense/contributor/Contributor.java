@@ -74,7 +74,7 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
 
     @Override
     public int compareTo(Contributor instanceToCompare) {
-        if(null == instanceToCompare)
+        if (null == instanceToCompare)
             throw new NullPointerException("Parameter instanceToCompare of type Contributor is mandatory");
 
         return getName().compareToIgnoreCase(instanceToCompare.getName());

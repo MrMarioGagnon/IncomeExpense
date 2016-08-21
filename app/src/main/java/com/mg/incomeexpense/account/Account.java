@@ -2,7 +2,6 @@ package com.mg.incomeexpense.account;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;

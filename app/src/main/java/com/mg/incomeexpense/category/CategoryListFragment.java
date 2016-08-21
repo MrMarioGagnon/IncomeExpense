@@ -1,6 +1,5 @@
 package com.mg.incomeexpense.category;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,25 +20,24 @@ import java.util.List;
  * Created by mario on 2016-08-07.
  */
 public class CategoryListFragment extends Fragment implements ItemSelectedHandler {
+    private final List<ItemSelectedListener> mListeners = new ArrayList<>();
     private View rootView;
     private ExpandableListView lv;
     private ExpandableListAdapter mAdapter;
-    private final List<ItemSelectedListener> mListeners = new ArrayList<>();
-
     private ExpandableListView.OnChildClickListener mChildCategoryClickListener = new ExpandableListView.OnChildClickListener() {
 
         @Override
         public boolean onChildClick(ExpandableListView parent, View view,
                                     int groupPosition, int childPosition, long rowId) {
 
-            Category category =  ((CategoryListAdapter)parent.getExpandableListAdapter()).getCategories()[groupPosition];
+            Category category = ((CategoryListAdapter) parent.getExpandableListAdapter()).getCategories()[groupPosition];
 
 
             String child = (String) parent.getExpandableListAdapter().getChild(
                     groupPosition, childPosition);
             category.setSelectedSubCategory(child);
 
-            notifyListener( new ItemSelectedEvent(category) );
+            notifyListener(new ItemSelectedEvent(category));
 
 /*
             Intent mIntent = new Intent();
@@ -77,7 +75,7 @@ public class CategoryListFragment extends Fragment implements ItemSelectedHandle
 
     }
 
-    public ExpandableListAdapter getAdapter(){
+    public ExpandableListAdapter getAdapter() {
         return mAdapter;
     }
 

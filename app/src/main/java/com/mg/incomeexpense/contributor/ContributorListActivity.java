@@ -3,13 +3,9 @@ package com.mg.incomeexpense.contributor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
@@ -34,7 +30,7 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
             bundle.putSerializable("item", contributor);
             intent.putExtras(bundle);
 
-            ContributorListActivity.this.startActivityForResult(intent,EDITOR_ACTIVITY);
+            ContributorListActivity.this.startActivityForResult(intent, EDITOR_ACTIVITY);
         }
     };
 
@@ -49,7 +45,7 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
         }
 
         ItemSelectedHandler f = (ItemSelectedHandler) getSupportFragmentManager().findFragmentById(R.id.contributor_list_fragment_container);
-        if(null != f){
+        if (null != f) {
             f.addListener(this);
         }
     }
@@ -62,7 +58,7 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
         bundle.putSerializable("item", event.getItem());
         intent.putExtras(bundle);
 
-        startActivityForResult(intent,EDITOR_ACTIVITY);
+        startActivityForResult(intent, EDITOR_ACTIVITY);
 
     }
 
@@ -70,14 +66,14 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         Bundle extras = null;
-        if(null != data)
+        if (null != data)
             extras = data.getExtras();
 
-        switch (requestCode){
+        switch (requestCode) {
             case EDITOR_ACTIVITY:
-                if(resultCode == RESULT_OK){
-                    if(null != data){
-                        Contributor item =(Contributor) data.getSerializableExtra("item");
+                if (resultCode == RESULT_OK) {
+                    if (null != data) {
+                        Contributor item = (Contributor) data.getSerializableExtra("item");
                         Log.i(LOG_TAG, item.toString());
                     }
                 }

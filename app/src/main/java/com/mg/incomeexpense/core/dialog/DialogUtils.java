@@ -24,17 +24,17 @@ public class DialogUtils {
             };
 
 
-	public static AlertDialog availableCategoryDialog(final Context context,
-			final CharSequence[] adapter,
-			final SingleChoiceEventHandler clickCommand) {
+    public static AlertDialog availableCategoryDialog(final Context context,
+                                                      final CharSequence[] adapter,
+                                                      final SingleChoiceEventHandler clickCommand) {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context)
-				.setItems(adapter, new SingleChoiceEventListener(clickCommand))
-				.setTitle(R.string.dialog_title_select_to_edit)
-				.setInverseBackgroundForced(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setItems(adapter, new SingleChoiceEventListener(clickCommand))
+                .setTitle(R.string.dialog_title_select_to_edit)
+                .setInverseBackgroundForced(true);
 
-		return builder.create();
-	}
+        return builder.create();
+    }
 
     public static AlertDialog messageBox(final Context context,
                                          final String message, final String title) {

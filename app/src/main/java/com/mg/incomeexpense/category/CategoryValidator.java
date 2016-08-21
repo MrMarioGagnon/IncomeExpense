@@ -43,7 +43,7 @@ public class CategoryValidator implements ObjectValidator {
 
     }
 
-    public ValidationStatus Validate(ObjectBase objectToValidate){
+    public ValidationStatus Validate(ObjectBase objectToValidate) {
 
         List<String> messages = new ArrayList<>();
 

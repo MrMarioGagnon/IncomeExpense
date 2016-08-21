@@ -27,21 +27,40 @@ import java.util.List;
  */
 public class TransactionListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ItemSelectedHandler {
 
+       /*
+        Account
+        Category
+        Type
+        Date
+        Amount
+        Currency
+        ExchangeRate
+        PaymentMethod
+        Note
+         */
+
     public static final int COL_DATE = 1;
     public static final int COL_ACCOUNT_ID = 2;
-    public static final int COL_COLUMN_TYPE = 3;
-    public static final int COL_COLUMN_AMOUNT = 4;
-    public static final int COL_COLUMN_CURRENCY = 4;
-    public static final int COL_COLUMN_EXCHANGERATE = 4;
+    public static final int COL_CATEGORY = 3;
+    public static final int COL_COLUMN_TYPE = 4;
+    public static final int COL_COLUMN_DATE = 5;
+    public static final int COL_COLUMN_AMOUNT = 6;
+    public static final int COL_COLUMN_CURRENCY = 7;
+    public static final int COL_COLUMN_EXCHANGERATE = 8;
+    public static final int COL_COLUMN_PAYMENT_METHOD_ID = 9;
+    public static final int COL_COLUMN_NOTE = 10;
 
     private static final String[] TRANSACTION_COLUMNS = {
             IncomeExpenseContract.TransactionEntry._ID,
-            IncomeExpenseContract.TransactionEntry.COLUMN_DATE,
             IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID,
+            IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY,
             IncomeExpenseContract.TransactionEntry.COLUMN_TYPE,
+            IncomeExpenseContract.TransactionEntry.COLUMN_DATE,
             IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT,
             IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY,
-            IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE
+            IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE,
+            IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID,
+            IncomeExpenseContract.TransactionEntry.COLUMN_NOTE
     };
     private static final String LOG_TAG = TransactionListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";

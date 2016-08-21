@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.core.ItemRepositorySynchronizerException;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 

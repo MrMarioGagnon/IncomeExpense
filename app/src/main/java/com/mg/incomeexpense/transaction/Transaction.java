@@ -39,17 +39,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mNew = false;
         newInstance.mDirty = false;
 
-        /*
-        Account
-        Category
-        Type
-        Date
-        Amount
-        Currency
-        ExchangeRate
-        PaymentMethod
-        Note
-         */
+
 
         Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ID));
         Long accountId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID));
@@ -70,13 +60,15 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
             }
         }
 
-        String[] categoryParts = categoryId.split("|");
-        subItemCursor = contentResolver.query( IncomeExpenseContract.CategoryEntry.buildInstanceUri(Integer.getInteger(categoryParts[0])), null, null, null, null );
+        String[] categoryParts = categoryId.split("\\|");
+        int catId = Integer.parseInt(categoryParts[0]);
+        String subCat = categoryParts[1];
+        subItemCursor = contentResolver.query( IncomeExpenseContract.CategoryEntry.buildInstanceUri(catId), null, null, null, null );
         Category category = null;
         if(subItemCursor != null){
             if(subItemCursor.moveToFirst()){
                 category = Category.create(subItemCursor, contentResolver);
-                category.setSelectedSubCategory(categoryParts[1]);
+                category.setSelectedSubCategory(subCat);
             }
         }
 

@@ -117,7 +117,7 @@ public class AccountListFragment extends Fragment implements LoaderManager.Loade
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (null != cursor) {
 
-                    Account account = Account.create(cursor,AccountListFragment.this.getActivity().getContentResolver());
+                    Account account = Account.create(cursor, AccountListFragment.this.getActivity().getContentResolver());
 
                     AccountListFragment.this.notifyListener(new ItemSelectedEvent(account));
 
@@ -168,7 +168,7 @@ public class AccountListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void addListener(ItemSelectedListener listener) {
 
-        if(null == listener)
+        if (null == listener)
             return;
 
         if (!mListeners.contains(listener)) {
@@ -179,7 +179,7 @@ public class AccountListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void notifyListener(ItemSelectedEvent event) {
 
-        if(null == event)
+        if (null == event)
             return;
 
         for (Object item : mListeners) {

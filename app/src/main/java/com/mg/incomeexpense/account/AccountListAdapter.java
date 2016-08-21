@@ -3,17 +3,13 @@ package com.mg.incomeexpense.account;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.widget.CursorAdapter;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.contributor.ContributorListFragment;
 
 /**
  * Created by mario on 2016-07-19.
@@ -44,9 +40,9 @@ public class AccountListAdapter extends CursorAdapter {
         viewHolder.textViewName.setText(account.getName());
         viewHolder.textViewCurrency.setText(account.getCurrency());
         viewHolder.textViewContributors.setText(account.getContributorsForDisplay());
-        if(account.getIsClose()){
+        if (account.getIsClose()) {
             view.setBackgroundColor(Color.RED);
-        }else{
+        } else {
 //            Log.i(LOG_TAG, "INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
 //            TypedValue a = new TypedValue();
 //            context.getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
