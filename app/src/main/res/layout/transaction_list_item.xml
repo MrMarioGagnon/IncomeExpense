@@ -7,7 +7,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/text_view_date"
@@ -24,10 +25,27 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
     <TextView
         android:id="@+id/text_view_type"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/text_view_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>
 

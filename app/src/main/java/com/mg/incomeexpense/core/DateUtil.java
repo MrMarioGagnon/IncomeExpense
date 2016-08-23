@@ -19,6 +19,7 @@ public class DateUtil {
         int firstDayOfWeek = 1;
         switch(currentDayOfWeek){
             case Calendar.MONDAY:
+                firstDayOfWeek = calendar.get(Calendar.DATE);
                 break;
             case Calendar.TUESDAY:
                 firstDayOfWeek = calendar.get(Calendar.DATE) - 1;

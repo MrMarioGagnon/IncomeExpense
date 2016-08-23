@@ -139,14 +139,14 @@ public class DashboardFragment extends Fragment
 
         @Override
         protected void onPostExecute(DashboardData data) {
-            mTextViewTodayExpense.setText(data.today.toString());
-            mTextViewTodayIncome.setText(data.today.toString());
-            mTextViewThisWeekExpense.setText(data.thisWeek.toString());
-            mTextViewThisWeekIncome.setText(data.thisWeek.toString());
-            mTextViewThisMonthExpense.setText(data.thisMonth.toString());
-            mTextViewThisMonthIncome.setText(data.thisMonth.toString());
-            mTextViewThisYearExpense.setText(data.thisYear.toString());
-            mTextViewThisYearIncome.setText(data.thisYear.toString());
+            mTextViewTodayExpense.setText(data.todayExpense.toString());
+            mTextViewTodayIncome.setText(data.todayIncome.toString());
+            mTextViewThisWeekExpense.setText(data.thisWeekExpense.toString());
+            mTextViewThisWeekIncome.setText(data.thisWeekIncome.toString());
+            mTextViewThisMonthExpense.setText(data.thisMonthExpense.toString());
+            mTextViewThisMonthIncome.setText(data.thisMonthIncome.toString());
+            mTextViewThisYearExpense.setText(data.thisYearExpense.toString());
+            mTextViewThisYearIncome.setText(data.thisYearIncome.toString());
         }
 
         @Override

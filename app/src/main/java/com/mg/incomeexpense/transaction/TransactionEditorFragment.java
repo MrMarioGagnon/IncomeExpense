@@ -1,9 +1,10 @@
 package com.mg.incomeexpense.transaction;
 
-import android.app.Dialog;
+import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,41 +13,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.account.AccountValidator;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.category.CategoryListActivity;
-import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.core.DatePickerFragment;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
-import com.mg.incomeexpense.core.dialog.DialogUtils;
-import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by mario on 2016-07-19.
  */
-public class TransactionEditorFragment extends Fragment implements ItemStateChangeHandler {
+public class TransactionEditorFragment extends Fragment implements ItemStateChangeHandler,  DatePickerDialog.OnDateSetListener  {
 
     private static final String LOG_TAG = TransactionEditorFragment.class.getSimpleName();
     private static final int CATEGORY_LIST_ACTIVITY = 1;
@@ -76,11 +73,21 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
     private ImageView mImageViewCategory;
 
+    private ImageView mImageViewDate;
+
     private TextView mTextViewCategory;
 
     private List<Account> mAccounts;
     private List<Category> mCategories;
     private List<PaymentMethod> mPaymentMethods;
+
+    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            updateEditTextDate(year, monthOfYear, dayOfMonth);
+        }
+    };
 
     public TransactionEditorFragment() {
 
@@ -134,6 +141,12 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         this.mObjectValidator = mObjectValidator;
     }
 
+
+    private void updateEditTextDate(int year, int month, int day) {
+        mEditTextDate.setText(String.format("%d-%02d-%02d", year, month + 1,
+                day));
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,8 +161,8 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         if (null == mTransaction)
             throw new NullPointerException("An transaction is mandatory");
 
-        mAccounts = (ArrayList<Account>)bundle.getSerializable("accounts");
-        mCategories = (ArrayList<Category>)bundle.getSerializable("categories");
+        mAccounts = (ArrayList<Account>) bundle.getSerializable("accounts");
+        mCategories = (ArrayList<Category>) bundle.getSerializable("categories");
         mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
 
         mAccountSpinnerAdapter = new AccountSpinnerAdapter(getActivity(),
@@ -184,13 +197,15 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
                 // Here you get the current item (a User object) that is selected by its position
-                Account user = mAccountSpinnerAdapter.getItem(position);
-                // Here you can do the action you want to...
-                Toast.makeText(getActivity(), "ID: " + user.getId() + "\nName: " + user.getName(),
-                        Toast.LENGTH_SHORT).show();
+//                Account user = mAccountSpinnerAdapter.getItem(position);
+//                // Here you can do the action you want to...
+//                Toast.makeText(getActivity(), "ID: " + user.getId() + "\nName: " + user.getName(),
+//                        Toast.LENGTH_SHORT).show();
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
         });
 
         mRadioGroupType = (RadioGroup) rootView.findViewById(R.id.radioGroupType);
@@ -204,13 +219,15 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
                 // Here you get the current item (a User object) that is selected by its position
-                Account user = mAccountSpinnerAdapter.getItem(position);
-                // Here you can do the action you want to...
-                Toast.makeText(getActivity(), "ID: " + user.getId() + "\nName: " + user.getName(),
-                        Toast.LENGTH_SHORT).show();
+//                Account user = mAccountSpinnerAdapter.getItem(position);
+//                // Here you can do the action you want to...
+//                Toast.makeText(getActivity(), "ID: " + user.getId() + "\nName: " + user.getName(),
+//                        Toast.LENGTH_SHORT).show();
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
         });
 
         mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
@@ -233,12 +250,20 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         });
         mTextViewCategory = (TextView) rootView.findViewById(R.id.text_view_category_name);
 
+        mImageViewDate = (ImageView) rootView.findViewById(R.id.image_view_date);
+        mImageViewDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowCalendar();
+            }
+        });
+
         mRadioButtonExpense = (RadioButton) rootView.findViewById(R.id.radioButtonExpense);
         mRadioButtonIncome = (RadioButton) rootView.findViewById(R.id.radioButtonIncome);
 
         if (null == savedInstanceState) {
 
-            if(mTransaction.isNew()){
+            if (mTransaction.isNew()) {
                 // get the current date
                 Calendar c = Calendar.getInstance();
                 year = c.get(Calendar.YEAR);
@@ -249,12 +274,12 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 mTransaction.setCurrency(Tools.getDefaultCurrency(getActivity()));
             }
 
-            Tools.setSpinner(mTransaction.getAccount(),mSpinnerAccount);
-            if(mTransaction.getCategory() != null)
+            Tools.setSpinner(mTransaction.getAccount(), mSpinnerAccount);
+            if (mTransaction.getCategory() != null)
                 mTextViewCategory.setText(mTransaction.getCategory().getSelectedCategoryToDisplay());
-            if(mTransaction.getType() == Transaction.TransactionType.Expense){
+            if (mTransaction.getType() == Transaction.TransactionType.Expense) {
                 mRadioButtonExpense.setChecked(true);
-            }else{
+            } else {
                 mRadioButtonIncome.setChecked(true);
             }
             mEditTextDate.setText(mTransaction.getDate());
@@ -275,7 +300,17 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         Bundle bundle = new Bundle();
         bundle.putBoolean("hideHomeButton", true);
         intent.putExtras(bundle);
-        startActivityForResult(intent,CATEGORY_LIST_ACTIVITY);
+        startActivityForResult(intent, CATEGORY_LIST_ACTIVITY);
+
+    }
+
+    private void ShowCalendar() {
+
+        DatePickerFragment picker = new DatePickerFragment();
+        picker.setListener(this);
+
+        picker.show(getFragmentManager(), "datePicker");
+
 
     }
 
@@ -283,12 +318,12 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
 
-        switch(requestCode){
+        switch (requestCode) {
             case CATEGORY_LIST_ACTIVITY:
-                if(data != null){
-                    Category category = (Category)data.getSerializableExtra("item");
+                if (data != null) {
+                    Category category = (Category) data.getSerializableExtra("item");
 
-                    if(category != null){
+                    if (category != null) {
                         mTextViewCategory.setText(category.getSelectedCategoryToDisplay());
                         mTextViewCategory.setTag(category);
                     }
@@ -333,30 +368,30 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 Account account = (Account) mSpinnerAccount.getSelectedItem();
                 mTransaction.setAccount(account);
 
-                Category category = (Category)mTextViewCategory.getTag();
-                if(category != null){
+                Category category = (Category) mTextViewCategory.getTag();
+                if (category != null) {
                     mTransaction.setCategory(category);
                 }
 
                 int selectedRadioButtonId = mRadioGroupType.getCheckedRadioButtonId();
-                mTransaction.setType( selectedRadioButtonId == R.id.radioButtonExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income);
+                mTransaction.setType(selectedRadioButtonId == R.id.radioButtonExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income);
 
                 PaymentMethod paymentMethod = (PaymentMethod) mSpinnerPaymentMethod.getSelectedItem();
                 mTransaction.setPaymentMethod(paymentMethod);
 
-                String currency = (String)mSpinnerCurrency.getSelectedItem();
+                String currency = (String) mSpinnerCurrency.getSelectedItem();
                 mTransaction.setCurrency(currency);
 
                 String date = mEditTextDate.getText().toString();
                 mTransaction.setDate(date);
 
                 String amount = mEditTextAmount.getText().toString();
-                if(amount.trim().length() > 0)
-                    mTransaction.setAmount( Double.parseDouble(amount) );
+                if (amount.trim().length() > 0)
+                    mTransaction.setAmount(Double.parseDouble(amount));
 
                 String exchangeRate = mEditTextExchangeRate.getText().toString();
-                if(exchangeRate.trim().length() > 0)
-                    mTransaction.setExchangeRate( Double.parseDouble(exchangeRate) );
+                if (exchangeRate.trim().length() > 0)
+                    mTransaction.setExchangeRate(Double.parseDouble(exchangeRate));
 
                 String note = mEditTextNote.getText().toString();
                 mTransaction.setNote(note);
@@ -404,34 +439,16 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
     }
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, day);
 
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = sdf.format(c.getTime());
 
-    private void showContributorSetterDialog() {
+            mEditTextDate.setText(formattedDate);
 
-//        try {
-//
-//            CharSequence[] contributorArray = new CharSequence[mAvailableContributors.size()];
-//            int i = 0;
-//            for (Contributor contributor : mAvailableContributors) {
-//                contributorArray[i++] = contributor.getName();
-//            }
-//
-//            Dialog dialog = DialogUtils.childSetterDialog(
-//                    this.getContext(),
-//                    contributorArray,
-//                    mContributorMultipleChoiceEventHandler,
-//                    buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors),
-//                    getString(R.string.dialog_title_contributor_setter));
-//
-//            dialog.setOwnerActivity(this.getActivity());
-//            dialog.show();
-//        } catch (Exception exception) {
-//            DialogUtils.messageBox(this.getContext(),
-//                    getString(R.string.error_unable_to_fetch_all_contributor),
-//                    getString(R.string.dialog_title_contributor_setter)).show();
-//
-//        }
 
     }
-
 }

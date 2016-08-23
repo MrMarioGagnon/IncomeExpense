@@ -42,17 +42,20 @@ public class TransactionListAdapter extends CursorAdapter {
         viewHolder.textViewDate.setText(transaction.getDate());
         viewHolder.textViewAccount.setText(transaction.getAccount().getName());
         viewHolder.textViewType.setText(transaction.getType().toString() );
+        viewHolder.textViewAmount.setText(transaction.getAmount().toString());
     }
 
     public static class ViewHolder {
         public final TextView textViewDate;
         public final TextView textViewAccount;
         public final TextView textViewType;
+        public final TextView textViewAmount;
 
         public ViewHolder(View view) {
             textViewDate = (TextView) view.findViewById(R.id.text_view_date);
             textViewAccount = (TextView) view.findViewById(R.id.text_view_account);
             textViewType = (TextView) view.findViewById(R.id.text_view_type);
+            textViewAmount = (TextView) view.findViewById(R.id.text_view_amount);
         }
     }
 }

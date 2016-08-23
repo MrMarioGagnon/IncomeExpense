@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
@@ -13,6 +14,7 @@ import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 import com.mg.incomeexpense.transaction.DashboardData;
+import com.mg.incomeexpense.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -222,13 +224,13 @@ public class IncomeExpenseRequestWrapper {
 
         DashboardData dashboardData = new DashboardData();
 
-        Integer sFirstDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfYear(date).getTime(), "yyyyMMdd"));
-        Integer sLastDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfYear(date).getTime(), "yyyyMMdd"));
-        Integer sFirstDateMonth = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfMonth(date).getTime(), "yyyyMMdd"));
-        Integer sLastDateMonth = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfMonth(date).getTime(), "yyyyMMdd"));
-        Integer sFirstDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfWeek(date).getTime(), "yyyyMMdd"));
-        Integer sLastDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfWeek(date).getTime(), "yyyyMMdd"));
-        Integer sToday = Integer.parseInt(Tools.formatDate(date, "yyyyMMdd"));
+        Integer firstDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfYear(date).getTime(), "yyyyMMdd"));
+        Integer lastDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfYear(date).getTime(), "yyyyMMdd"));
+        Integer firstDateMonth = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfMonth(date).getTime(), "yyyyMMdd"));
+        Integer lastDateMonth = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfMonth(date).getTime(), "yyyyMMdd"));
+        Integer firstDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfWeek(date).getTime(), "yyyyMMdd"));
+        Integer lastDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfWeek(date).getTime(), "yyyyMMdd"));
+        Integer today = Integer.parseInt(Tools.formatDate(date, "yyyyMMdd"));
 
         Cursor cursor = null;
         try {
@@ -236,25 +238,57 @@ public class IncomeExpenseRequestWrapper {
             Integer cursorDate;
             Double cursorAmount;
             Double cursorExchangeRate;
+            int iType;
+            Transaction.TransactionType type;
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 cursorDate = Integer.parseInt(cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_DATE)).replace("-", ""));
                 cursorAmount = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT));
                 cursorExchangeRate = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE));
+                iType = cursor.getInt(cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE)));
+                type = iType == 0 ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income;
+                if (cursorDate >= firstDateYear && cursorDate <= lastDateYear) {
 
-                if (cursorDate >= sFirstDateYear && cursorDate <= sLastDateYear) {
+                    switch (type) {
+                        case Expense:
 
-                    dashboardData.thisYear += cursorAmount * cursorExchangeRate;
+                            dashboardData.thisYearExpense += cursorAmount * cursorExchangeRate;
 
-                    if (cursorDate >= sFirstDateMonth && cursorDate <= sLastDateMonth) {
-                        dashboardData.thisMonth += cursorAmount * cursorExchangeRate;
+                            if (cursorDate >= firstDateMonth && cursorDate <= lastDateMonth) {
+                                dashboardData.thisMonthExpense += cursorAmount * cursorExchangeRate;
+                            }
+
+                            if (cursorDate >= firstDateWeek && cursorDate <= lastDateWeek) {
+                                dashboardData.thisWeekExpense += cursorAmount * cursorExchangeRate;
+                            }
+
+                            if (cursorDate == today)
+                                dashboardData.todayExpense += cursorAmount * cursorExchangeRate;
+
+
+                            break;
+                        case Income:
+
+                            dashboardData.thisYearIncome += cursorAmount * cursorExchangeRate;
+
+                            if (cursorDate >= firstDateMonth && cursorDate <= lastDateMonth) {
+                                dashboardData.thisMonthIncome += cursorAmount * cursorExchangeRate;
+                            }
+
+                            if (cursorDate >= firstDateWeek && cursorDate <= lastDateWeek) {
+                                dashboardData.thisWeekIncome += cursorAmount * cursorExchangeRate;
+                            }
+
+                            if (cursorDate == today)
+                                dashboardData.todayIncome += cursorAmount * cursorExchangeRate;
+
+
+                            break;
+                        default:
+                            Log.i(LOG_TAG, "Unknown type" + type.toString());
+                            break;
                     }
 
-                    if (cursorDate >= sFirstDateWeek && cursorDate <= sLastDateWeek) {
-                        dashboardData.thisWeek += cursorAmount * cursorExchangeRate;
-                    }
 
-                    if (cursorDate == sToday)
-                        dashboardData.today += cursorAmount * cursorExchangeRate;
                 }
             }
         } finally {

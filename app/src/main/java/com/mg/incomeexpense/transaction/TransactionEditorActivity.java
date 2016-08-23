@@ -48,7 +48,7 @@ public class TransactionEditorActivity extends AppCompatActivity implements Item
             fragment.addListener(this);
             fragment.setArguments(bundle);
             fragment.setRetainInstance(true);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.transaction_editor_container, fragment)
                     .commit();
         }

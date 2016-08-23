@@ -11,29 +11,33 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView android:layout_width="fill_parent" android:id="@+id/textViewValidationErrorMessage"
+        <TextView
+            android:id="@+id/textViewValidationErrorMessage"
             style="@style/ErrorBoxStyle"
-            android:visibility="gone"/>
+            android:layout_width="fill_parent"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/linear_layout_account"
             style="@style/TransactionEditorSectionStyle">
 
-           <LinearLayout
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:orientation="vertical"
-               android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="@string/text_view_account"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_account" />
 
-               <Spinner android:id="@+id/spinner_account"
-                   android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+                <Spinner
+                    android:id="@+id/spinner_account"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
 
-           </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -44,28 +48,27 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_category"/>
+                    android:text="@string/text_view_category" />
 
                 <TextView
+                    android:id="@+id/text_view_category_name"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/text_view_category_name"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/image_view_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/image_view_category"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_chevron_right_white_24dp"/>
+                android:layout_gravity="center"
+                android:src="@drawable/ic_chevron_right_white_24dp" />
 
         </LinearLayout>
 
@@ -76,36 +79,35 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_type"/>
+                    android:text="@string/text_view_type" />
 
 
-                    <RadioGroup
+                <RadioGroup
+                    android:id="@+id/radioGroupType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkedButton="@+id/radioButtonExpense"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButtonExpense"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/radioGroupType"
-                        android:checkedButton="@+id/radioButtonExpense"
-                        android:orientation="horizontal">
+                        android:text="@string/radio_button_expense" />
 
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/radio_button_expense"
-                            android:id="@+id/radioButtonExpense" />
+                    <RadioButton
+                        android:id="@+id/radioButtonIncome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/radio_button_income" />
 
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/radio_button_income"
-                            android:id="@+id/radioButtonIncome"/>
-
-                    </RadioGroup>
-
+                </RadioGroup>
 
 
             </LinearLayout>
@@ -119,23 +121,29 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_date"/>
+                    android:text="@string/text_view_date" />
 
                 <EditText
-                    android:layout_width="match_parent"
+                    android:id="@+id/edit_text_date"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
                     android:ems="10"
-                    android:id="@+id/edit_text_date" />
-
-
+                    android:inputType="date" />
             </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/image_view_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_insert_invitation_white_24dp"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 
@@ -147,20 +155,20 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_amount"/>
+                    android:text="@string/text_view_amount" />
 
                 <EditText
+                    android:id="@+id/edit_text_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/edit_text_amount"/>
+                    android:inputType="numberDecimal" />
 
             </LinearLayout>
 
@@ -173,16 +181,18 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_currency"/>
+                    android:text="@string/text_view_currency" />
 
-                <Spinner android:id="@+id/spinner_currency"
-                    android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+                <Spinner
+                    android:id="@+id/spinner_currency"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -195,20 +205,20 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_exchange_rate"/>
+                    android:text="@string/text_view_exchange_rate" />
 
                 <EditText
+                    android:id="@+id/edit_text_exchange_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/edit_text_exchange_rate"/>
+                    android:inputType="numberDecimal" />
 
             </LinearLayout>
 
@@ -221,16 +231,18 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_payment_method"/>
+                    android:text="@string/text_view_payment_method" />
 
-                <Spinner android:id="@+id/spinner_payment_method"
-                    android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+                <Spinner
+                    android:id="@+id/spinner_payment_method"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -243,20 +255,20 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_note"/>
+                    android:text="@string/text_view_note" />
 
                 <EditText
+                    android:id="@+id/edit_text_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
                     android:ems="10"
-                    android:id="@+id/edit_text_note" />
+                    android:inputType="textMultiLine" />
 
             </LinearLayout>
 
