@@ -3,11 +3,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/textView_payment_method_name"
@@ -16,18 +18,31 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/textView_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"/>
+            android:id="@+id/text_view_contributors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_contributors"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/text_view_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/text_view_exchange_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>
 

@@ -42,37 +42,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_layout_category"
-            style="@style/TransactionEditorSectionStyle">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_view_category" />
-
-                <TextView
-                    android:id="@+id/text_view_category_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/image_view_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_chevron_right_white_24dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/linear_layout_type"
             style="@style/TransactionEditorSectionStyle">
 
@@ -115,7 +84,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_layout_date"
+            android:id="@+id/linear_layout_payment_method"
             style="@style/TransactionEditorSectionStyle">
 
             <LinearLayout
@@ -127,23 +96,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_date" />
+                    android:text="@string/text_view_payment_method" />
 
-                <EditText
-                    android:id="@+id/edit_text_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="date" />
+                <Spinner
+                    android:id="@+id/spinner_payment_method"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
-
-
-            <ImageView
-                android:id="@+id/image_view_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_insert_invitation_white_24dp"
-                android:layout_gravity="center"/>
 
         </LinearLayout>
 
@@ -189,10 +149,10 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_currency" />
 
-                <Spinner
-                    android:id="@+id/spinner_currency"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/text_view_currency"/>
 
             </LinearLayout>
 
@@ -225,7 +185,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_layout_payment_method"
+            android:id="@+id/linear_layout_category"
             style="@style/TransactionEditorSectionStyle">
 
             <LinearLayout
@@ -237,14 +197,53 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_payment_method" />
+                    android:text="@string/text_view_category" />
 
-                <Spinner
-                    android:id="@+id/spinner_payment_method"
-                    android:layout_width="fill_parent"
+                <TextView
+                    android:id="@+id/text_view_category_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/image_view_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_chevron_right_white_24dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_date"
+            style="@style/TransactionEditorSectionStyle">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_date" />
+
+                <TextView
+                    android:id="@+id/text_view_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"/>
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/image_view_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_insert_invitation_white_24dp" />
 
         </LinearLayout>
 

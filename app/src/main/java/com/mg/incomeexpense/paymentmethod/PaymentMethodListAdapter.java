@@ -41,6 +41,7 @@ public class PaymentMethodListAdapter extends CursorAdapter {
         viewHolder.textViewName.setText(paymentMethod.getName());
         viewHolder.textViewCurrency.setText(paymentMethod.getCurrency());
         viewHolder.textViewContributors.setText(paymentMethod.getContributorsForDisplay());
+        viewHolder.textViewExchangeRate.setText(paymentMethod.getExchangeRate().toString());
         if(paymentMethod.getIsClose()){
             view.setBackgroundColor(Color.RED);
         }else{
@@ -52,11 +53,13 @@ public class PaymentMethodListAdapter extends CursorAdapter {
         public final TextView textViewName;
         public final TextView textViewCurrency;
         public final TextView textViewContributors;
+        public final TextView textViewExchangeRate;
 
         public ViewHolder(View view) {
             textViewName = (TextView) view.findViewById(R.id.textView_payment_method_name);
-            textViewCurrency = (TextView) view.findViewById(R.id.textView_currency);
-            textViewContributors = (TextView) view.findViewById(R.id.textView_contributors);
+            textViewCurrency = (TextView) view.findViewById(R.id.text_view_currency);
+            textViewContributors = (TextView) view.findViewById(R.id.text_view_contributors);
+            textViewExchangeRate = (TextView)view.findViewById(R.id.text_view_exchange_rate);
         }
     }
 }

@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,13 +35,12 @@ import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by mario on 2016-07-19.
  */
-public class TransactionEditorFragment extends Fragment implements ItemStateChangeHandler,  DatePickerDialog.OnDateSetListener  {
+public class TransactionEditorFragment extends Fragment implements ItemStateChangeHandler, DatePickerDialog.OnDateSetListener {
 
     private static final String LOG_TAG = TransactionEditorFragment.class.getSimpleName();
     private static final int CATEGORY_LIST_ACTIVITY = 1;
@@ -59,10 +56,9 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     private Spinner mSpinnerPaymentMethod;
     private PaymentMethodSpinnerAdapter mPaymentMethodSpinnerAdapter;
 
-    private Spinner mSpinnerCurrency;
-    private ArrayAdapter<CharSequence> mSpinnerCurrencyAdapter;
+    private TextView mTextViewCurrency;
 
-    private EditText mEditTextDate;
+    private TextView mTextViewDate;
     private RadioGroup mRadioGroupType;
     private RadioButton mRadioButtonExpense;
     private RadioButton mRadioButtonIncome;
@@ -78,54 +74,10 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     private TextView mTextViewCategory;
 
     private List<Account> mAccounts;
-    private List<Category> mCategories;
     private List<PaymentMethod> mPaymentMethods;
-
-    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            updateEditTextDate(year, monthOfYear, dayOfMonth);
-        }
-    };
 
     public TransactionEditorFragment() {
 
-//        mSelectedContributors = new ArrayList<>();
-//
-//        mOnSwitchClickListener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Switch s = (Switch) v;
-//
-//                s.setText(s.isChecked() ? getString(R.string.account_close) : getString(R.string.account_active));
-//
-//            }
-//        };
-//
-//        mOnContributorImageButtonClickListener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showContributorSetterDialog();
-//            }
-//        };
-//
-//        mContributorMultipleChoiceEventHandler = new MultipleChoiceEventHandler() { // Creating an anonymous Class Object
-//            @Override
-//            public void execute(boolean[] idSelected) {
-//                mSelectedContributors.clear();
-//                StringBuilder sb = new StringBuilder();
-//                for (int i = 0; i < idSelected.length; i++) {
-//                    if (idSelected[i]) {
-//                        Contributor contributor = mAvailableContributors.get(i);
-//                        mSelectedContributors.add(contributor);
-//                        sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), contributor.getName()));
-//                    }
-//                }
-//                mTextViewContributors.setText(sb.toString());
-//            }
-//        };
     }
 
     public ObjectValidator getObjectValidator() {
@@ -135,16 +87,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         }
 
         return mObjectValidator;
-    }
-
-    public void setObjectValidator(ObjectValidator mObjectValidator) {
-        this.mObjectValidator = mObjectValidator;
-    }
-
-
-    private void updateEditTextDate(int year, int month, int day) {
-        mEditTextDate.setText(String.format("%d-%02d-%02d", year, month + 1,
-                day));
     }
 
     @Override
@@ -162,7 +104,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             throw new NullPointerException("An transaction is mandatory");
 
         mAccounts = (ArrayList<Account>) bundle.getSerializable("accounts");
-        mCategories = (ArrayList<Category>) bundle.getSerializable("categories");
         mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
 
         mAccountSpinnerAdapter = new AccountSpinnerAdapter(getActivity(),
@@ -172,10 +113,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         mPaymentMethodSpinnerAdapter = new PaymentMethodSpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 mPaymentMethods);
-
-        mSpinnerCurrencyAdapter = ArrayAdapter.createFromResource(
-                getActivity(), R.array.pref_currency_values,
-                android.R.layout.simple_spinner_dropdown_item);
     }
 
     @Override
@@ -190,23 +127,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
         mSpinnerAccount = (Spinner) rootView.findViewById(R.id.spinner_account);
         mSpinnerAccount.setAdapter(mAccountSpinnerAdapter); // Set the custom adapter to the spinner
-        // You can create an anonymous listener to handle the event when is selected an spinner item
-        mSpinnerAccount.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view,
-                                       int position, long id) {
-                // Here you get the current item (a User object) that is selected by its position
-//                Account user = mAccountSpinnerAdapter.getItem(position);
-//                // Here you can do the action you want to...
-//                Toast.makeText(getActivity(), "ID: " + user.getId() + "\nName: " + user.getName(),
-//                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapter) {
-            }
-        });
 
         mRadioGroupType = (RadioGroup) rootView.findViewById(R.id.radioGroupType);
 
@@ -218,11 +138,14 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
-                // Here you get the current item (a User object) that is selected by its position
-//                Account user = mAccountSpinnerAdapter.getItem(position);
-//                // Here you can do the action you want to...
-//                Toast.makeText(getActivity(), "ID: " + user.getId() + "\nName: " + user.getName(),
-//                        Toast.LENGTH_SHORT).show();
+
+                PaymentMethod paymentMethod = mPaymentMethodSpinnerAdapter.getItem(position);
+                Double exchangeRate = paymentMethod.getExchangeRate();
+                mEditTextExchangeRate.setEnabled(exchangeRate == 1.0 ? true : false);
+                mEditTextExchangeRate.setText(exchangeRate.toString());
+
+                mTextViewCurrency.setText(paymentMethod.getCurrency());
+
             }
 
             @Override
@@ -230,12 +153,11 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             }
         });
 
-        mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
-        mSpinnerCurrency.setAdapter(mSpinnerCurrencyAdapter);
+        mTextViewCurrency = (TextView) rootView.findViewById(R.id.text_view_currency);
 
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
 
-        mEditTextDate = (EditText) rootView.findViewById(R.id.edit_text_date);
+        mTextViewDate = (TextView) rootView.findViewById(R.id.text_view_date);
 
         mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
         mEditTextExchangeRate = (EditText) rootView.findViewById(R.id.edit_text_exchange_rate);
@@ -282,12 +204,13 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             } else {
                 mRadioButtonIncome.setChecked(true);
             }
-            mEditTextDate.setText(mTransaction.getDate());
+            mTextViewDate.setText(mTransaction.getDate());
             mEditTextAmount.setText(mTransaction.getAmount().toString());
-            Tools.setSpinner(mTransaction.getCurrency(), mSpinnerCurrency);
             mEditTextExchangeRate.setText(mTransaction.getExchangeRate().toString());
             Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
             mEditTextNote.setText(mTransaction.getNote());
+
+            mSpinnerAccount.setEnabled(false);
 
         }
 
@@ -316,8 +239,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case CATEGORY_LIST_ACTIVITY:
                 if (data != null) {
@@ -379,10 +300,10 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 PaymentMethod paymentMethod = (PaymentMethod) mSpinnerPaymentMethod.getSelectedItem();
                 mTransaction.setPaymentMethod(paymentMethod);
 
-                String currency = (String) mSpinnerCurrency.getSelectedItem();
+                String currency = mTextViewCurrency.getText().toString();
                 mTransaction.setCurrency(currency);
 
-                String date = mEditTextDate.getText().toString();
+                String date = mTextViewDate.getText().toString();
                 mTransaction.setDate(date);
 
                 String amount = mEditTextAmount.getText().toString();
@@ -444,10 +365,10 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         Calendar c = Calendar.getInstance();
         c.set(year, month, day);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String formattedDate = sdf.format(c.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = sdf.format(c.getTime());
 
-            mEditTextDate.setText(formattedDate);
+        mTextViewDate.setText(formattedDate);
 
 
     }
