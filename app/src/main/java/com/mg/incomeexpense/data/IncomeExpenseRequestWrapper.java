@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
@@ -13,7 +12,7 @@ import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
-import com.mg.incomeexpense.transaction.DashboardData;
+import com.mg.incomeexpense.transaction.IncExpAcc;
 import com.mg.incomeexpense.transaction.Transaction;
 
 import java.util.ArrayList;
@@ -212,17 +211,10 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static DashboardData getDashboardData(ContentResolver contentResolver, Account account, Date date) {
-
-        String[] projection = new String[]{IncomeExpenseContract.TransactionEntry.COLUMN_TYPE,
-                IncomeExpenseContract.TransactionEntry.COLUMN_DATE,
-                IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT,
-                IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE};
+    public static IncExpAcc[] getDashboardData(ContentResolver contentResolver, Account account, Date date) {
 
         String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
         String[] selectionArgs = new String[]{account.getId().toString()};
-
-        DashboardData dashboardData = new DashboardData();
 
         Integer firstDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfYear(date).getTime(), "yyyyMMdd"));
         Integer lastDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfYear(date).getTime(), "yyyyMMdd"));
@@ -232,62 +224,38 @@ public class IncomeExpenseRequestWrapper {
         Integer lastDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfWeek(date).getTime(), "yyyyMMdd"));
         Integer today = Integer.parseInt(Tools.formatDate(date, "yyyyMMdd"));
 
+        IncExpAcc todayTotal = new IncExpAcc(account.getContributors());
+        IncExpAcc thisWeekTotal = new IncExpAcc(account.getContributors());
+        IncExpAcc thisMonthTotal = new IncExpAcc(account.getContributors());
+        IncExpAcc thisYearTotal = new IncExpAcc(account.getContributors());
+
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.TransactionEntry.CONTENT_URI, projection, selection, selectionArgs, null);
-            Integer cursorDate;
-            Double cursorAmount;
-            Double cursorExchangeRate;
-            int iType;
-            Transaction.TransactionType type;
+            cursor = contentResolver.query(IncomeExpenseContract.TransactionEntry.CONTENT_URI, null, selection, selectionArgs, null);
+            int transactionDate;
+            Transaction transaction;
+            Double amount;
+
+
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                cursorDate = Integer.parseInt(cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_DATE)).replace("-", ""));
-                cursorAmount = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT));
-                cursorExchangeRate = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE));
-                iType = cursor.getInt(cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE)));
-                type = iType == 0 ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income;
-                if (cursorDate >= firstDateYear && cursorDate <= lastDateYear) {
+                transaction = Transaction.create(cursor, contentResolver);
+                transactionDate = transaction.getDateAsInt();
+                amount = transaction.getAmount() * transaction.getExchangeRate();
 
-                    switch (type) {
-                        case Expense:
+                if (transactionDate >= firstDateYear && transactionDate <= lastDateYear) {
 
-                            dashboardData.thisYearExpense += cursorAmount * cursorExchangeRate;
+                    thisYearTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
 
-                            if (cursorDate >= firstDateMonth && cursorDate <= lastDateMonth) {
-                                dashboardData.thisMonthExpense += cursorAmount * cursorExchangeRate;
-                            }
-
-                            if (cursorDate >= firstDateWeek && cursorDate <= lastDateWeek) {
-                                dashboardData.thisWeekExpense += cursorAmount * cursorExchangeRate;
-                            }
-
-                            if (cursorDate == today)
-                                dashboardData.todayExpense += cursorAmount * cursorExchangeRate;
-
-
-                            break;
-                        case Income:
-
-                            dashboardData.thisYearIncome += cursorAmount * cursorExchangeRate;
-
-                            if (cursorDate >= firstDateMonth && cursorDate <= lastDateMonth) {
-                                dashboardData.thisMonthIncome += cursorAmount * cursorExchangeRate;
-                            }
-
-                            if (cursorDate >= firstDateWeek && cursorDate <= lastDateWeek) {
-                                dashboardData.thisWeekIncome += cursorAmount * cursorExchangeRate;
-                            }
-
-                            if (cursorDate == today)
-                                dashboardData.todayIncome += cursorAmount * cursorExchangeRate;
-
-
-                            break;
-                        default:
-                            Log.i(LOG_TAG, "Unknown type" + type.toString());
-                            break;
+                    if (transactionDate >= firstDateMonth && transactionDate <= lastDateMonth) {
+                        thisMonthTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
                     }
 
+                    if (transactionDate >= firstDateWeek && transactionDate <= lastDateWeek) {
+                        thisWeekTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
+                    }
+
+                    if (transactionDate == today)
+                        todayTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
 
                 }
             }
@@ -297,7 +265,7 @@ public class IncomeExpenseRequestWrapper {
             }
         }
 
-        return dashboardData;
+        return new IncExpAcc[] {todayTotal, thisWeekTotal, thisMonthTotal, thisYearTotal};
     }
 
 }

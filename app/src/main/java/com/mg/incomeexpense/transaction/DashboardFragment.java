@@ -127,26 +127,26 @@ public class DashboardFragment extends Fragment
     /*
     http://stackoverflow.com/questions/9671546/asynctask-android-example
      */
-    private class GetData extends AsyncTask<String, Void, DashboardData>{
+    private class GetData extends AsyncTask<String, Void, IncExpAcc[]>{
 
         @Override
-        protected DashboardData doInBackground(String... params) {
+        protected IncExpAcc[] doInBackground(String... params) {
 
-            DashboardData d = IncomeExpenseRequestWrapper.getDashboardData(getActivity().getContentResolver(), mAccount, new Date());
+            IncExpAcc[] d = IncomeExpenseRequestWrapper.getDashboardData(getActivity().getContentResolver(), mAccount, new Date());
 
             return d;
         }
 
         @Override
-        protected void onPostExecute(DashboardData data) {
-            mTextViewTodayExpense.setText(data.todayExpense.toString());
-            mTextViewTodayIncome.setText(data.todayIncome.toString());
-            mTextViewThisWeekExpense.setText(data.thisWeekExpense.toString());
-            mTextViewThisWeekIncome.setText(data.thisWeekIncome.toString());
-            mTextViewThisMonthExpense.setText(data.thisMonthExpense.toString());
-            mTextViewThisMonthIncome.setText(data.thisMonthIncome.toString());
-            mTextViewThisYearExpense.setText(data.thisYearExpense.toString());
-            mTextViewThisYearIncome.setText(data.thisYearIncome.toString());
+        protected void onPostExecute(IncExpAcc[] data) {
+            mTextViewTodayExpense.setText(data[0].mTotal.expense.toString());
+            mTextViewTodayIncome.setText(data[0].mTotal.income.toString());
+            mTextViewThisWeekExpense.setText(data[1].mTotal.expense.toString());
+            mTextViewThisWeekIncome.setText(data[1].mTotal.income.toString());
+            mTextViewThisMonthExpense.setText(data[2].mTotal.expense.toString());
+            mTextViewThisMonthIncome.setText(data[2].mTotal.income.toString());
+            mTextViewThisYearExpense.setText(data[3].mTotal.expense.toString());
+            mTextViewThisYearIncome.setText(data[3].mTotal.income.toString());
         }
 
         @Override

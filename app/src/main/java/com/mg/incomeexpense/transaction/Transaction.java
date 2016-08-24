@@ -168,6 +168,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         }
     }
 
+    public int getDateAsInt(){
+        return Integer.parseInt(mDate.replace("-", ""));
+    }
+
     public Double getExchangeRate() {
         return mExchangeRate;
     }
