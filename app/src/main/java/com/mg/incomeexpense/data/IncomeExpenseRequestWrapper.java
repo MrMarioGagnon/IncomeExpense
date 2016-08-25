@@ -12,10 +12,12 @@ import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
-import com.mg.incomeexpense.transaction.IncExpAcc;
+import com.mg.incomeexpense.transaction.DashboardData;
 import com.mg.incomeexpense.transaction.Transaction;
+import com.mg.incomeexpense.transaction.TransactionAmountAccumulator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -211,23 +213,35 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static IncExpAcc[] getDashboardData(ContentResolver contentResolver, Account account, Date date) {
+    public static DashboardData getDashboardData(ContentResolver contentResolver, Account account, Date date) {
 
         String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
         String[] selectionArgs = new String[]{account.getId().toString()};
 
-        Integer firstDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfYear(date).getTime(), "yyyyMMdd"));
-        Integer lastDateYear = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfYear(date).getTime(), "yyyyMMdd"));
-        Integer firstDateMonth = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfMonth(date).getTime(), "yyyyMMdd"));
-        Integer lastDateMonth = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfMonth(date).getTime(), "yyyyMMdd"));
-        Integer firstDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getFirstDateOfWeek(date).getTime(), "yyyyMMdd"));
-        Integer lastDateWeek = Integer.parseInt(Tools.formatDate(DateUtil.getLastDateOfWeek(date).getTime(), "yyyyMMdd"));
+        Date dFirstDateYear= DateUtil.getFirstDateOfYear(date).getTime();
+        Date dLastDateYear = DateUtil.getLastDateOfYear(date).getTime();
+        Date dFirstDateMonth = DateUtil.getFirstDateOfMonth(date).getTime();
+        Date dLastDateMonth = DateUtil.getLastDateOfMonth(date).getTime();
+        Date dFirstDateWeek = DateUtil.getFirstDateOfWeek(date).getTime();
+        Date dLastDateWeek = DateUtil.getLastDateOfWeek(date).getTime();
+
+        Integer firstDateYear = Integer.parseInt(Tools.formatDate(dFirstDateYear, "yyyyMMdd"));
+        Integer lastDateYear = Integer.parseInt(Tools.formatDate(dLastDateYear, "yyyyMMdd"));
+        Integer firstDateMonth = Integer.parseInt(Tools.formatDate(dFirstDateMonth, "yyyyMMdd"));
+        Integer lastDateMonth = Integer.parseInt(Tools.formatDate(dLastDateMonth, "yyyyMMdd"));
+        Integer firstDateWeek = Integer.parseInt(Tools.formatDate(dFirstDateWeek, "yyyyMMdd"));
+        Integer lastDateWeek = Integer.parseInt(Tools.formatDate(dLastDateWeek, "yyyyMMdd"));
         Integer today = Integer.parseInt(Tools.formatDate(date, "yyyyMMdd"));
 
-        IncExpAcc todayTotal = new IncExpAcc(account.getContributors());
-        IncExpAcc thisWeekTotal = new IncExpAcc(account.getContributors());
-        IncExpAcc thisMonthTotal = new IncExpAcc(account.getContributors());
-        IncExpAcc thisYearTotal = new IncExpAcc(account.getContributors());
+        String sToday = Tools.formatDate(date, "yyyy-MM-dd" );
+        String sThisWeek = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateWeek, "yyyy-MM-dd" ), Tools.formatDate(dLastDateWeek, "yyyy-MM-dd" ));
+        String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, "yyyy-MM-dd" ), Tools.formatDate(dLastDateMonth, "yyyy-MM-dd" ));
+        String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, "yyyy-MM-dd" ), Tools.formatDate(dLastDateYear, "yyyy-MM-dd" ));;
+
+        TransactionAmountAccumulator todayTotal = new TransactionAmountAccumulator(account.getContributors(), sToday);
+        TransactionAmountAccumulator thisWeekTotal = new TransactionAmountAccumulator(account.getContributors(),sThisWeek);
+        TransactionAmountAccumulator thisMonthTotal = new TransactionAmountAccumulator(account.getContributors(),sThisMonth);
+        TransactionAmountAccumulator thisYearTotal = new TransactionAmountAccumulator(account.getContributors(),sThisYear);
 
         Cursor cursor = null;
         try {
@@ -265,7 +279,7 @@ public class IncomeExpenseRequestWrapper {
             }
         }
 
-        return new IncExpAcc[] {todayTotal, thisWeekTotal, thisMonthTotal, thisYearTotal};
+        return new DashboardData(todayTotal.getTransactionAmountTotal(), thisWeekTotal.getTransactionAmountTotal(), thisMonthTotal.getTransactionAmountTotal(), thisYearTotal.getTransactionAmountTotal());
     }
 
 }
