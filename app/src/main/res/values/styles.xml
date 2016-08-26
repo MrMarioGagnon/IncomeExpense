@@ -37,7 +37,6 @@
     </style>
 
     <style name="DashboardSectionStyle">
-        <item name="android:background">#1ff70b</item>
         <item name="android:layout_margin">5dp</item>
     </style>
 

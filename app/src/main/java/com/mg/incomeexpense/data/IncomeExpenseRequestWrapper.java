@@ -1,10 +1,12 @@
 package com.mg.incomeexpense.data;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
@@ -213,7 +215,7 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static DashboardData getDashboardData(ContentResolver contentResolver, Account account, Date date) {
+    public static DashboardData getDashboardData(Context context, ContentResolver contentResolver, Account account, Date date) {
 
         String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
         String[] selectionArgs = new String[]{account.getId().toString()};
@@ -238,10 +240,10 @@ public class IncomeExpenseRequestWrapper {
         String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, "yyyy-MM-dd" ), Tools.formatDate(dLastDateMonth, "yyyy-MM-dd" ));
         String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, "yyyy-MM-dd" ), Tools.formatDate(dLastDateYear, "yyyy-MM-dd" ));;
 
-        TransactionAmountAccumulator todayTotal = new TransactionAmountAccumulator(account.getContributors(), sToday);
-        TransactionAmountAccumulator thisWeekTotal = new TransactionAmountAccumulator(account.getContributors(),sThisWeek);
-        TransactionAmountAccumulator thisMonthTotal = new TransactionAmountAccumulator(account.getContributors(),sThisMonth);
-        TransactionAmountAccumulator thisYearTotal = new TransactionAmountAccumulator(account.getContributors(),sThisYear);
+        TransactionAmountAccumulator todayTotal = new TransactionAmountAccumulator(account.getContributors(),String.format("%1$s : %2$s",context.getString(R.string.title_today) , sToday));
+        TransactionAmountAccumulator thisWeekTotal = new TransactionAmountAccumulator(account.getContributors(),String.format("%1$s : %2$s",context.getString(R.string.title_this_week) , sThisWeek));
+        TransactionAmountAccumulator thisMonthTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s",context.getString(R.string.title_this_month) , sThisMonth));
+        TransactionAmountAccumulator thisYearTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s",context.getString(R.string.title_this_year) , sThisYear));
 
         Cursor cursor = null;
         try {

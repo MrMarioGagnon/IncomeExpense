@@ -44,6 +44,10 @@ public class TransactionAmountAccumulator {
         mDate = date;
         mPeriodTotals = new Hashtable<>();
         int i = 0;
+        Contributor titleContributor = Contributor.createNew();
+        titleContributor.setId(0L);
+        titleContributor.setName(date);
+        mPeriodTotals.put(0L, new TransactionAmountTotal(++i, titleContributor));
         for(Contributor contributor : contributors) {
 
                 mPeriodTotals.put(contributor.getId(), new TransactionAmountTotal(++i, contributor));
