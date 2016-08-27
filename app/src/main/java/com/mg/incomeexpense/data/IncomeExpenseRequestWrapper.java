@@ -19,7 +19,6 @@ import com.mg.incomeexpense.transaction.Transaction;
 import com.mg.incomeexpense.transaction.TransactionAmountAccumulator;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -220,7 +219,7 @@ public class IncomeExpenseRequestWrapper {
         String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
         String[] selectionArgs = new String[]{account.getId().toString()};
 
-        Date dFirstDateYear= DateUtil.getFirstDateOfYear(date).getTime();
+        Date dFirstDateYear = DateUtil.getFirstDateOfYear(date).getTime();
         Date dLastDateYear = DateUtil.getLastDateOfYear(date).getTime();
         Date dFirstDateMonth = DateUtil.getFirstDateOfMonth(date).getTime();
         Date dLastDateMonth = DateUtil.getLastDateOfMonth(date).getTime();
@@ -235,15 +234,16 @@ public class IncomeExpenseRequestWrapper {
         Integer lastDateWeek = Integer.parseInt(Tools.formatDate(dLastDateWeek, "yyyyMMdd"));
         Integer today = Integer.parseInt(Tools.formatDate(date, "yyyyMMdd"));
 
-        String sToday = Tools.formatDate(date, "yyyy-MM-dd" );
-        String sThisWeek = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateWeek, "yyyy-MM-dd" ), Tools.formatDate(dLastDateWeek, "yyyy-MM-dd" ));
-        String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, "yyyy-MM-dd" ), Tools.formatDate(dLastDateMonth, "yyyy-MM-dd" ));
-        String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, "yyyy-MM-dd" ), Tools.formatDate(dLastDateYear, "yyyy-MM-dd" ));;
+        String sToday = Tools.formatDate(date, "yyyy-MM-dd");
+        String sThisWeek = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateWeek, "yyyy-MM-dd"), Tools.formatDate(dLastDateWeek, "yyyy-MM-dd"));
+        String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, "yyyy-MM-dd"), Tools.formatDate(dLastDateMonth, "yyyy-MM-dd"));
+        String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, "yyyy-MM-dd"), Tools.formatDate(dLastDateYear, "yyyy-MM-dd"));
+        ;
 
-        TransactionAmountAccumulator todayTotal = new TransactionAmountAccumulator(account.getContributors(),String.format("%1$s : %2$s",context.getString(R.string.title_today) , sToday));
-        TransactionAmountAccumulator thisWeekTotal = new TransactionAmountAccumulator(account.getContributors(),String.format("%1$s : %2$s",context.getString(R.string.title_this_week) , sThisWeek));
-        TransactionAmountAccumulator thisMonthTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s",context.getString(R.string.title_this_month) , sThisMonth));
-        TransactionAmountAccumulator thisYearTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s",context.getString(R.string.title_this_year) , sThisYear));
+        TransactionAmountAccumulator todayTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_today), sToday));
+        TransactionAmountAccumulator thisWeekTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_week), sThisWeek));
+        TransactionAmountAccumulator thisMonthTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_month), sThisMonth));
+        TransactionAmountAccumulator thisYearTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_year), sThisYear));
 
         Cursor cursor = null;
         try {
@@ -260,18 +260,18 @@ public class IncomeExpenseRequestWrapper {
 
                 if (transactionDate >= firstDateYear && transactionDate <= lastDateYear) {
 
-                    thisYearTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
+                    thisYearTotal.Add(transaction.getType(), amount);
 
                     if (transactionDate >= firstDateMonth && transactionDate <= lastDateMonth) {
-                        thisMonthTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
+                        thisMonthTotal.Add(transaction.getType(), amount);
                     }
 
                     if (transactionDate >= firstDateWeek && transactionDate <= lastDateWeek) {
-                        thisWeekTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
+                        thisWeekTotal.Add(transaction.getType(), amount);
                     }
 
                     if (transactionDate == today)
-                        todayTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
+                        todayTotal.Add(transaction.getType(), amount);
 
                 }
             }

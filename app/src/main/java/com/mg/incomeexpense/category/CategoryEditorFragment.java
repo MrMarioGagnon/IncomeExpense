@@ -117,6 +117,7 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
             }
         }
 
+        mEditTextName.requestFocus();
         return rootView;
     }
 

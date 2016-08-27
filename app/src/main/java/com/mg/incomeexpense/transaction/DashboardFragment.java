@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,10 +79,14 @@ public class DashboardFragment extends Fragment {
         mListViewThisMonth = (ListView) rootView.findViewById(R.id.list_view_this_month);
         mListViewThisYear = (ListView) rootView.findViewById(R.id.list_view_this_year);
 
-        new GetData().execute("");
+        refresh();
 
         return rootView;
 
+    }
+
+    public void refresh(){
+        new GetData().execute("");
     }
 
     /*
@@ -91,6 +96,8 @@ public class DashboardFragment extends Fragment {
 
         @Override
         protected DashboardData doInBackground(String... params) {
+
+            FragmentActivity fa = getActivity();
 
             DashboardData d = IncomeExpenseRequestWrapper.getDashboardData(getActivity(), getActivity().getContentResolver(), mAccount, new Date());
 

@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.transaction.DashboardFragment;
 
 import java.util.List;
 
@@ -39,7 +38,9 @@ public class TransactionDashboardPagerAdapter extends FragmentStatePagerAdapter 
         return mAccount.size();
     }
 
-    public Account getAccount(int i){
+    public Account getAccount(int i) {
         return mAccount.get(i);
     }
+
+
 }

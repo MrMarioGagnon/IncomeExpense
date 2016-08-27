@@ -17,6 +17,7 @@ import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
+import com.mg.incomeexpense.transaction.DashboardFragment;
 import com.mg.incomeexpense.transaction.Transaction;
 import com.mg.incomeexpense.transaction.TransactionDashboardPagerAdapter;
 import com.mg.incomeexpense.transaction.TransactionEditorActivity;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int EDITOR_ACTIVITY = 1;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,25 +39,25 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver());
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         TabLayout.Tab tab;
         for (Account account : accounts) {
-            tab = tabLayout.newTab();
+            tab = mTabLayout.newTab();
             tab.setText(account.getName());
             tab.setTag(account.getId());
-            tabLayout.addTab(tab);
+            mTabLayout.addTab(tab);
         }
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
         final TransactionDashboardPagerAdapter adapter = new TransactionDashboardPagerAdapter
                 (getSupportFragmentManager(), accounts);
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mViewPager.setAdapter(adapter);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                mViewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Account account = ((TransactionDashboardPagerAdapter) viewPager.getAdapter()).getAccount(tabLayout.getSelectedTabPosition());
+                Account account = ((TransactionDashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
 
                 ShowTransactionEditor(account);
 
@@ -101,6 +104,17 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case EDITOR_ACTIVITY:
+                if( resultCode == RESULT_OK){
+                    this.recreate();
+                }
+                break;
+        }
     }
 
     @Override
