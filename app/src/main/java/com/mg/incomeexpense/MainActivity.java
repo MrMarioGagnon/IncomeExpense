@@ -72,23 +72,37 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddTransaction);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddExpense);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Account account = ((TransactionDashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
 
-                ShowTransactionEditor(account);
+                ShowTransactionEditor(account, Transaction.TransactionType.Expense);
 
             }
         });
+
+        fab = (FloatingActionButton) findViewById(R.id.fabAddIncome);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Account account = ((TransactionDashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
+
+                ShowTransactionEditor(account, Transaction.TransactionType.Income);
+
+            }
+        });
+
     }
 
-    private void ShowTransactionEditor(Account account) {
+    private void ShowTransactionEditor(Account account, Transaction.TransactionType type) {
 
         Transaction transaction = Transaction.createNew();
         transaction.setAccount(account);
+        transaction.setType(type);
 
         Intent intent = new Intent(this, TransactionEditorActivity.class);
         Bundle bundle = new Bundle();

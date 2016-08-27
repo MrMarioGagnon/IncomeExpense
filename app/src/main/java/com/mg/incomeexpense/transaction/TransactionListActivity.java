@@ -26,6 +26,7 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
         public void onClick(View view) {
 
             Transaction transaction = Transaction.createNew();
+            transaction.setType( view.getId() == R.id.fabAddExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income  );
 
             Intent intent = new Intent(TransactionListActivity.this, TransactionEditorActivity.class);
             Bundle bundle = new Bundle();
@@ -43,10 +44,16 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
 
         Bundle bundle = getIntent().getExtras();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddExpense);
         if (fab != null) {
             fab.setOnClickListener(mFabOnClickListener);
         }
+
+        fab = (FloatingActionButton) findViewById(R.id.fabAddIncome);
+        if (fab != null) {
+            fab.setOnClickListener(mFabOnClickListener);
+        }
+
 
         TransactionListFragment fragment = new TransactionListFragment();
         fragment.addListener(this);

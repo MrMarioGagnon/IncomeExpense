@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by mario on 2016-07-19.
  */
@@ -41,7 +43,8 @@ public class PaymentMethodListAdapter extends CursorAdapter {
         viewHolder.textViewName.setText(paymentMethod.getName());
         viewHolder.textViewCurrency.setText(paymentMethod.getCurrency());
         viewHolder.textViewContributors.setText(paymentMethod.getContributorsForDisplay());
-        viewHolder.textViewExchangeRate.setText(paymentMethod.getExchangeRate().toString());
+        DecimalFormat df = new DecimalFormat("#.00");
+        viewHolder.textViewExchangeRate.setText(df.format(paymentMethod.getExchangeRate()));
         if(paymentMethod.getIsClose()){
             view.setBackgroundColor(Color.RED);
         }else{
