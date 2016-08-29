@@ -2,7 +2,6 @@ package com.mg.incomeexpense.transaction;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.account.Account;
+
+import java.text.DecimalFormat;
 
 /**
  * Created by mario on 2016-07-19.
@@ -40,21 +40,22 @@ public class TransactionListAdapter extends CursorAdapter {
         Transaction transaction = Transaction.create(cursor, context.getContentResolver());
 
         viewHolder.textViewDate.setText(transaction.getDate());
-        viewHolder.textViewAccount.setText(transaction.getAccount().getName());
-        viewHolder.textViewType.setText(transaction.getType().toString() );
-        viewHolder.textViewAmount.setText(transaction.getAmount().toString());
+        viewHolder.textViewCategory.setText(transaction.getCategory().getSelectedCategoryToDisplay());
+        DecimalFormat df = new DecimalFormat("#.00");
+        viewHolder.textViewAmount.setText(df.format(transaction.getAmount()));
+
+        int color = context.getResources().getColor(transaction.getType() == Transaction.TransactionType.Expense ? R.color.colorExpense : R.color.colorIncome, null);
+        viewHolder.textViewAmount.setTextColor(color);
     }
 
     public static class ViewHolder {
         public final TextView textViewDate;
-        public final TextView textViewAccount;
-        public final TextView textViewType;
+        public final TextView textViewCategory;
         public final TextView textViewAmount;
 
         public ViewHolder(View view) {
             textViewDate = (TextView) view.findViewById(R.id.text_view_date);
-            textViewAccount = (TextView) view.findViewById(R.id.text_view_account);
-            textViewType = (TextView) view.findViewById(R.id.text_view_type);
+            textViewCategory = (TextView) view.findViewById(R.id.text_view_category);
             textViewAmount = (TextView) view.findViewById(R.id.text_view_amount);
         }
     }

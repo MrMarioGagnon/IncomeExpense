@@ -146,7 +146,7 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
 
         editText = (EditText) view.findViewById(R.id.editTextName);
         editText.setText(name);
-        editText.setFilters(new InputFilter[]{new LetterDigitFilter()});
+        //editText.setFilters(new InputFilter[]{new LetterDigitFilter()});
         editText.requestFocus();
 
         ImageButton imageButtonEdit = (ImageButton) view

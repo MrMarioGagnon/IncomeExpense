@@ -65,13 +65,17 @@ public class TransactionAmountAccumulator {
 
     }
 
-    public void Add(Transaction.TransactionType type, Double amount) {
+    public void Add(List<Contributor> contributors, Transaction.TransactionType type, Double amount) {
 
-        int divider = mContributors.size();
+        int divider = contributors.size();
         Double splitAmount = amount / divider;
 
         TransactionAmountTotal total;
         for (Contributor contributor : mContributors) {
+
+            if(!contributors.contains(contributor))
+                continue;
+
             total = mPeriodTotals.get(contributor.getId());
             if (total != null) {
                 switch (type) {
