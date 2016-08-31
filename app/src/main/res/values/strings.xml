@@ -48,14 +48,15 @@
     <string name="title_expense">Expense</string>
     <string name="title_transaction_list">Transactions</string>
 
+    <string name="text_add_expense">Add Expense</string>
+    <string name="text_add_income">Add Income</string>
+    <string name="text_add_category">Add Category</string>
+    <string name="text_update_category">Update Category</string>
 
     <string name="message_contributor_no_data">No Contributor Available.</string>
     <string name="message_account_no_data">No Account Available.</string>
     <string name="message_payment_method_no_data">No Payment Method Available.</string>
     <string name="message_transaction_no_data">No Transaction Available.</string>
-
-    message_transaction_no_data
-
 
     <string name="label_name">Name:</string>
     <string name="label_currency">Currency:</string>

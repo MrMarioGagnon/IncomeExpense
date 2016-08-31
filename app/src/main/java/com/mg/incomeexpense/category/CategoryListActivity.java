@@ -24,10 +24,12 @@ public class CategoryListActivity extends AppCompatActivity implements ItemSelec
     private static final String LOG_TAG = CategoryListActivity.class.getSimpleName();
     private static final int EDITOR_ACTIVITY_ADD = 1;
     private static final int EDITOR_ACTIVITY_UPDATE = 2;
+    private com.mg.floatingactionbutton.FloatingActionsMenu mFabMenu;
     private final OnClickListener mFabAddOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
 
+            mFabMenu.collapseImmediately();
             Category category = Category.createNew();
 
             showCategoryEditor(category);
@@ -51,6 +53,7 @@ public class CategoryListActivity extends AppCompatActivity implements ItemSelec
     private final OnClickListener mFabEditOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
+            mFabMenu.collapseImmediately();
             showAvailableCategory();
         }
     };
@@ -98,12 +101,12 @@ public class CategoryListActivity extends AppCompatActivity implements ItemSelec
             }
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+        com.mg.floatingactionbutton.FloatingActionButton fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAdd);
         if (fab != null) {
             fab.setOnClickListener(mFabAddOnClickListener);
         }
 
-        fab = (FloatingActionButton) findViewById(R.id.fabEdit);
+        fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabEdit);
         if (fab != null) {
             fab.setOnClickListener(mFabEditOnClickListener);
         }
@@ -114,6 +117,7 @@ public class CategoryListActivity extends AppCompatActivity implements ItemSelec
 
         mAdapter = ((CategoryListFragment) fragment).getAdapter();
 
+        mFabMenu = (com.mg.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.floating_action_menu_action);
     }
 
     @Override

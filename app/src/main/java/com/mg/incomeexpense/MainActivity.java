@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.mg.incomeexpense.account.Account;
@@ -30,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int EDITOR_ACTIVITY = 1;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private com.mg.floatingactionbutton.FloatingActionsMenu mFabMenu;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
@@ -72,11 +73,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddExpense);
+        com.mg.floatingactionbutton.FloatingActionButton fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddExpense);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                mFabMenu.collapseImmediately();
                 Account account = ((TransactionDashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
 
                 ShowTransactionEditor(account, Transaction.TransactionType.Expense);
@@ -84,11 +86,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fab = (FloatingActionButton) findViewById(R.id.fabAddIncome);
+        fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddIncome);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                mFabMenu.collapseImmediately();
                 Account account = ((TransactionDashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
 
                 ShowTransactionEditor(account, Transaction.TransactionType.Income);
@@ -96,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mFabMenu = (com.mg.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.floating_action_menu_Type);
     }
 
     private void ShowTransactionEditor(Account account, Transaction.TransactionType type) {

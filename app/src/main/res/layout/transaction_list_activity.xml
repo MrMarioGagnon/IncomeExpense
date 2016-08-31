@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,7 +24,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.mg.floatingactionbutton.FloatingActionsMenu
+        android:layout_gravity="bottom|end"
+        android:id="@+id/floating_action_menu_Type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        fab:fab_addButtonColorNormal="@color/colorAccent"
+        fab:fab_addButtonColorPressed="@color/colorAccent"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp">
+
+        <com.mg.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorExpense"
+            fab:fab_colorPressed="@color/colorExpense"
+            fab:fab_icon="@drawable/ic_add_white_24dp"
+            fab:fab_title="@string/text_add_expense"
+            fab:fab_plusIconColor="@color/white"/>
+
+        <com.mg.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorIncome"
+            fab:fab_colorPressed="@color/colorIncome"
+            fab:fab_icon="@drawable/ic_add_white_24dp"
+            fab:fab_title="@string/text_add_income"
+            fab:fab_plusIconColor="@color/white"/>
+
+    </com.mg.floatingactionbutton.FloatingActionsMenu>
+
+
+    <!--android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddExpense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,6 +79,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorIncome"
-        android:src="@drawable/ic_add_white_24dp" />
+        android:src="@drawable/ic_add_white_24dp" /-->
 
 </android.support.design.widget.CoordinatorLayout>

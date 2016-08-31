@@ -20,11 +20,13 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
     private static final String LOG_TAG = TransactionListActivity.class.getSimpleName();
     private static final int EDITOR_ACTIVITY_ADD = 1;
     private static final int EDITOR_ACTIVITY_UPDATE = 2;
+    private com.mg.floatingactionbutton.FloatingActionsMenu mFabMenu;
 
     private final OnClickListener mFabOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
 
+            mFabMenu.collapseImmediately();
             Transaction transaction = Transaction.createNew();
             transaction.setType( view.getId() == R.id.fabAddExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income  );
 
@@ -44,16 +46,17 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
 
         Bundle bundle = getIntent().getExtras();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddExpense);
+        com.mg.floatingactionbutton.FloatingActionButton fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddExpense);
         if (fab != null) {
             fab.setOnClickListener(mFabOnClickListener);
         }
 
-        fab = (FloatingActionButton) findViewById(R.id.fabAddIncome);
+        fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddIncome);
         if (fab != null) {
             fab.setOnClickListener(mFabOnClickListener);
         }
 
+        mFabMenu = (com.mg.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.floating_action_menu_Type);
 
         TransactionListFragment fragment = new TransactionListFragment();
         fragment.addListener(this);
