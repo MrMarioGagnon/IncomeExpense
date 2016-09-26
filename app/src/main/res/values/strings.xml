@@ -8,6 +8,7 @@
     <string name="action_accounts">Accounts</string>
     <string name="action_payment_methods">Payment Methods</string>
     <string name="action_categories">Categories</string>
+    <string name="action_utility">Utility</string>
 
     <string name="error_unable_to_fetch_all_contributor">Unable to fetch all contributor.</string>
 
@@ -47,6 +48,7 @@
     <string name="title_income">Income</string>
     <string name="title_expense">Expense</string>
     <string name="title_transaction_list">Transactions</string>
+    <string name="title_utility">Utility</string>
 
     <string name="text_add_expense">Add Expense</string>
     <string name="text_add_income">Add Income</string>

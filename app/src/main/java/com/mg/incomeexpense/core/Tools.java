@@ -76,17 +76,17 @@ public class Tools {
 
         File data = Environment.getDataDirectory();
 
-        createDirectory("traveloid");
+        createDirectory("incomeexpense");
 
-        File sdTraveloid = new File(sd, "traveloid");
+        File sdTraveloid = new File(sd, "incomeexpense");
 
         if (sd.canWrite()) {
 
-            String sourceFilePath = "/data/com.gagnon.mario.mr.traveloid/databases/traveloid.db";
+            String sourceFilePath = "/data/com.mg.incomeexpense/databases/incexp.db";
 
             String now = now("yyyyMMddkkmmss");
 
-            String destinationFilePath = "Traveloid" + now + ".db";
+            String destinationFilePath = "incexp" + now + ".db";
 
             File currentDB = new File(data, sourceFilePath);
 

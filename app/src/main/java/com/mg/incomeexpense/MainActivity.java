@@ -2,14 +2,12 @@ package com.mg.incomeexpense;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.mg.incomeexpense.account.Account;
@@ -18,10 +16,10 @@ import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
-import com.mg.incomeexpense.transaction.DashboardFragment;
 import com.mg.incomeexpense.transaction.Transaction;
 import com.mg.incomeexpense.transaction.TransactionDashboardPagerAdapter;
 import com.mg.incomeexpense.transaction.TransactionEditorActivity;
+import com.mg.incomeexpense.utility.UtilityActivity;
 
 import java.util.List;
 
@@ -126,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case EDITOR_ACTIVITY:
-                if( resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     this.recreate();
                 }
                 break;
@@ -162,6 +160,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_category:
                 intent = new Intent(this, CategoryListActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_utility:
+                intent = new Intent(this, UtilityActivity.class);
                 startActivity(intent);
                 return true;
             default:

@@ -23,6 +23,11 @@
         android:title="@string/action_categories"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_utility"
+        android:orderInCategory="450"
+        android:title="@string/action_utility"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="500"
         android:title="@string/action_settings"

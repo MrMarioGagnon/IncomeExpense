@@ -77,6 +77,11 @@
             android:label="@string/title_transaction_list"
             android:parentActivityName=".MainActivity" >
         </activity>
+        <activity
+            android:name=".utility.UtilityActivity"
+            android:label="@string/title_utility"
+            android:parentActivityName=".MainActivity" >
+        </activity>
 
         <provider
             android:authorities="com.mg.incomeexpense"
@@ -85,5 +90,5 @@
             android:syncable="true"/>
 
     </application>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>
