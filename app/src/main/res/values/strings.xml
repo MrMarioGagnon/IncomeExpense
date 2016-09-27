@@ -89,6 +89,7 @@
     <string name="validation_date_mandatory">No date selected</string>
     <string name="validation_amount_mandatory">No amount selected</string>
     <string name="validation_payment_method_mandatory">No payment method selected</string>
+    <string name="validation_budget_must_be_positive">Budget amount must be positive</string>
 
 
 

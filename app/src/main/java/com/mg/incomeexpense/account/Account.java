@@ -26,6 +26,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     private String mCurrency;
     private Boolean mIsClose;
     private List<Contributor> mContributors;
+    private Double mBudget;
 
     private Account() {
 
@@ -41,17 +42,19 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         String currency = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY));
         Integer close = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE));
         String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
+        Double budget = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_BUDGET));
 
         newInstance.mId = id;
         newInstance.mName = name;
         newInstance.mCurrency = currency;
         newInstance.mIsClose = close == 1 ? true : false;
         newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
+        newInstance.mBudget = budget;
 
         return newInstance;
     }
 
-    public static Account create(Long id, String name, String currency, Boolean isClose, List<Contributor> contributors) {
+    public static Account create(Long id, String name, String currency, Boolean isClose, List<Contributor> contributors, Double budget) {
 
         Account newInstance = new Account();
         newInstance.mNew = false;
@@ -61,6 +64,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mCurrency = currency;
         newInstance.mIsClose = isClose;
         newInstance.mContributors = contributors;
+        newInstance.mBudget = budget;
 
         return newInstance;
     }
@@ -121,6 +125,15 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         }
     }
 
+    public Double getBudget() { return mBudget;}
+
+    public void setBudget(Double budget){
+        if(!mBudget.equals(budget)){
+            mDirty = true;
+            mBudget = budget;
+        }
+    }
+
     public Boolean getIsClose() {
         return mIsClose;
     }
@@ -136,23 +149,25 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Account)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Account account = (Account) o;
 
-        if (!mId.equals(account.mId)) return false;
         if (!mName.equals(account.mName)) return false;
         if (!mCurrency.equals(account.mCurrency)) return false;
-        return mIsClose.equals(account.mIsClose);
+        if (!mIsClose.equals(account.mIsClose)) return false;
+        if (!mContributors.equals(account.mContributors)) return false;
+        return mBudget != null ? mBudget.equals(account.mBudget) : account.mBudget == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = mId.hashCode();
-        result = 31 * result + mName.hashCode();
+        int result = mName.hashCode();
         result = 31 * result + mCurrency.hashCode();
         result = 31 * result + mIsClose.hashCode();
+        result = 31 * result + mContributors.hashCode();
+        result = 31 * result + (mBudget != null ? mBudget.hashCode() : 0);
         return result;
     }
 

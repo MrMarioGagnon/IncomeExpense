@@ -31,6 +31,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.AccountEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL," +
                 IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY + " TEXT NOT NULL," +
                 IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS + " TEXT NOT NULL," +
+                IncomeExpenseContract.AccountEntry.COLUMN_BUDGET + " NUMERIC," +
                 IncomeExpenseContract.AccountEntry.COLUMN_CLOSE + " INTEGER NOT NULL DEFAULT 0" +
                 " );";
 
