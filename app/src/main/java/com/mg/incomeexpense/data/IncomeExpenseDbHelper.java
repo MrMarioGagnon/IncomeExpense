@@ -40,7 +40,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL," +
                 IncomeExpenseContract.PaymentMethodEntry.COLUMN_CURRENCY + " TEXT NOT NULL," +
                 IncomeExpenseContract.PaymentMethodEntry.COLUMN_EXCHANGE_RATE + " NUMERIC NOT NULL DEFAULT 1," +
-                IncomeExpenseContract.PaymentMethodEntry.COLUMN_CONTRIBUTORS + " TEXT NOT NULL," +
+                IncomeExpenseContract.PaymentMethodEntry.COLUMN_OWNER_ID + " INTEGER NOT NULL," +
                 IncomeExpenseContract.PaymentMethodEntry.COLUMN_CLOSE + " INTEGER NOT NULL DEFAULT 0" +
                 " );";
 

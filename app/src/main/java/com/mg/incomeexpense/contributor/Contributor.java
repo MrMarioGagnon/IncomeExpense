@@ -1,6 +1,12 @@
 package com.mg.incomeexpense.contributor;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.data.IdToItemConvertor;
+import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
 
@@ -11,6 +17,21 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
     private Contributor() {
 
     }
+
+    public static Contributor create(Cursor cursor) {
+        Contributor newInstance = new Contributor();
+        newInstance.mNew = false;
+        newInstance.mDirty = false;
+
+        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
+        String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
+
+        newInstance.mId = id;
+        newInstance.mName = name;
+
+        return newInstance;
+    }
+
 
     public static Contributor create(Long id, String name) {
 

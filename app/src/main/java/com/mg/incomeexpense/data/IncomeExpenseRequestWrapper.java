@@ -238,7 +238,6 @@ public class IncomeExpenseRequestWrapper {
         String sThisWeek = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateWeek, "yyyy-MM-dd"), Tools.formatDate(dLastDateWeek, "yyyy-MM-dd"));
         String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, "yyyy-MM-dd"), Tools.formatDate(dLastDateMonth, "yyyy-MM-dd"));
         String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, "yyyy-MM-dd"), Tools.formatDate(dLastDateYear, "yyyy-MM-dd"));
-        ;
 
         TransactionAmountAccumulator todayTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_today), sToday));
         TransactionAmountAccumulator thisWeekTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_week), sThisWeek));
@@ -260,18 +259,18 @@ public class IncomeExpenseRequestWrapper {
 
                 if (transactionDate >= firstDateYear && transactionDate <= lastDateYear) {
 
-                    thisYearTotal.Add(transaction.getPaymentMethod().getContributors(), transaction.getType(), amount);
+                    thisYearTotal.Add(transaction.getContributors(), transaction.getType(), amount);
 
                     if (transactionDate >= firstDateMonth && transactionDate <= lastDateMonth) {
-                        thisMonthTotal.Add(transaction.getPaymentMethod().getContributors(),transaction.getType(), amount);
+                        thisMonthTotal.Add(transaction.getContributors(),transaction.getType(), amount);
                     }
 
                     if (transactionDate >= firstDateWeek && transactionDate <= lastDateWeek) {
-                        thisWeekTotal.Add(transaction.getPaymentMethod().getContributors(),transaction.getType(), amount);
+                        thisWeekTotal.Add(transaction.getContributors(),transaction.getType(), amount);
                     }
 
                     if (transactionDate == today)
-                        todayTotal.Add(transaction.getPaymentMethod().getContributors(),transaction.getType(), amount);
+                        todayTotal.Add(transaction.getContributors(),transaction.getType(), amount);
 
                 }
             }

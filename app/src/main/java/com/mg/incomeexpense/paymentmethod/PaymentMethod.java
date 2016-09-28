@@ -6,14 +6,10 @@ import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
-import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IdToItemConvertor;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class PaymentMethod extends ObjectBase implements Serializable, Comparable<PaymentMethod> {
 
@@ -39,17 +35,14 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         String currency = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.PaymentMethodEntry.COLUMN_CURRENCY));
         Integer close = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.PaymentMethodEntry.COLUMN_CLOSE));
         Double exchangeRate = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.PaymentMethodEntry.COLUMN_EXCHANGE_RATE));
-        String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.PaymentMethodEntry.COLUMN_CONTRIBUTORS));
+        Long ownerId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.PaymentMethodEntry.COLUMN_OWNER_ID));
 
         newInstance.mId = id;
         newInstance.mName = name;
         newInstance.mCurrency = currency;
         newInstance.mIsClose = close == 1 ? true : false;
         newInstance.mExchangeRate = exchangeRate;
-        List<Contributor> owners = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
-        if(owners.size() == 1){
-            newInstance.mOwner = owners.get(0);
-        }
+        newInstance.mOwner = IdToItemConvertor.ConvertIdToContributor(contentResolver, ownerId);
 
         return newInstance;
     }
@@ -88,7 +81,7 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         return mOwner;
     }
 
-    public void setContributors(Contributor owner) {
+    public void setOwner(Contributor owner) {
         if (null == mOwner || !mOwner.equals(owner)) {
             mDirty = true;
             this.mOwner = owner;

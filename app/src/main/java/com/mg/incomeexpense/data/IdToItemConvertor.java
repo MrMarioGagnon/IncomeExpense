@@ -16,6 +16,28 @@ import java.util.List;
  */
 public class IdToItemConvertor {
 
+    public static Contributor ConvertIdToContributor(ContentResolver contentResolver, Long id) {
+
+        Uri uri = IncomeExpenseContract.ContributorEntry.buildInstanceUri(id);
+        Contributor contributor = null;
+
+        Cursor cursor = null;
+        try {
+            cursor = contentResolver.query(uri, null, null, null, null);
+            cursor.moveToFirst();
+            if(!cursor.isAfterLast()){
+                contributor = Contributor.create(cursor);
+            }
+        }finally{
+            if(null!=cursor){
+                cursor.close();
+            }
+        }
+
+        return contributor;
+    }
+
+
     public static List<Contributor> ConvertIdsToContributors(ContentResolver contentResolver, Uri uri, String stringId, String separator) {
 
         // Parameter validation

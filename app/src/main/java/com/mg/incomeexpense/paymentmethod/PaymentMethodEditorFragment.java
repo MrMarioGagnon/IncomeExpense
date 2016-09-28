@@ -17,14 +17,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.contributor.ContributorSpinnerAdapter;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
+import com.mg.incomeexpense.transaction.AccountSpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,16 +51,18 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
     private ArrayAdapter<CharSequence> mSpinnerCurrencyAdapter;
     private Switch mSwitchClose;
     private View.OnClickListener mOnSwitchClickListener;
-    private ImageButton mImageButtonContributors;
-    private View.OnClickListener mOnContributorImageButtonClickListener;
-    private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
-    private TextView mTextViewContributors;
-    private List<Contributor> mAvailableContributors;
-    private List<Contributor> mSelectedContributors;
+//    private ImageButton mImageButtonContributors;
+//    private View.OnClickListener mOnContributorImageButtonClickListener;
+//    private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
+//    private TextView mTextViewContributors;
+//    private List<Contributor> mAvailableContributors;
+//    private List<Contributor> mSelectedContributors;
+
+    private List<Contributor> mOwners;
+    private Spinner mSpinnerOwner;
+    private ContributorSpinnerAdapter mOwnerSpinnerAdapter;
 
     public PaymentMethodEditorFragment() {
-
-        mSelectedContributors = new ArrayList<>();
 
         mOnSwitchClickListener = new View.OnClickListener() {
             @Override
@@ -69,28 +75,6 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
             }
         };
 
-        mOnContributorImageButtonClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showContributorSetterDialog();
-            }
-        };
-
-        mContributorMultipleChoiceEventHandler = new MultipleChoiceEventHandler() { // Creating an anonymous Class Object
-            @Override
-            public void execute(boolean[] idSelected) {
-                mSelectedContributors.clear();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < idSelected.length; i++) {
-                    if (idSelected[i]) {
-                        Contributor contributor = mAvailableContributors.get(i);
-                        mSelectedContributors.add(contributor);
-                        sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), contributor.getName()));
-                    }
-                }
-                mTextViewContributors.setText(sb.toString());
-            }
-        };
     }
 
     public ObjectValidator getObjectValidator() {
@@ -124,11 +108,10 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
         if (null == mNames)
             throw new NullPointerException("A list of payment methods name is mandatory");
 
-        mAvailableContributors = (List<Contributor>) bundle.getSerializable("contributors");
-        if (null == mAvailableContributors)
-            throw new NullPointerException("A list of contributors is mandatory");
+        mOwnerSpinnerAdapter = new ContributorSpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                mOwners);
 
-        mSelectedContributors.addAll(mPaymentMethod.getContributors());
         mSpinnerCurrencyAdapter = ArrayAdapter.createFromResource(
                 getActivity(), R.array.pref_currency_values,
                 android.R.layout.simple_spinner_item);
@@ -149,17 +132,15 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
 
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
 
-        mImageButtonContributors = (ImageButton) rootView.findViewById(R.id.imagebutton_contributors);
-        mImageButtonContributors.setOnClickListener(mOnContributorImageButtonClickListener);
-
-        mTextViewContributors = (TextView) rootView.findViewById(R.id.textview_contributors);
+        mSpinnerOwner = (Spinner) rootView.findViewById(R.id.spinner_owner);
+        mSpinnerOwner.setAdapter(mOwnerSpinnerAdapter); // Set the custom adapter to the spinner
 
         if (null == savedInstanceState) {
             mEditTextName.setText(mPaymentMethod.getName());
             mEditTextExchangeRate.setText(mPaymentMethod.getExchangeRate().toString());
             mSwitchClose.setChecked(mPaymentMethod.getIsClose());
             mSwitchClose.setText(mPaymentMethod.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
-            mTextViewContributors.setText(mPaymentMethod.getContributorsForDisplay());
+            Tools.setSpinner(mPaymentMethod.getOwner(), mSpinnerOwner);
             mSpinnerCurrency.setSelection(((ArrayAdapter<String>) mSpinnerCurrency.getAdapter()).getPosition(mPaymentMethod.getCurrency()), false);
         }
 

@@ -65,6 +65,7 @@
     <string name="label_contributors">Contributors:</string>
     <string name="label_exchange_rate">Exchange Rate:</string>
     <string name="label_budget">Budget:</string>
+    <string name="label_owner">Owner:</string>
 
     <string name="hint_contributor_name">Contributor name</string>
     <string name="hint_account_name">Account name</string>
@@ -82,7 +83,6 @@
     <string name="validation_name_mandatory">Name is mandatory</string>
     <string name="validation_exchange_rate_mandatory">Exchange rate must be greater than 0</string>
     <string name="validation_group_mandatory">Group is mandatory</string>
-    <string name="validation_contributors_mandatory">No contributor selected</string>
     <string name="validation_category_mandatory">No category selected</string>
     <string name="validation_sub_categories_mandatory">Sub categories are mandatory</string>
     <string name="validation_account_mandatory">No account selected</string>
