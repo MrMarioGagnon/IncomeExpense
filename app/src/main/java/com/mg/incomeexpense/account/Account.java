@@ -128,7 +128,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     public Double getBudget() { return mBudget;}
 
     public void setBudget(Double budget){
-        if(!mBudget.equals(budget)){
+        if(null == mBudget || !mBudget.equals(budget)){
             mDirty = true;
             mBudget = budget;
         }

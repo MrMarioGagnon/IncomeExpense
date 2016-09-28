@@ -64,12 +64,14 @@
     <string name="label_currency">Currency:</string>
     <string name="label_contributors">Contributors:</string>
     <string name="label_exchange_rate">Exchange Rate:</string>
+    <string name="label_budget">Budget:</string>
 
     <string name="hint_contributor_name">Contributor name</string>
     <string name="hint_account_name">Account name</string>
     <string name="hint_payment_method_name">Payment Method name</string>
     <string name="hint_enter_category">Enter Category</string>
     <string name="hint_enter_sub_category">Enter Sub Category</string>
+    <string name="hint_account_budget">Enter Budget Amount</string>
 
     <string name="button_label_delete">Delete</string>
     <string name="button_label_save">Save</string>

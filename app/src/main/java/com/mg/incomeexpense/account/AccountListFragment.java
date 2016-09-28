@@ -31,13 +31,15 @@ public class AccountListFragment extends Fragment implements LoaderManager.Loade
     public static final int COL_CURRENCY = 2;
     public static final int COL_CONTRIBUTOR = 3;
     public static final int COL_CLOSE = 4;
+    public static final int COL_BUDGET = 5;
 
     private static final String[] ACCOUNT_COLUMNS = {
             IncomeExpenseContract.AccountEntry._ID,
             IncomeExpenseContract.AccountEntry.COLUMN_NAME,
             IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY,
             IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS,
-            IncomeExpenseContract.AccountEntry.COLUMN_CLOSE
+            IncomeExpenseContract.AccountEntry.COLUMN_CLOSE,
+            IncomeExpenseContract.AccountEntry.COLUMN_BUDGET
     };
     private static final String LOG_TAG = AccountListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";

@@ -26,6 +26,7 @@ import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
     private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private Account mAccount = null;
     private EditText mEditTextName;
+    private EditText mEditTextBudget;
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
     private ArrayList<String> mNames;
@@ -140,6 +142,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
 
         View rootView = inflater.inflate(R.layout.account_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_account_name);
+        mEditTextBudget = (EditText) rootView.findViewById(R.id.edit_text_budget);
         mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
         mSpinnerCurrency.setAdapter(mSpinnerCurrencyAdapter);
 
@@ -154,6 +157,10 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
 
         if (null == savedInstanceState) {
             mEditTextName.setText(mAccount.getName());
+            if(null != mAccount.getBudget()) {
+                DecimalFormat df = new DecimalFormat("#.00");
+                mEditTextBudget.setText(df.format(mAccount.getBudget()));
+            }
             mSwitchClose.setChecked(mAccount.getIsClose());
             mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
             mTextViewContributors.setText(mAccount.getContributorsForDisplay());
@@ -195,6 +202,11 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
                 break;
             case R.id.action_save:
                 mAccount.setName(mEditTextName.getText().toString());
+
+                String budget = mEditTextBudget.getText().toString();
+                if (budget.trim().length() > 0)
+                    mAccount.setBudget(Double.parseDouble(budget));
+
                 mAccount.setCurrency((String) mSpinnerCurrency
                         .getSelectedItem());
                 mAccount.setIsClose(mSwitchClose.isChecked());

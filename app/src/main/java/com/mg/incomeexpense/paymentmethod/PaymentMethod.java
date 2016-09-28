@@ -23,7 +23,7 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
     private String mCurrency;
     private Double mExchangeRate;
     private Boolean mIsClose;
-    private List<Contributor> mContributors;
+    private Contributor mOwner;
 
     private PaymentMethod() {
 
@@ -46,12 +46,15 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         newInstance.mCurrency = currency;
         newInstance.mIsClose = close == 1 ? true : false;
         newInstance.mExchangeRate = exchangeRate;
-        newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
+        List<Contributor> owners = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
+        if(owners.size() == 1){
+            newInstance.mOwner = owners.get(0);
+        }
 
         return newInstance;
     }
 
-    public static PaymentMethod create(Long id, String name, String currency, Double exchangeRate, Boolean isClose, List<Contributor> contributors) {
+    public static PaymentMethod create(Long id, String name, String currency, Double exchangeRate, Boolean isClose, Contributor owner) {
 
         PaymentMethod newInstance = new PaymentMethod();
         newInstance.mNew = false;
@@ -61,7 +64,7 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         newInstance.mCurrency = currency;
         newInstance.mExchangeRate = exchangeRate;
         newInstance.mIsClose = isClose;
-        newInstance.mContributors = contributors;
+        newInstance.mOwner = owner;
 
         return newInstance;
     }
@@ -75,25 +78,20 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         newInstance.mCurrency = "";
         newInstance.mExchangeRate = 1.0;
         newInstance.mIsClose = false;
-        newInstance.mContributors = new ArrayList<>();
+        newInstance.mOwner = null;
 
         return newInstance;
 
     }
 
-    public List<Contributor> getContributors() {
-        return mContributors;
+    public Contributor getOwner() {
+        return mOwner;
     }
 
-    public void setContributors(List<Contributor> contributors) {
-        Contributor[] a1 = new Contributor[mContributors.size()];
-        mContributors.toArray(a1);
-        Contributor[] a2 = new Contributor[contributors.size()];
-        contributors.toArray(a2);
-
-        if (!Arrays.equals(a1, a2)) {
+    public void setContributors(Contributor owner) {
+        if (null == mOwner || !mOwner.equals(owner)) {
             mDirty = true;
-            this.mContributors = contributors;
+            this.mOwner = owner;
         }
     }
 
@@ -148,7 +146,7 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PaymentMethod)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         PaymentMethod that = (PaymentMethod) o;
 
@@ -156,12 +154,8 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         if (!mCurrency.equals(that.mCurrency)) return false;
         if (!mExchangeRate.equals(that.mExchangeRate)) return false;
         if (!mIsClose.equals(that.mIsClose)) return false;
+        return mOwner.equals(that.mOwner);
 
-        Contributor[] a1 = new Contributor[mContributors.size()];
-        mContributors.toArray(a1);
-        Contributor[] a2 = new Contributor[that.getContributors().size()];
-        that.getContributors().toArray(a2);
-        return Arrays.equals(a1,a2);
     }
 
     @Override
@@ -170,7 +164,7 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         result = 31 * result + mCurrency.hashCode();
         result = 31 * result + mExchangeRate.hashCode();
         result = 31 * result + mIsClose.hashCode();
-        result = 31 * result + (mContributors != null ? mContributors.hashCode() : 0);
+        result = 31 * result + mOwner.hashCode();
         return result;
     }
 
@@ -183,18 +177,5 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
     public int compareTo(@NonNull PaymentMethod instanceToCompare) {
         return getName().compareToIgnoreCase(instanceToCompare.getName());
     }
-
-    public String getContributorsForDisplay(){
-        return Tools.join(mContributors, ",");
-    }
-
-    public String getContributorsIds() {
-        List<String> a = new ArrayList<>();
-        for (Contributor item : mContributors) {
-            a.add(item.getId().toString());
-        }
-        return Tools.join(a, ";");
-    }
-
 
 }
