@@ -92,8 +92,7 @@
     <string name="validation_amount_mandatory">No amount selected</string>
     <string name="validation_payment_method_mandatory">No payment method selected</string>
     <string name="validation_budget_must_be_positive">Budget amount must be positive</string>
-
-
+    <string name="validation_contributors_mandatory">No contributor selected</string>
 
     <string name="log_error_adding_item">Error adding item</string>
     <string name="log_error_deleting_item">Error deleting item</string>

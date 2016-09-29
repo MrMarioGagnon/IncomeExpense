@@ -72,7 +72,7 @@ public class PaymentMethodRepositorySynchronizer {
                 itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_CURRENCY, itemToBeSave.getCurrency());
                 itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_CLOSE, itemToBeSave.getIsClose());
                 itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_EXCHANGE_RATE, itemToBeSave.getExchangeRate());
-                itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_CONTRIBUTORS, itemToBeSave.getContributorsIds());
+                itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_OWNER_ID, itemToBeSave.getOwner().getId());
                 Uri newUri = mContentResolver.insert(mItemUri, itemValues);
                 id = IncomeExpenseContract.AccountEntry.getIdFromUri(newUri);
                 rowsAffected = (id != null) ? 1 : 0;
@@ -84,11 +84,11 @@ public class PaymentMethodRepositorySynchronizer {
                 selectionArgs = new String[]{id.toString()};
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updating_item), itemType, id));
                 ContentValues itemValues = new ContentValues();
-                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_NAME, itemToBeSave.getName());
-                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY, itemToBeSave.getCurrency());
-                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE, itemToBeSave.getIsClose());
+                itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME, itemToBeSave.getName());
+                itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_CURRENCY, itemToBeSave.getCurrency());
+                itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_CLOSE, itemToBeSave.getIsClose());
                 itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_EXCHANGE_RATE, itemToBeSave.getExchangeRate());
-                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS, itemToBeSave.getContributorsIds());
+                itemValues.put(IncomeExpenseContract.PaymentMethodEntry.COLUMN_OWNER_ID, itemToBeSave.getOwner().getId());
                 rowsAffected = mContentResolver.update(mItemUri, itemValues, selection, selectionArgs);
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updated_item), itemType, rowsAffected, id));
             }

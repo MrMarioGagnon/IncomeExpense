@@ -51,12 +51,6 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
     private ArrayAdapter<CharSequence> mSpinnerCurrencyAdapter;
     private Switch mSwitchClose;
     private View.OnClickListener mOnSwitchClickListener;
-//    private ImageButton mImageButtonContributors;
-//    private View.OnClickListener mOnContributorImageButtonClickListener;
-//    private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
-//    private TextView mTextViewContributors;
-//    private List<Contributor> mAvailableContributors;
-//    private List<Contributor> mSelectedContributors;
 
     private List<Contributor> mOwners;
     private Spinner mSpinnerOwner;
@@ -108,6 +102,11 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
         if (null == mNames)
             throw new NullPointerException("A list of payment methods name is mandatory");
 
+        mOwners = (ArrayList<Contributor>) bundle.getSerializable("contributors");
+        if (null == mOwners)
+            throw new NullPointerException("A list of contributors is mandatory");
+
+
         mOwnerSpinnerAdapter = new ContributorSpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 mOwners);
@@ -142,6 +141,7 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
             mSwitchClose.setText(mPaymentMethod.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
             Tools.setSpinner(mPaymentMethod.getOwner(), mSpinnerOwner);
             mSpinnerCurrency.setSelection(((ArrayAdapter<String>) mSpinnerCurrency.getAdapter()).getPosition(mPaymentMethod.getCurrency()), false);
+
         }
 
         return rootView;
@@ -185,7 +185,7 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
                 mPaymentMethod.setIsClose(mSwitchClose.isChecked());
 
 
-                mPaymentMethod.setContributors(mSelectedContributors);
+                mPaymentMethod.setOwner((Contributor) mSpinnerOwner.getSelectedItem());
 
                 ValidationStatus validationStatus = getObjectValidator().Validate(mPaymentMethod);
 
@@ -230,47 +230,4 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
 
     }
 
-    private void showContributorSetterDialog() {
-
-        try {
-
-            CharSequence[] contributorArray = new CharSequence[mAvailableContributors.size()];
-            int i = 0;
-            for (Contributor contributor : mAvailableContributors) {
-                contributorArray[i++] = contributor.getName();
-            }
-
-            Dialog dialog = DialogUtils.childSetterDialog(
-                    this.getContext(),
-                    contributorArray,
-                    mContributorMultipleChoiceEventHandler,
-                    buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors),
-                    getString(R.string.dialog_title_contributor_setter));
-
-            dialog.setOwnerActivity(this.getActivity());
-            dialog.show();
-        } catch (Exception exception) {
-            DialogUtils.messageBox(this.getContext(),
-                    getString(R.string.error_unable_to_fetch_all_contributor),
-                    getString(R.string.dialog_title_contributor_setter)).show();
-
-        }
-
-    }
-
-    private boolean[] buildContributorsCheckedArray(List<Contributor> availableContributors,
-                                                    List<Contributor> selectedContributors) {
-
-        boolean[] checked = new boolean[availableContributors.size()];
-
-        for (Contributor contributor : selectedContributors) {
-            int index = availableContributors.indexOf(contributor);
-            if (index >= 0) {
-                checked[index] = true;
-            }
-        }
-
-        return checked;
-
-    }
 }

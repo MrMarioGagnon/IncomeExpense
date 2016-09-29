@@ -30,16 +30,16 @@ public class PaymentMethodListFragment extends Fragment implements LoaderManager
     public static final int COL_NAME = 1;
     public static final int COL_CURRENCY = 2;
     public static final int COL_EXCHANGE_RATE = 3;
-    public static final int COL_CONTRIBUTOR = 4;
+    public static final int COL_OWNER = 4;
     public static final int COL_CLOSE = 5;
 
     private static final String[] PAYMENT_METHOD_COLUMNS = {
-            IncomeExpenseContract.AccountEntry._ID,
-            IncomeExpenseContract.AccountEntry.COLUMN_NAME,
-            IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY,
+            IncomeExpenseContract.PaymentMethodEntry._ID,
+            IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME,
+            IncomeExpenseContract.PaymentMethodEntry.COLUMN_CURRENCY,
             IncomeExpenseContract.PaymentMethodEntry.COLUMN_EXCHANGE_RATE,
-            IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS,
-            IncomeExpenseContract.AccountEntry.COLUMN_CLOSE
+            IncomeExpenseContract.PaymentMethodEntry.COLUMN_OWNER_ID,
+            IncomeExpenseContract.PaymentMethodEntry.COLUMN_CLOSE
     };
     private static final String LOG_TAG = PaymentMethodListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";

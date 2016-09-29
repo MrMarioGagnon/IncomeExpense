@@ -42,7 +42,7 @@ public class PaymentMethodListAdapter extends CursorAdapter {
 
         viewHolder.textViewName.setText(paymentMethod.getName());
         viewHolder.textViewCurrency.setText(paymentMethod.getCurrency());
-        viewHolder.textViewContributors.setText(paymentMethod.getContributorsForDisplay());
+        viewHolder.textViewOwner.setText(paymentMethod.getOwner().getName());
         DecimalFormat df = new DecimalFormat("#.00");
         viewHolder.textViewExchangeRate.setText(df.format(paymentMethod.getExchangeRate()));
         if(paymentMethod.getIsClose()){
@@ -55,13 +55,13 @@ public class PaymentMethodListAdapter extends CursorAdapter {
     public static class ViewHolder {
         public final TextView textViewName;
         public final TextView textViewCurrency;
-        public final TextView textViewContributors;
+        public final TextView textViewOwner;
         public final TextView textViewExchangeRate;
 
         public ViewHolder(View view) {
             textViewName = (TextView) view.findViewById(R.id.textView_payment_method_name);
             textViewCurrency = (TextView) view.findViewById(R.id.text_view_currency);
-            textViewContributors = (TextView) view.findViewById(R.id.text_view_contributors);
+            textViewOwner = (TextView) view.findViewById(R.id.text_view_owner);
             textViewExchangeRate = (TextView)view.findViewById(R.id.text_view_exchange_rate);
         }
     }
