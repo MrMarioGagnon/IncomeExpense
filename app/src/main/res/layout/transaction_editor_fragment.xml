@@ -83,6 +83,33 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_contributors"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textview_contributors"
+                android:text="Sample text"
+                android:layout_weight="1"/>
+
+            <ImageButton
+                android:id="@+id/imagebutton_contributors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_person_black_24dp"/>
+
+        </LinearLayout>
+
+
         <LinearLayout
             android:id="@+id/linear_layout_payment_method"
             style="@style/TransactionEditorSectionStyle">

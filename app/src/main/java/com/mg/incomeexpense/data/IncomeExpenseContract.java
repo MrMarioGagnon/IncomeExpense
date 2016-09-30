@@ -151,6 +151,7 @@ public class IncomeExpenseContract {
         public static final String COLUMN_CURRENCY = "currency";
         public static final String COLUMN_EXCHANGERATE = "exchangeRate";
         public static final String COLUMN_PAYMENTMETHOD_ID = "paymentMethodId";
+        public static final String COLUMN_CONTRIBUTORS = "contributors";
         public static final String COLUMN_NOTE = "note";
 
         public static Uri buildInstanceUri(long id) {

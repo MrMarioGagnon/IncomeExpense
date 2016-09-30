@@ -73,6 +73,7 @@ public class TransactionRepositorySynchronizer {
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY, itemToBeSave.getCurrency());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE, itemToBeSave.getExchangeRate());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID, itemToBeSave.getPaymentMethod().getId());
+                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CONTRIBUTORS, itemToBeSave.getContributorsIds());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_NOTE, itemToBeSave.getNote());
                 Uri newUri = mContentResolver.insert(mItemUri, itemValues);
                 id = IncomeExpenseContract.TransactionEntry.getIdFromUri(newUri);
@@ -93,6 +94,7 @@ public class TransactionRepositorySynchronizer {
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY, itemToBeSave.getCurrency());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE, itemToBeSave.getExchangeRate());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID, itemToBeSave.getPaymentMethod().getId());
+                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CONTRIBUTORS, itemToBeSave.getContributorsIds());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_NOTE, itemToBeSave.getNote());
                 rowsAffected = mContentResolver.update(mItemUri, itemValues, selection, selectionArgs);
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updated_item), itemType, rowsAffected, id));

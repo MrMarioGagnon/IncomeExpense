@@ -259,18 +259,18 @@ public class IncomeExpenseRequestWrapper {
 
                 if (transactionDate >= firstDateYear && transactionDate <= lastDateYear) {
 
-//                    thisYearTotal.Add(transaction.getContributors(), transaction.getType(), amount);
-//
-//                    if (transactionDate >= firstDateMonth && transactionDate <= lastDateMonth) {
-//                        thisMonthTotal.Add(transaction.getContributors(),transaction.getType(), amount);
-//                    }
-//
-//                    if (transactionDate >= firstDateWeek && transactionDate <= lastDateWeek) {
-//                        thisWeekTotal.Add(transaction.getContributors(),transaction.getType(), amount);
-//                    }
-//
-//                    if (transactionDate == today)
-//                        todayTotal.Add(transaction.getContributors(),transaction.getType(), amount);
+                    thisYearTotal.Add(transaction.getContributors(), transaction.getType(), amount);
+
+                    if (transactionDate >= firstDateMonth && transactionDate <= lastDateMonth) {
+                        thisMonthTotal.Add(transaction.getContributors(),transaction.getType(), amount);
+                    }
+
+                    if (transactionDate >= firstDateWeek && transactionDate <= lastDateWeek) {
+                        thisWeekTotal.Add(transaction.getContributors(),transaction.getType(), amount);
+                    }
+
+                    if (transactionDate == today)
+                        todayTotal.Add(transaction.getContributors(),transaction.getType(), amount);
 
                 }
             }

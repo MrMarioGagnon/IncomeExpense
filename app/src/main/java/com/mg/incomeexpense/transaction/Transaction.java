@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
+import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IdToItemConvertor;
@@ -12,6 +13,9 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by mario on 2016-07-23.
@@ -28,6 +32,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     private String mCurrency;
     private Double mExchangeRate;
     private PaymentMethod mPaymentMethod;
+    private List<Contributor> mContributors;
     private String mNote;
 
     private Transaction() {
@@ -39,8 +44,6 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mNew = false;
         newInstance.mDirty = false;
 
-
-
         Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ID));
         Long accountId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID));
         String categoryId = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY));
@@ -50,6 +53,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         String currency = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY));
         Double exchangeRate = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE));
         Long paymentMethodId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID));
+        String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
         String note = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_NOTE));
 
         Cursor subItemCursor = contentResolver.query( IncomeExpenseContract.AccountEntry.buildInstanceUri(accountId), null, null, null, null );
@@ -89,6 +93,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mCurrency = currency;
         newInstance.mExchangeRate = exchangeRate;
         newInstance.mPaymentMethod = paymentMethod;
+        newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
         newInstance.mNote = note;
 
         return newInstance;
@@ -107,11 +112,29 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mCurrency = "";
         newInstance.mExchangeRate = 1.0;
         newInstance.mPaymentMethod = null;
+        newInstance.mContributors = new ArrayList<>();
         newInstance.mNote = "";
 
         return newInstance;
 
     }
+
+    public List<Contributor> getContributors() {
+        return mContributors;
+    }
+
+    public void setContributors(List<Contributor> contributors) {
+        Contributor[] a1 = new Contributor[mContributors.size()];
+        mContributors.toArray(a1);
+        Contributor[] a2 = new Contributor[contributors.size()];
+        contributors.toArray(a2);
+
+        if (!Arrays.equals(a1, a2)) {
+            mDirty = true;
+            this.mContributors = contributors;
+        }
+    }
+
 
     public Account getAccount() {
         return mAccount;
@@ -231,6 +254,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         if (!mCurrency.equals(that.mCurrency)) return false;
         if (!mExchangeRate.equals(that.mExchangeRate)) return false;
         if (!mPaymentMethod.equals(that.mPaymentMethod)) return false;
+        if (!mContributors.equals(that.mContributors)) return false;
         return mNote != null ? mNote.equals(that.mNote) : that.mNote == null;
 
     }
@@ -245,6 +269,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         result = 31 * result + mCurrency.hashCode();
         result = 31 * result + mExchangeRate.hashCode();
         result = 31 * result + mPaymentMethod.hashCode();
+        result = 31 * result + mContributors.hashCode();
         result = 31 * result + (mNote != null ? mNote.hashCode() : 0);
         return result;
     }
@@ -256,6 +281,18 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
     public enum TransactionType {
         Expense, Income
+    }
+
+    public String getContributorsForDisplay() {
+        return Tools.join(mContributors, ",");
+    }
+
+    public String getContributorsIds() {
+        List<String> a = new ArrayList<>();
+        for (Contributor item : mContributors) {
+            a.add(item.getId().toString());
+        }
+        return Tools.join(a, ";");
     }
 
 

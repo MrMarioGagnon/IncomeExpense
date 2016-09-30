@@ -46,17 +46,20 @@ public class TransactionListAdapter extends CursorAdapter {
 
         int color = context.getResources().getColor(transaction.getType() == Transaction.TransactionType.Expense ? R.color.colorExpense : R.color.colorIncome, null);
         viewHolder.textViewAmount.setTextColor(color);
+        viewHolder.textViewContributors.setText(transaction.getContributorsForDisplay());
     }
 
     public static class ViewHolder {
         public final TextView textViewDate;
         public final TextView textViewCategory;
         public final TextView textViewAmount;
+        public final TextView textViewContributors;
 
         public ViewHolder(View view) {
             textViewDate = (TextView) view.findViewById(R.id.text_view_date);
             textViewCategory = (TextView) view.findViewById(R.id.text_view_category);
             textViewAmount = (TextView) view.findViewById(R.id.text_view_amount);
+            textViewContributors = (TextView) view.findViewById(R.id.textView_contributors);
         }
     }
 }

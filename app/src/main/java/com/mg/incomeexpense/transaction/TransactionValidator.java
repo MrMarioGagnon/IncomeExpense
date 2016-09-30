@@ -36,6 +36,7 @@ public class TransactionValidator implements ObjectValidator {
         messages.put(R.string.validation_amount_mandatory, context.getString(R.string.validation_amount_mandatory));
         messages.put(R.string.validation_currency_mandatory, context.getString(R.string.validation_currency_mandatory));
         messages.put(R.string.validation_exchange_rate_mandatory, context.getString(R.string.validation_exchange_rate_mandatory));
+        messages.put(R.string.validation_contributors_mandatory, context.getString(R.string.validation_contributors_mandatory));
         messages.put(R.string.validation_payment_method_mandatory, context.getString(R.string.validation_payment_method_mandatory));
 
         return new TransactionValidator(messages);
@@ -96,6 +97,10 @@ public class TransactionValidator implements ObjectValidator {
         if (transaction.getPaymentMethod() == null) {
             message = mValidationMessages.get(R.string.validation_payment_method_mandatory);
             messages.add(message);
+        }
+
+        if (transaction.getContributors().size() == 0) {
+            messages.add(mValidationMessages.get(R.string.validation_contributors_mandatory));
         }
 
         return ValidationStatus.create(Tools.join(messages, "\n"));

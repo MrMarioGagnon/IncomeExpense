@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.transaction;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,6 +25,7 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.category.CategoryListActivity;
+import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DatePickerFragment;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
@@ -30,6 +33,8 @@ import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
+import com.mg.incomeexpense.core.dialog.DialogUtils;
+import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.text.SimpleDateFormat;
@@ -76,7 +81,38 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     private List<Account> mAccounts;
     private List<PaymentMethod> mPaymentMethods;
 
+    private ImageButton mImageButtonContributors;
+    private View.OnClickListener mOnContributorImageButtonClickListener;
+    private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
+    private TextView mTextViewContributors;
+    private List<Contributor> mAvailableContributors;
+    private List<Contributor> mSelectedContributors;
+
+
     public TransactionEditorFragment() {
+        mSelectedContributors = new ArrayList<>();
+        mOnContributorImageButtonClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContributorSetterDialog();
+            }
+        };
+
+        mContributorMultipleChoiceEventHandler = new MultipleChoiceEventHandler() { // Creating an anonymous Class Object
+            @Override
+            public void execute(boolean[] idSelected) {
+                mSelectedContributors.clear();
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < idSelected.length; i++) {
+                    if (idSelected[i]) {
+                        Contributor contributor = mAvailableContributors.get(i);
+                        mSelectedContributors.add(contributor);
+                        sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), contributor.getName()));
+                    }
+                }
+                mTextViewContributors.setText(sb.toString());
+            }
+        };
 
     }
 
@@ -113,6 +149,13 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         mPaymentMethodSpinnerAdapter = new PaymentMethodSpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 mPaymentMethods);
+
+        mAvailableContributors = (List<Contributor>) bundle.getSerializable("contributors");
+        if (null == mAvailableContributors)
+            throw new NullPointerException("A list of contributors is mandatory");
+
+        mSelectedContributors.addAll(mTransaction.getContributors());
+
     }
 
     @Override
@@ -124,6 +167,8 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         int day;
 
         View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
+
+
 
         mSpinnerAccount = (Spinner) rootView.findViewById(R.id.spinner_account);
         mSpinnerAccount.setAdapter(mAccountSpinnerAdapter); // Set the custom adapter to the spinner
@@ -183,6 +228,11 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         mRadioButtonExpense = (RadioButton) rootView.findViewById(R.id.radioButtonExpense);
         mRadioButtonIncome = (RadioButton) rootView.findViewById(R.id.radioButtonIncome);
 
+        mImageButtonContributors = (ImageButton) rootView.findViewById(R.id.imagebutton_contributors);
+        mImageButtonContributors.setOnClickListener(mOnContributorImageButtonClickListener);
+
+        mTextViewContributors = (TextView) rootView.findViewById(R.id.textview_contributors);
+
         if (null == savedInstanceState) {
 
             if (mTransaction.isNew()) {
@@ -209,7 +259,7 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             mEditTextExchangeRate.setText(mTransaction.getExchangeRate().toString());
             Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
             mEditTextNote.setText(mTransaction.getNote());
-
+            mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
             mSpinnerAccount.setEnabled(false);
 
         }
@@ -317,6 +367,8 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 String note = mEditTextNote.getText().toString();
                 mTransaction.setNote(note);
 
+                mTransaction.setContributors(mSelectedContributors);
+
                 ValidationStatus validationStatus = getObjectValidator().Validate(mTransaction);
 
                 if (validationStatus.isValid()) {
@@ -372,4 +424,49 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
 
     }
+
+    private void showContributorSetterDialog() {
+
+        try {
+
+            CharSequence[] contributorArray = new CharSequence[mAvailableContributors.size()];
+            int i = 0;
+            for (Contributor contributor : mAvailableContributors) {
+                contributorArray[i++] = contributor.getName();
+            }
+
+            Dialog dialog = DialogUtils.childSetterDialog(
+                    this.getContext(),
+                    contributorArray,
+                    mContributorMultipleChoiceEventHandler,
+                    buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors),
+                    getString(R.string.dialog_title_contributor_setter));
+
+            dialog.setOwnerActivity(this.getActivity());
+            dialog.show();
+        } catch (Exception exception) {
+            DialogUtils.messageBox(this.getContext(),
+                    getString(R.string.error_unable_to_fetch_all_contributor),
+                    getString(R.string.dialog_title_contributor_setter)).show();
+
+        }
+
+    }
+
+    private boolean[] buildContributorsCheckedArray(List<Contributor> availableContributors,
+                                                    List<Contributor> selectedContributors) {
+
+        boolean[] checked = new boolean[availableContributors.size()];
+
+        for (Contributor contributor : selectedContributors) {
+            int index = availableContributors.indexOf(contributor);
+            if (index >= 0) {
+                checked[index] = true;
+            }
+        }
+
+        return checked;
+
+    }
+
 }
