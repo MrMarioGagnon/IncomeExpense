@@ -136,17 +136,24 @@ public class IncomeExpenseRequestWrapper {
         return names;
     }
 
-    public static ArrayList<Contributor> getAvailableContributors(ContentResolver contentResolver) {
+    public static ArrayList<Contributor> getAvailableContributors(ContentResolver contentResolver, Account account) {
 
         ArrayList<Contributor> contributors = new ArrayList<>();
 
         Cursor cursor = null;
         try {
             cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.ContributorEntry.COLUMN_NAME);
+            Contributor contributor;
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
-                contributors.add(Contributor.create(id, name));
+                contributor = Contributor.create(id, name);
+                if(null == account){
+                    contributors.add(contributor);
+                }else {
+                    if (account.getContributors().contains(contributor))
+                        contributors.add(contributor);
+                }
             }
         } finally {
             if (null != cursor) {

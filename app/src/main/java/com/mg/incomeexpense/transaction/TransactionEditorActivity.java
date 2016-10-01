@@ -43,7 +43,7 @@ public class TransactionEditorActivity extends AppCompatActivity implements Item
             bundle.putSerializable("accounts", IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver()));
             bundle.putSerializable("categories", IncomeExpenseRequestWrapper.getAvailableCategories(getContentResolver()));
             bundle.putSerializable("paymentMethods", IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getContentResolver()));
-            bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver()));
+            bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver(), transaction.getAccount()));
 
             TransactionEditorFragment fragment = new TransactionEditorFragment();
             fragment.addListener(this);

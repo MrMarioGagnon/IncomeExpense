@@ -47,7 +47,7 @@ public class AccountEditorActivity extends AppCompatActivity implements ItemStat
             }
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableAccountName(getContentResolver(), account));
-            bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver()));
+            bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver(), null));
 
             AccountEditorFragment fragment = new AccountEditorFragment();
             fragment.addListener(this);

@@ -50,6 +50,7 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
     public static final int COL_COLUMN_EXCHANGERATE = 8;
     public static final int COL_COLUMN_PAYMENT_METHOD_ID = 9;
     public static final int COL_COLUMN_NOTE = 10;
+    public static final int COL_COLUMN_CONTRIBUTOR = 11;
 
     private static final String[] TRANSACTION_COLUMNS = {
             IncomeExpenseContract.TransactionEntry._ID,
@@ -61,7 +62,8 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
             IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY,
             IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE,
             IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID,
-            IncomeExpenseContract.TransactionEntry.COLUMN_NOTE
+            IncomeExpenseContract.TransactionEntry.COLUMN_NOTE,
+            IncomeExpenseContract.TransactionEntry.COLUMN_CONTRIBUTORS
     };
     private static final String LOG_TAG = TransactionListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
