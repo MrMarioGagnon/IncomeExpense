@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.ObjectBase;
@@ -44,33 +43,6 @@ public class IncomeExpenseRequestWrapper {
             cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.AccountEntry.COLUMN_NAME}, selection, selectionArgument, IncomeExpenseContract.AccountEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_NAME));
-                names.add(name.toUpperCase());
-            }
-        } finally {
-            if (null != cursor) {
-                cursor.close();
-            }
-        }
-
-        return names;
-    }
-
-    public static ArrayList<String> getAvailableCategoryName(@NonNull ContentResolver contentResolver, ObjectBase category) {
-
-        ArrayList<String> names = new ArrayList<>();
-
-        Uri uri = IncomeExpenseContract.CategoryEntry.CONTENT_URI;
-
-        Cursor cursor = null;
-        try {
-
-            String selection = String.format("%1$s !=?", IncomeExpenseContract.CategoryEntry.COLUMN_ID);
-            // Si category est new le id va etre null, donc remplacer par -1
-            String[] selectionArgument = new String[]{category.isNew() ? "-1" : category.getId().toString()};
-
-            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.CategoryEntry.COLUMN_NAME}, selection, selectionArgument, IncomeExpenseContract.CategoryEntry.COLUMN_NAME);
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
                 names.add(name.toUpperCase());
             }
         } finally {
@@ -148,9 +120,9 @@ public class IncomeExpenseRequestWrapper {
                 Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
                 String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
                 contributor = Contributor.create(id, name);
-                if(null == account){
+                if (null == account) {
                     contributors.add(contributor);
-                }else {
+                } else {
                     if (account.getContributors().contains(contributor))
                         contributors.add(contributor);
                 }
@@ -173,25 +145,6 @@ public class IncomeExpenseRequestWrapper {
             cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.AccountEntry.COLUMN_NAME);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(Account.create(cursor, contentResolver));
-            }
-        } finally {
-            if (null != cursor) {
-                cursor.close();
-            }
-        }
-
-        return assets;
-    }
-
-    public static ArrayList<Category> getAvailableCategories(ContentResolver contentResolver) {
-
-        ArrayList<Category> assets = new ArrayList<>();
-
-        Cursor cursor = null;
-        try {
-            cursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.CategoryEntry.COLUMN_NAME);
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                assets.add(Category.create(cursor, contentResolver));
             }
         } finally {
             if (null != cursor) {
@@ -269,15 +222,15 @@ public class IncomeExpenseRequestWrapper {
                     thisYearTotal.Add(transaction.getContributors(), transaction.getType(), amount);
 
                     if (transactionDate >= firstDateMonth && transactionDate <= lastDateMonth) {
-                        thisMonthTotal.Add(transaction.getContributors(),transaction.getType(), amount);
+                        thisMonthTotal.Add(transaction.getContributors(), transaction.getType(), amount);
                     }
 
                     if (transactionDate >= firstDateWeek && transactionDate <= lastDateWeek) {
-                        thisWeekTotal.Add(transaction.getContributors(),transaction.getType(), amount);
+                        thisWeekTotal.Add(transaction.getContributors(), transaction.getType(), amount);
                     }
 
                     if (transactionDate == today)
-                        todayTotal.Add(transaction.getContributors(),transaction.getType(), amount);
+                        todayTotal.Add(transaction.getContributors(), transaction.getType(), amount);
 
                 }
             }

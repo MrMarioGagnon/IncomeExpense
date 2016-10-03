@@ -38,7 +38,6 @@ public class AccountListAdapter extends CursorAdapter {
         Account account = Account.create(cursor, context.getContentResolver());
 
         viewHolder.textViewName.setText(account.getName());
-        viewHolder.textViewCurrency.setText(account.getCurrency());
         viewHolder.textViewContributors.setText(account.getContributorsForDisplay());
         if (account.getIsClose()) {
             view.setBackgroundColor(Color.RED);
@@ -58,12 +57,10 @@ public class AccountListAdapter extends CursorAdapter {
 
     public static class ViewHolder {
         public final TextView textViewName;
-        public final TextView textViewCurrency;
         public final TextView textViewContributors;
 
         public ViewHolder(View view) {
             textViewName = (TextView) view.findViewById(R.id.textView_account_name);
-            textViewCurrency = (TextView) view.findViewById(R.id.textView_currency);
             textViewContributors = (TextView) view.findViewById(R.id.textView_contributors);
         }
     }

@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,18 @@ import java.util.List;
  * Created by mario on 2016-07-21.
  */
 public class Tools {
+
+    public static List<String> split(String stringToSplit, String separator){
+        List<String> items;
+
+        String[] strings = stringToSplit.split(separator);
+
+        items = Arrays.asList(strings);
+
+        Collections.sort(items);
+
+        return items;
+    }
 
     public static String getDefaultCurrency(Context context){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
