@@ -39,11 +39,6 @@ public class AccountEditorActivity extends AppCompatActivity implements ItemStat
 
             if (actionBar != null) {
                 actionBar.setTitle(getString(account.isNew() ? R.string.title_account_editor_add : R.string.title_account_editor_update));
-
-                if(account.isNew()){
-                    account.setCurrency(Tools.getDefaultCurrency(this));
-                }
-
             }
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableAccountName(getContentResolver(), account));

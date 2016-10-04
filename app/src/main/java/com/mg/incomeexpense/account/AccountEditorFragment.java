@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.account;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,14 +10,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.category.Category;
+import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
@@ -36,6 +38,7 @@ import java.util.List;
 public class AccountEditorFragment extends Fragment implements ItemStateChangeHandler {
 
     private static final String LOG_TAG = AccountEditorFragment.class.getSimpleName();
+    private static final int CATEGORY_LIST_ACTIVITY = 1;
 
     private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private Account mAccount = null;
@@ -44,8 +47,6 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
     private ArrayList<String> mNames;
-    private Spinner mSpinnerCurrency;
-    private ArrayAdapter<CharSequence> mSpinnerCurrencyAdapter;
     private Switch mSwitchClose;
     private View.OnClickListener mOnSwitchClickListener;
     private ImageButton mImageButtonContributors;
@@ -54,6 +55,8 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
     private TextView mTextViewContributors;
     private List<Contributor> mAvailableContributors;
     private List<Contributor> mSelectedContributors;
+    private ImageView mImageViewCategory;
+    private TextView mTextViewCategory;
 
     public AccountEditorFragment() {
 
@@ -130,10 +133,6 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
             throw new NullPointerException("A list of contributors is mandatory");
 
         mSelectedContributors.addAll(mAccount.getContributors());
-        mSpinnerCurrencyAdapter = ArrayAdapter.createFromResource(
-                getActivity(), R.array.pref_currency_values,
-                android.R.layout.simple_spinner_item);
-        mSpinnerCurrencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
     @Override
@@ -143,8 +142,6 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
         View rootView = inflater.inflate(R.layout.account_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_account_name);
         mEditTextBudget = (EditText) rootView.findViewById(R.id.edit_text_budget);
-        mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
-        mSpinnerCurrency.setAdapter(mSpinnerCurrencyAdapter);
 
         mSwitchClose = (Switch) rootView.findViewById(R.id.switch_close);
 
@@ -155,20 +152,59 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
 
         mTextViewContributors = (TextView) rootView.findViewById(R.id.textview_contributors);
 
+        mImageViewCategory = (ImageView) rootView.findViewById(R.id.image_view_category);
+        mImageViewCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowCategoryList();
+            }
+        });
+        mTextViewCategory = (TextView) rootView.findViewById(R.id.text_view_category_name);
+
+
         if (null == savedInstanceState) {
             mEditTextName.setText(mAccount.getName());
-            if(null != mAccount.getBudget()) {
+            if (null != mAccount.getBudget()) {
                 DecimalFormat df = new DecimalFormat("#.00");
                 mEditTextBudget.setText(df.format(mAccount.getBudget()));
             }
             mSwitchClose.setChecked(mAccount.getIsClose());
             mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
             mTextViewContributors.setText(mAccount.getContributorsForDisplay());
-            mSpinnerCurrency.setSelection(((ArrayAdapter<String>) mSpinnerCurrency.getAdapter()).getPosition(mAccount.getCurrency()), false);
+            if (mAccount.getCategoriesAsString() != null)
+                mTextViewCategory.setText(mAccount.getCategoriesAsString());
         }
 
         return rootView;
     }
+
+    private void ShowCategoryList() {
+
+        Intent intent = new Intent(getActivity(), CategoryListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("hideHomeButton", true);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, CATEGORY_LIST_ACTIVITY);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case CATEGORY_LIST_ACTIVITY:
+                if (data != null) {
+                    Category category = (Category) data.getSerializableExtra("item");
+
+                    if (category != null) {
+                        mTextViewCategory.setText(category.getSelectedCategoryToDisplay());
+                        mTextViewCategory.setTag(category);
+                    }
+
+                }
+                break;
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -203,14 +239,16 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
             case R.id.action_save:
                 mAccount.setName(mEditTextName.getText().toString());
 
+                Category category = (Category) mTextViewCategory.getTag();
+                if (category != null) {
+                    mAccount.setCategories(null);
+                }
+
                 String budget = mEditTextBudget.getText().toString();
                 if (budget.trim().length() > 0)
                     mAccount.setBudget(Double.parseDouble(budget));
 
-                mAccount.setCurrency((String) mSpinnerCurrency
-                        .getSelectedItem());
                 mAccount.setIsClose(mSwitchClose.isChecked());
-
 
                 mAccount.setContributors(mSelectedContributors);
 

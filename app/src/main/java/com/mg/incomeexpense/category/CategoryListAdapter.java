@@ -29,14 +29,14 @@ public class CategoryListAdapter extends BaseExpandableListAdapter {
     }
 
     public void refresh(Activity activity){
-        Cursor cursor = activity.getContentResolver().query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null, null);
-
-        List<Category> categories = new ArrayList<>();
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            categories.add( Category.create( cursor ));
-        }
-        mCategories = new Category[categories.size()];
-        categories.toArray( mCategories );
+//        Cursor cursor = activity.getContentResolver().query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null, null);
+//
+//        List<Category> categories = new ArrayList<>();
+//        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+//            categories.add( Category.create( cursor ));
+//        }
+//        mCategories = new Category[categories.size()];
+//        categories.toArray( mCategories );
 
     }
 

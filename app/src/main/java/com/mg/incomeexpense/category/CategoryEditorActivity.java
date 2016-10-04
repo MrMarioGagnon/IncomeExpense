@@ -40,7 +40,7 @@ public class CategoryEditorActivity extends AppCompatActivity implements ItemSta
                 actionBar.setTitle(getString(category.isNew() ? R.string.title_category_editor_add : R.string.title_category_editor_update));
             }
 
-            bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableCategoryName(getContentResolver(), category));
+            //bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableCategoryName(getContentResolver(), category));
 
             CategoryEditorFragment fragment = new CategoryEditorFragment();
             fragment.addListener(this);
@@ -60,10 +60,10 @@ public class CategoryEditorActivity extends AppCompatActivity implements ItemSta
             setResult(RESULT_CANCELED);
         } else {
 
-            CategoryRepositorySynchronizer synchronizer = new CategoryRepositorySynchronizer(getContentResolver(),
-                    IncomeExpenseContract.CategoryEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, CategoryRepositorySynchronizer.class.getSimpleName()));
+//            CategoryRepositorySynchronizer synchronizer = new CategoryRepositorySynchronizer(getContentResolver(),
+//                    IncomeExpenseContract.CategoryEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, CategoryRepositorySynchronizer.class.getSimpleName()));
 
-            synchronizer.Save(event.getItem());
+//            synchronizer.Save(event.getItem());
             setResult(RESULT_OK);
         }
 

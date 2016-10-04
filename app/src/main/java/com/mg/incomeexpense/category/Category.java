@@ -28,13 +28,13 @@ public class Category extends ObjectBase implements Serializable {
         newInstance.mNew = false;
         newInstance.mDirty = false;
 
-        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_ID));
-        String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
-        String subCategories = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY));
+//        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_ID));
+//        String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
+//        String subCategories = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY));
 
-        newInstance.mId = id;
-        newInstance.mName = name;
-        newInstance.mSubCategories = subCategories.split("|");
+//        newInstance.mId = id;
+//        newInstance.mName = name;
+//        newInstance.mSubCategories = subCategories.split("|");
 
         return newInstance;
     }
@@ -44,13 +44,13 @@ public class Category extends ObjectBase implements Serializable {
         newInstance.mNew = false;
         newInstance.mDirty = false;
 
-        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_ID));
-        String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
-        String subCategories = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY));
+//        Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_ID));
+//        String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
+//        String subCategories = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY));
 
-        newInstance.mId = id;
-        newInstance.mName = name;
-        newInstance.mSubCategories = subCategories.split("\\|");
+//        newInstance.mId = id;
+//        newInstance.mName = name;
+//        newInstance.mSubCategories = subCategories.split("\\|");
 
         return newInstance;
     }

@@ -33,7 +33,8 @@ public class AccountValidator implements ObjectValidator {
         messages.put(R.string.validation_name_already_exists, context.getString(R.string.validation_name_already_exists));
         messages.put(R.string.validation_currency_mandatory, context.getString(R.string.validation_currency_mandatory));
         messages.put(R.string.validation_contributors_mandatory, context.getString(R.string.validation_contributors_mandatory));
-        messages.put(R.string.validation_budget_must_be_positive,context.getString(R.string.validation_budget_must_be_positive));
+        messages.put(R.string.validation_category_mandatory, context.getString(R.string.validation_category_mandatory));
+        messages.put(R.string.validation_budget_must_be_positive, context.getString(R.string.validation_budget_must_be_positive));
 
         return new AccountValidator(names, messages);
     }
@@ -54,7 +55,6 @@ public class AccountValidator implements ObjectValidator {
 
         Account account = (Account) objectToValidate;
         String name = account.getName().trim();
-        String currency = account.getCurrency().trim();
 
         if (name.length() == 0) {
             messages.add(mValidationMessages.get(R.string.validation_name_mandatory));
@@ -62,15 +62,15 @@ public class AccountValidator implements ObjectValidator {
             messages.add(mValidationMessages.get(R.string.validation_name_already_exists));
         }
 
-        if (currency.length() == 0) {
-            messages.add(mValidationMessages.get(R.string.validation_currency_mandatory));
-        }
-
         if (account.getContributors().size() == 0) {
             messages.add(mValidationMessages.get(R.string.validation_contributors_mandatory));
         }
 
-        if(null != account.getBudget() && account.getBudget() < 0){
+        if (account.getCategories().size() == 0) {
+            messages.add(mValidationMessages.get(R.string.validation_category_mandatory));
+        }
+
+        if (null != account.getBudget() && account.getBudget() < 0) {
             messages.add(mValidationMessages.get(R.string.validation_budget_must_be_positive));
         }
 

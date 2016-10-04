@@ -48,41 +48,41 @@ public class CategoryRepositorySynchronizer {
         final String itemType = itemToBeSave.getClass().getSimpleName();
         Long id;
 
-        final String selection = IncomeExpenseContract.CategoryEntry.COLUMN_ID + "=?";
-        final String[] selectionArgs;
-        int rowsAffected;
-
-        if (itemToBeSave.isDead()) {
-            // Delete item
-            id = itemToBeSave.getId();
-            selectionArgs = new String[]{id.toString()};
-            Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_deleting_item), itemType, id));
-            rowsAffected = mContentResolver.delete(mItemUri, selection, selectionArgs);
-            Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_deleted_item), itemType, rowsAffected, id));
-        } else {
-            if (itemToBeSave.isNew()) {
-                // add item
-                Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_adding_item), itemType));
-                ContentValues itemValues = new ContentValues();
-                itemValues.put(IncomeExpenseContract.CategoryEntry.COLUMN_NAME, itemToBeSave.getName());
-                itemValues.put(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY, itemToBeSave.getSubCategoriesAsString());
-                Uri newUri = mContentResolver.insert(mItemUri, itemValues);
-                id = IncomeExpenseContract.AccountEntry.getIdFromUri(newUri);
-                rowsAffected = (id != null) ? 1 : 0;
-                itemToBeSave.setId(id);
-                Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_added_item), itemType, rowsAffected, id));
-            } else {
-                // update item
-                id = itemToBeSave.getId();
-                selectionArgs = new String[]{id.toString()};
-                Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updating_item), itemType, id));
-                ContentValues itemValues = new ContentValues();
-                itemValues.put(IncomeExpenseContract.CategoryEntry.COLUMN_NAME, itemToBeSave.getName());
-                itemValues.put(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY, itemToBeSave.getSubCategoriesAsString());
-                rowsAffected = mContentResolver.update(mItemUri, itemValues, selection, selectionArgs);
-                Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updated_item), itemType, rowsAffected, id));
-            }
-        }
+//        final String selection = IncomeExpenseContract.CategoryEntry.COLUMN_ID + "=?";
+//        final String[] selectionArgs;
+//        int rowsAffected;
+//
+//        if (itemToBeSave.isDead()) {
+//            // Delete item
+//            id = itemToBeSave.getId();
+//            selectionArgs = new String[]{id.toString()};
+//            Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_deleting_item), itemType, id));
+//            rowsAffected = mContentResolver.delete(mItemUri, selection, selectionArgs);
+//            Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_deleted_item), itemType, rowsAffected, id));
+//        } else {
+//            if (itemToBeSave.isNew()) {
+//                // add item
+//                Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_adding_item), itemType));
+//                ContentValues itemValues = new ContentValues();
+//                itemValues.put(IncomeExpenseContract.CategoryEntry.COLUMN_NAME, itemToBeSave.getName());
+//                itemValues.put(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY, itemToBeSave.getSubCategoriesAsString());
+//                Uri newUri = mContentResolver.insert(mItemUri, itemValues);
+//                id = IncomeExpenseContract.AccountEntry.getIdFromUri(newUri);
+//                rowsAffected = (id != null) ? 1 : 0;
+//                itemToBeSave.setId(id);
+//                Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_added_item), itemType, rowsAffected, id));
+//            } else {
+//                // update item
+//                id = itemToBeSave.getId();
+//                selectionArgs = new String[]{id.toString()};
+//                Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updating_item), itemType, id));
+//                ContentValues itemValues = new ContentValues();
+//                itemValues.put(IncomeExpenseContract.CategoryEntry.COLUMN_NAME, itemToBeSave.getName());
+//                itemValues.put(IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY, itemToBeSave.getSubCategoriesAsString());
+//                rowsAffected = mContentResolver.update(mItemUri, itemValues, selection, selectionArgs);
+//                Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updated_item), itemType, rowsAffected, id));
+//            }
+        //}
 
         return itemToBeSave;
     }

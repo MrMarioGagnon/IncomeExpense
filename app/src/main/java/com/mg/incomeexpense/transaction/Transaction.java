@@ -64,17 +64,17 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
             }
         }
 
-        String[] categoryParts = categoryId.split("\\|");
-        int catId = Integer.parseInt(categoryParts[0]);
-        String subCat = categoryParts[1];
-        subItemCursor = contentResolver.query( IncomeExpenseContract.CategoryEntry.buildInstanceUri(catId), null, null, null, null );
-        Category category = null;
-        if(subItemCursor != null){
-            if(subItemCursor.moveToFirst()){
-                category = Category.create(subItemCursor, contentResolver);
-                category.setSelectedSubCategory(subCat);
-            }
-        }
+//        String[] categoryParts = categoryId.split("\\|");
+//        int catId = Integer.parseInt(categoryParts[0]);
+//        String subCat = categoryParts[1];
+//        subItemCursor = contentResolver.query( IncomeExpenseContract.CategoryEntry.buildInstanceUri(catId), null, null, null, null );
+//        Category category = null;
+//        if(subItemCursor != null){
+//            if(subItemCursor.moveToFirst()){
+//                category = Category.create(subItemCursor, contentResolver);
+//                category.setSelectedSubCategory(subCat);
+//            }
+//        }
 
         subItemCursor = contentResolver.query( IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(paymentMethodId), null, null, null, null );
         PaymentMethod paymentMethod = null;
@@ -86,7 +86,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
         newInstance.mId = id;
         newInstance.mAccount = account;
-        newInstance.mCategory = category;
+        //newInstance.mCategory = category;
         newInstance.mType = type == 0? TransactionType.Expense: TransactionType.Income;
         newInstance.mDate = date;
         newInstance.mAmount = amount;

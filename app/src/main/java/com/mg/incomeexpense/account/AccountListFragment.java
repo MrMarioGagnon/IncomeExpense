@@ -36,7 +36,7 @@ public class AccountListFragment extends Fragment implements LoaderManager.Loade
     private static final String[] ACCOUNT_COLUMNS = {
             IncomeExpenseContract.AccountEntry._ID,
             IncomeExpenseContract.AccountEntry.COLUMN_NAME,
-            IncomeExpenseContract.AccountEntry.COLUMN_CURRENCY,
+            IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES,
             IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS,
             IncomeExpenseContract.AccountEntry.COLUMN_CLOSE,
             IncomeExpenseContract.AccountEntry.COLUMN_BUDGET
