@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.Category;
+import com.mg.incomeexpense.category.CategoryEditorActivity;
 import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
@@ -156,7 +157,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
         mImageViewCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowCategoryList();
+                ShowCategoryEditor();
             }
         });
         mTextViewCategory = (TextView) rootView.findViewById(R.id.text_view_category_name);
@@ -178,10 +179,11 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
         return rootView;
     }
 
-    private void ShowCategoryList() {
+    private void ShowCategoryEditor() {
 
-        Intent intent = new Intent(getActivity(), CategoryListActivity.class);
+        Intent intent = new Intent(getActivity(), CategoryEditorActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putSerializable("item", new ArrayList<>());
         bundle.putBoolean("hideHomeButton", true);
         intent.putExtras(bundle);
         startActivityForResult(intent, CATEGORY_LIST_ACTIVITY);

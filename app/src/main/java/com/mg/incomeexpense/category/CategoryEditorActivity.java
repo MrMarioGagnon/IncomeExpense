@@ -11,6 +11,8 @@ import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
+import java.util.List;
+
 /**
  * Created by mario on 2016-07-19.
  */
@@ -30,17 +32,15 @@ public class CategoryEditorActivity extends AppCompatActivity implements ItemSta
             if (null == bundle)
                 throw new NullPointerException("A bundle with and Category item is mandatory");
 
-            Category category = (Category) bundle.getSerializable("item");
-            if (null == category)
-                throw new NullPointerException("An category object is mandatory");
+            List<String> categories = (List<String>) bundle.getSerializable("item");
+            if (null == categories)
+                throw new NullPointerException("An list of category is mandatory");
 
             ActionBar actionBar = getSupportActionBar();
 
             if (actionBar != null) {
-                actionBar.setTitle(getString(category.isNew() ? R.string.title_category_editor_add : R.string.title_category_editor_update));
+                actionBar.setTitle(R.string.title_category_editor_update);
             }
-
-            //bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableCategoryName(getContentResolver(), category));
 
             CategoryEditorFragment fragment = new CategoryEditorFragment();
             fragment.addListener(this);

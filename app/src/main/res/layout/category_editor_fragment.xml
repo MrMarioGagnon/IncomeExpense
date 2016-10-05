@@ -14,38 +14,30 @@
             android:id="@+id/relativeLayoutHeader"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
 
-            <TextView android:layout_width="fill_parent" android:id="@+id/textViewValidationErrorMessage"
+            <TextView
+                android:id="@+id/textViewValidationErrorMessage"
                 style="@style/ErrorBoxStyle"
-                android:visibility="gone"/>
-
-            <EditText
-                android:id="@+id/edittext_category_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_enter_category"
-                android:inputType="text|textNoSuggestions"/>
-
+                android:layout_width="fill_parent"
+                android:visibility="gone" />
 
             <Button
+                android:id="@+id/button_add_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Sub Category"
-                android:id="@+id/button_add_sub_category"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:text="@string/button_add_category" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_layout_sub_category"
-            android:orientation="vertical"
+            android:id="@+id/linear_layout_category"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
-
 
 </ScrollView>

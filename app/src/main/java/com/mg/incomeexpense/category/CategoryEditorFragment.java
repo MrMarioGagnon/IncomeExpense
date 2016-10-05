@@ -2,7 +2,6 @@ package com.mg.incomeexpense.category;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,9 +18,7 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
-import com.mg.incomeexpense.core.LetterDigitFilter;
 import com.mg.incomeexpense.core.ObjectValidator;
-import com.mg.incomeexpense.core.ValidationStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,29 +29,27 @@ import java.util.List;
 public class CategoryEditorFragment extends Fragment implements ItemStateChangeHandler {
 
     private static final String LOG_TAG = CategoryEditorFragment.class.getSimpleName();
-
     private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
-    private Category mCategory = null;
-    private EditText mEditTextName;
+    private List<String> mCategories;
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
     private ArrayList<String> mNames;
     private int mLayoutPosition = 0;
-    private LinearLayout mLinearLayoutSubCategory;
-    private View.OnClickListener mRemoveSubCategoryClickListener = new View.OnClickListener() {
+    private LinearLayout mLinearLayoutCategory;
+    private View.OnClickListener mRemoveCategoryClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mLinearLayoutSubCategory.removeView((ViewGroup) v.getParent());
+            mLinearLayoutCategory.removeView((ViewGroup) v.getParent());
             mLayoutPosition--;
         }
     };
-    private View.OnClickListener mAddSubCategoryClickListener = new View.OnClickListener() {
+    private View.OnClickListener mAddCategoryClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
 
-            View view = createSubCategoryView(null);
-            mLinearLayoutSubCategory.addView(view, mLayoutPosition);
+            View view = createCategoryView(null);
+            mLinearLayoutCategory.addView(view, mLayoutPosition);
             mLayoutPosition++;
 
         }
@@ -87,14 +82,9 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
         if (null == bundle)
             throw new NullPointerException("A bundle is mandatory");
 
-        mCategory = (Category) bundle.getSerializable("item");
-        if (null == mCategory)
-            throw new NullPointerException("An category is mandatory");
-
-        mNames = (ArrayList<String>) bundle.getSerializable("names");
-        if (null == mNames)
-            throw new NullPointerException("A list of categories name is mandatory");
-
+        mCategories = (List<String>) bundle.getSerializable("item");
+        if (null == mCategories)
+            throw new NullPointerException("A list of categories is mandatory");
     }
 
     @Override
@@ -102,43 +92,40 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.category_editor_fragment, container, false);
-        mEditTextName = (EditText) rootView.findViewById(R.id.edittext_category_name);
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
-        mLinearLayoutSubCategory = (LinearLayout) rootView.findViewById(R.id.linear_layout_sub_category);
-        Button buttonAddSubCategory = (Button) rootView.findViewById(R.id.button_add_sub_category);
-        buttonAddSubCategory.setOnClickListener(mAddSubCategoryClickListener);
+        mLinearLayoutCategory = (LinearLayout) rootView.findViewById(R.id.linear_layout_category);
+        Button buttonAddCategory = (Button) rootView.findViewById(R.id.button_add_category);
+        buttonAddCategory.setOnClickListener(mAddCategoryClickListener);
 
         if (null == savedInstanceState) {
-            if (mCategory.isNew()) {
-                buttonAddSubCategory.performClick();
+            if (mCategories.size() == 0) {
+                buttonAddCategory.performClick();
             } else {
-                mEditTextName.setText(mCategory.getName());
-                AddSubCategories(mCategory.getSubCategories());
+                AddCategories(mCategories);
             }
         }
 
-        mEditTextName.requestFocus();
         return rootView;
     }
 
-    private void AddSubCategories(String[] subCategories) {
+    private void AddCategories(List<String> categories) {
 
-        if (null == subCategories)
+        if (null == categories)
             return;
 
         View view;
-        for (String subCategory : subCategories) {
+        for (String category : categories) {
 
-            view = createSubCategoryView(subCategory);
+            view = createCategoryView(category);
 
-            mLinearLayoutSubCategory.addView(view, mLayoutPosition);
+            mLinearLayoutCategory.addView(view, mLayoutPosition);
             mLayoutPosition++;
 
         }
 
     }
 
-    private View createSubCategoryView(String name) {
+    private View createCategoryView(String name) {
 
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         EditText editText;
@@ -146,12 +133,11 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
 
         editText = (EditText) view.findViewById(R.id.editTextName);
         editText.setText(name);
-        //editText.setFilters(new InputFilter[]{new LetterDigitFilter()});
         editText.requestFocus();
 
         ImageButton imageButtonEdit = (ImageButton) view
                 .findViewById(R.id.imageButtonEdit);
-        imageButtonEdit.setOnClickListener(mRemoveSubCategoryClickListener);
+        imageButtonEdit.setOnClickListener(mRemoveCategoryClickListener);
 
         return view;
 
@@ -166,12 +152,12 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_editor, menu);
 
-        if (mCategory.isNew()) {
-            MenuItem mi = menu.findItem(R.id.action_delete);
-            if (null != mi) {
-                mi.setVisible(false);
-            }
-        }
+//        if (mCategory.isNew()) {
+//            MenuItem mi = menu.findItem(R.id.action_delete);
+//            if (null != mi) {
+//                mi.setVisible(false);
+//            }
+//        }
 
     }
 
@@ -179,50 +165,50 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.action_delete:
-                mCategory.setDead(true);
-                notifyListener(new ItemStateChangeEvent(mCategory));
-                break;
-            case R.id.action_save:
-                mCategory.setName(mEditTextName.getText().toString());
-                // Get sub items from layout and update mCategory
-
-                ViewGroup subCategoryView = mLinearLayoutSubCategory;
-                EditText editTextSubCategory;
-                String subCategoryName;
-                List<String> subCategories = new ArrayList();
-                for (int i = 0; i < subCategoryView.getChildCount(); i++) {
-                    View view = subCategoryView.getChildAt(i);
-                    editTextSubCategory = (EditText) view
-                            .findViewById(R.id.editTextName);
-                    subCategoryName = editTextSubCategory.getText().toString();
-
-                    if (subCategoryName.trim().length() != 0) {
-                        subCategories.add(subCategoryName);
-                    }
-                }
-
-                String[] subs = new String[subCategories.size()];
-                subCategories.toArray(subs);
-                mCategory.setSubCategories(subs);
-
-                ValidationStatus validationStatus = getObjectValidator().Validate(mCategory);
-
-                if (validationStatus.isValid()) {
-                    notifyListener(new ItemStateChangeEvent(mCategory));
-                } else {
-                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
-                }
-
-                break;
-            case android.R.id.home:
-                notifyListener(new ItemStateChangeEvent());
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+//        switch (id) {
+//            case R.id.action_delete:
+//                mCategory.setDead(true);
+//                notifyListener(new ItemStateChangeEvent(mCategory));
+//                break;
+//            case R.id.action_save:
+//                mCategory.setName(mEditTextName.getText().toString());
+//                // Get sub items from layout and update mCategory
+//
+//                ViewGroup subCategoryView = mLinearLayoutSubCategory;
+//                EditText editTextSubCategory;
+//                String subCategoryName;
+//                List<String> subCategories = new ArrayList();
+//                for (int i = 0; i < subCategoryView.getChildCount(); i++) {
+//                    View view = subCategoryView.getChildAt(i);
+//                    editTextSubCategory = (EditText) view
+//                            .findViewById(R.id.editTextName);
+//                    subCategoryName = editTextSubCategory.getText().toString();
+//
+//                    if (subCategoryName.trim().length() != 0) {
+//                        subCategories.add(subCategoryName);
+//                    }
+//                }
+//
+//                String[] subs = new String[subCategories.size()];
+//                subCategories.toArray(subs);
+//                mCategory.setSubCategories(subs);
+//
+//                ValidationStatus validationStatus = getObjectValidator().Validate(mCategory);
+//
+//                if (validationStatus.isValid()) {
+//                    notifyListener(new ItemStateChangeEvent(mCategory));
+//                } else {
+//                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
+//                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+//                }
+//
+//                break;
+//            case android.R.id.home:
+//                notifyListener(new ItemStateChangeEvent());
+//                break;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
 
         return true;
 
