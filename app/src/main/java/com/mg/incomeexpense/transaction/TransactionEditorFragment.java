@@ -60,6 +60,9 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     private Spinner mSpinnerPaymentMethod;
     private PaymentMethodSpinnerAdapter mPaymentMethodSpinnerAdapter;
 
+    private Spinner mSpinnerCategory;
+    private CategorySpinnerAdapter mCategorySpinnerAdapter;
+
     private TextView mTextViewCurrency;
 
     private TextView mTextViewDate;
@@ -71,14 +74,11 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     private EditText mEditTextExchangeRate;
     private EditText mEditTextNote;
 
-    private ImageView mImageViewCategory;
-
     private ImageView mImageViewDate;
-
-    private TextView mTextViewCategory;
 
     private List<Account> mAccounts;
     private List<PaymentMethod> mPaymentMethods;
+    private List<String> mCategories;
 
     private ImageButton mImageButtonContributors;
     private View.OnClickListener mOnContributorImageButtonClickListener;
@@ -140,6 +140,7 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
         mAccounts = (ArrayList<Account>) bundle.getSerializable("accounts");
         mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
+        mCategories = (ArrayList<String>) bundle.getSerializable("categories");
 
         mAccountSpinnerAdapter = new AccountSpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -148,6 +149,10 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         mPaymentMethodSpinnerAdapter = new PaymentMethodSpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 mPaymentMethods);
+
+        mCategorySpinnerAdapter = new CategorySpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                mCategories);
 
         mAvailableContributors = (List<Contributor>) bundle.getSerializable("contributors");
         if (null == mAvailableContributors)
@@ -166,8 +171,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         int day;
 
         View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
-
-
 
         mSpinnerAccount = (Spinner) rootView.findViewById(R.id.spinner_account);
         mSpinnerAccount.setAdapter(mAccountSpinnerAdapter); // Set the custom adapter to the spinner
@@ -197,6 +200,10 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             }
         });
 
+        mSpinnerCategory = (Spinner) rootView.findViewById(R.id.spinner_category);
+        mSpinnerCategory.setAdapter(mCategorySpinnerAdapter); // Set the custom adapter to the spinner
+        // You can create an anonymous listener to handle the event when is selected an spinner item
+
         mTextViewCurrency = (TextView) rootView.findViewById(R.id.text_view_currency);
 
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
@@ -206,15 +213,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
         mEditTextExchangeRate = (EditText) rootView.findViewById(R.id.edit_text_exchange_rate);
         mEditTextNote = (EditText) rootView.findViewById(R.id.edit_text_note);
-
-        mImageViewCategory = (ImageView) rootView.findViewById(R.id.image_view_category);
-        mImageViewCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowCategoryList();
-            }
-        });
-        mTextViewCategory = (TextView) rootView.findViewById(R.id.text_view_category_name);
 
         mImageViewDate = (ImageView) rootView.findViewById(R.id.image_view_date);
         mImageViewDate.setOnClickListener(new View.OnClickListener() {
@@ -246,8 +244,7 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             }
 
             Tools.setSpinner(mTransaction.getAccount(), mSpinnerAccount);
-            if (mTransaction.getCategory() != null)
-                mTextViewCategory.setText(mTransaction.getCategory().getSelectedCategoryToDisplay());
+            Tools.setSpinner(mTransaction.getCategory(), mSpinnerCategory);
             if (mTransaction.getType() == Transaction.TransactionType.Expense) {
                 mRadioButtonExpense.setChecked(true);
             } else {
@@ -266,41 +263,12 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         return rootView;
     }
 
-    private void ShowCategoryList() {
-
-        Intent intent = new Intent(getActivity(), CategoryListActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("hideHomeButton", true);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, CATEGORY_LIST_ACTIVITY);
-
-    }
-
     private void ShowCalendar() {
 
         DatePickerFragment picker = new DatePickerFragment();
         picker.setListener(this);
 
         picker.show(getFragmentManager(), "datePicker");
-
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case CATEGORY_LIST_ACTIVITY:
-                if (data != null) {
-                    Category category = (Category) data.getSerializableExtra("item");
-
-                    if (category != null) {
-                        mTextViewCategory.setText(category.getSelectedCategoryToDisplay());
-                        mTextViewCategory.setTag(category);
-                    }
-
-                }
-                break;
-        }
     }
 
     @Override
@@ -338,10 +306,8 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 Account account = (Account) mSpinnerAccount.getSelectedItem();
                 mTransaction.setAccount(account);
 
-                Category category = (Category) mTextViewCategory.getTag();
-                if (category != null) {
-                    mTransaction.setCategory(category);
-                }
+                String category = (String) mSpinnerCategory.getSelectedItem();
+                mTransaction.setCategory(category);
 
                 int selectedRadioButtonId = mRadioGroupType.getCheckedRadioButtonId();
                 mTransaction.setType(selectedRadioButtonId == R.id.radioButtonExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income);

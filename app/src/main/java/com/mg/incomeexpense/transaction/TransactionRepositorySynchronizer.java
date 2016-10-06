@@ -9,7 +9,6 @@ import android.util.Log;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
-import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.util.Map;
 
@@ -66,7 +65,7 @@ public class TransactionRepositorySynchronizer {
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_adding_item), itemType));
                 ContentValues itemValues = new ContentValues();
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID, itemToBeSave.getAccount().getId());
-                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY, itemToBeSave.getCategory().getSelectedCategory());
+                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY, itemToBeSave.getCategory());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE, itemToBeSave.getType().ordinal());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_DATE, itemToBeSave.getDate());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT, itemToBeSave.getAmount());
@@ -87,7 +86,7 @@ public class TransactionRepositorySynchronizer {
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updating_item), itemType, id));
                 ContentValues itemValues = new ContentValues();
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID, itemToBeSave.getAccount().getId());
-                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY, itemToBeSave.getCategory().getSelectedCategory());
+                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY, itemToBeSave.getCategory());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE, itemToBeSave.getType().ordinal());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_DATE, itemToBeSave.getDate());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT, itemToBeSave.getAmount());
@@ -102,4 +101,5 @@ public class TransactionRepositorySynchronizer {
         }
 
         return itemToBeSave;
-    }}
+    }
+}

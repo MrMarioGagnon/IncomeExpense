@@ -153,13 +153,10 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_editor, menu);
 
-//        if (mCategory.isNew()) {
-//            MenuItem mi = menu.findItem(R.id.action_delete);
-//            if (null != mi) {
-//                mi.setVisible(false);
-//            }
-//        }
-
+        MenuItem mi = menu.findItem(R.id.action_delete);
+        if (null != mi) {
+            mi.setVisible(false);
+        }
     }
 
     @Override
@@ -169,12 +166,12 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
         switch (id) {
             case R.id.action_save:
                 // Get sub items from layout and update mCategory
-                ViewGroup subCategoryView = mLinearLayoutCategory;
+                ViewGroup categoryView = mLinearLayoutCategory;
                 EditText editTextCategory;
                 String categoryName;
                 List<String> categories = new ArrayList();
-                for (int i = 0; i < subCategoryView.getChildCount(); i++) {
-                    View view = subCategoryView.getChildAt(i);
+                for (int i = 0; i < categoryView.getChildCount(); i++) {
+                    View view = categoryView.getChildAt(i);
                     editTextCategory = (EditText) view
                             .findViewById(R.id.editTextName);
                     categoryName = editTextCategory.getText().toString();

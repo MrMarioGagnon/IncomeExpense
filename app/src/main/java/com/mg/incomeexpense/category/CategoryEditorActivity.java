@@ -6,11 +6,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.core.ItemRepositorySynchronizerMessageBuilder;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
-import com.mg.incomeexpense.data.IncomeExpenseContract;
-import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,11 +59,14 @@ public class CategoryEditorActivity extends AppCompatActivity implements ItemSta
         if (event.isCancelled()) {
             setResult(RESULT_CANCELED);
         } else {
-            ArrayList<String> categories = new ArrayList<>();
-            Collections.copy(categories, ((Category)event.getItem()).getCategories());
-            Intent intent = new Intent();
-            intent.putExtra("item", categories);
-            setResult(RESULT_OK, intent);
+            Category category = (Category) event.getItem();
+            if (null != category) {
+                ArrayList<String> categories = new ArrayList<>(category.getCategories());
+                Intent intent = new Intent();
+                intent.putExtra("item", categories);
+                setResult(RESULT_OK, intent);
+            }
+
         }
 
         finish();

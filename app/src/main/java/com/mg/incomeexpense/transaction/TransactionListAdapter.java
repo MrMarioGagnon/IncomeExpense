@@ -40,7 +40,7 @@ public class TransactionListAdapter extends CursorAdapter {
         Transaction transaction = Transaction.create(cursor, context.getContentResolver());
 
         viewHolder.textViewDate.setText(transaction.getDate());
-        viewHolder.textViewCategory.setText(transaction.getCategory().getSelectedCategoryToDisplay());
+        viewHolder.textViewCategory.setText(transaction.getCategory());
         DecimalFormat df = new DecimalFormat("#.00");
         viewHolder.textViewAmount.setText(df.format(transaction.getAmount()));
 

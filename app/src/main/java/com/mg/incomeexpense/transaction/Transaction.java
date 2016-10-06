@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 
 import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
@@ -25,7 +24,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     private static final String LOG_TAG = Transaction.class.getSimpleName();
 
     private Account mAccount;
-    private Category mCategory;
+    private String mCategory;
     private TransactionType mType;
     private String mDate;
     private Double mAmount;
@@ -46,7 +45,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
         Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ID));
         Long accountId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID));
-        String categoryId = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY));
+        String category = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY));
         int type = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE));
         String date = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_DATE));
         Double amount = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT));
@@ -56,38 +55,26 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
         String note = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_NOTE));
 
-        Cursor subItemCursor = contentResolver.query( IncomeExpenseContract.AccountEntry.buildInstanceUri(accountId), null, null, null, null );
+        Cursor subItemCursor = contentResolver.query(IncomeExpenseContract.AccountEntry.buildInstanceUri(accountId), null, null, null, null);
         Account account = null;
-        if(subItemCursor != null){
-            if(subItemCursor.moveToFirst()){
+        if (subItemCursor != null) {
+            if (subItemCursor.moveToFirst()) {
                 account = Account.create(subItemCursor, contentResolver);
             }
         }
 
-//        String[] categoryParts = categoryId.split("\\|");
-//        int catId = Integer.parseInt(categoryParts[0]);
-//        String subCat = categoryParts[1];
-//        subItemCursor = contentResolver.query( IncomeExpenseContract.CategoryEntry.buildInstanceUri(catId), null, null, null, null );
-//        Category category = null;
-//        if(subItemCursor != null){
-//            if(subItemCursor.moveToFirst()){
-//                category = Category.create(subItemCursor, contentResolver);
-//                category.setSelectedSubCategory(subCat);
-//            }
-//        }
-
-        subItemCursor = contentResolver.query( IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(paymentMethodId), null, null, null, null );
+        subItemCursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(paymentMethodId), null, null, null, null);
         PaymentMethod paymentMethod = null;
-        if(subItemCursor != null){
-            if(subItemCursor.moveToFirst()){
+        if (subItemCursor != null) {
+            if (subItemCursor.moveToFirst()) {
                 paymentMethod = PaymentMethod.create(subItemCursor, contentResolver);
             }
         }
 
         newInstance.mId = id;
         newInstance.mAccount = account;
-        //newInstance.mCategory = category;
-        newInstance.mType = type == 0? TransactionType.Expense: TransactionType.Income;
+        newInstance.mCategory = category;
+        newInstance.mType = type == 0 ? TransactionType.Expense : TransactionType.Income;
         newInstance.mDate = date;
         newInstance.mAmount = amount;
         newInstance.mCurrency = currency;
@@ -158,11 +145,11 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         }
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return mCategory;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         if (mCategory == null || !mCategory.equals(category)) {
             mDirty = true;
             mCategory = category;
@@ -191,7 +178,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         }
     }
 
-    public int getDateAsInt(){
+    public int getDateAsInt() {
         return Integer.parseInt(mDate.replace("-", ""));
     }
 
@@ -279,10 +266,6 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return 0;
     }
 
-    public enum TransactionType {
-        Expense, Income
-    }
-
     public String getContributorsForDisplay() {
         return Tools.join(mContributors, ",");
     }
@@ -293,6 +276,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
             a.add(item.getId().toString());
         }
         return Tools.join(a, ";");
+    }
+
+    public enum TransactionType {
+        Expense, Income
     }
 
 

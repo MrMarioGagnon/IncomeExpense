@@ -3,7 +3,6 @@ package com.mg.incomeexpense.transaction;
 import android.content.Context;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
@@ -58,15 +57,10 @@ public class TransactionValidator implements ObjectValidator {
             messages.add(message);
         }
 
-        Category category = transaction.getCategory();
+        String category = transaction.getCategory();
         if (category == null) {
             message = mValidationMessages.get(R.string.validation_category_mandatory);
             messages.add(message);
-        } else {
-            if (category.getSelectedSubCategory() == null || category.getSelectedSubCategory().trim().length() == 0) {
-                message = mValidationMessages.get(R.string.validation_sub_category_mandatory);
-                messages.add(message);
-            }
         }
 
         if (transaction.getType() == null) {
