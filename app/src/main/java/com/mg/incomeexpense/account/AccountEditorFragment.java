@@ -19,12 +19,12 @@ import android.widget.TextView;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.category.CategoryEditorActivity;
-import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
@@ -39,7 +39,7 @@ import java.util.List;
 public class AccountEditorFragment extends Fragment implements ItemStateChangeHandler {
 
     private static final String LOG_TAG = AccountEditorFragment.class.getSimpleName();
-    private static final int CATEGORY_LIST_ACTIVITY = 1;
+    private static final int CATEGORY_EDITOR_ACTIVITY = 1;
 
     private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private Account mAccount = null;
@@ -183,23 +183,23 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
 
         Intent intent = new Intent(getActivity(), CategoryEditorActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("item", new ArrayList<>());
+        bundle.putSerializable("item", new ArrayList<>()); // TODO Passer les bonnes categories
         bundle.putBoolean("hideHomeButton", true);
         intent.putExtras(bundle);
-        startActivityForResult(intent, CATEGORY_LIST_ACTIVITY);
+        startActivityForResult(intent, CATEGORY_EDITOR_ACTIVITY);
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case CATEGORY_LIST_ACTIVITY:
+            case CATEGORY_EDITOR_ACTIVITY:
                 if (data != null) {
-                    Category category = (Category) data.getSerializableExtra("item");
+                    List<String> categories = (List<String>) data.getSerializableExtra("item");
 
-                    if (category != null) {
-                        mTextViewCategory.setText(category.getSelectedCategoryToDisplay());
-                        mTextViewCategory.setTag(category);
+                    if (categories != null) {
+                        mTextViewCategory.setText(Tools.join(categories,","));
+                        mTextViewCategory.setTag(categories);
                     }
 
                 }

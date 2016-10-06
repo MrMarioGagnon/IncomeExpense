@@ -19,6 +19,7 @@ import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
+import com.mg.incomeexpense.core.ValidationStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,50 +166,41 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-//        switch (id) {
-//            case R.id.action_delete:
-//                mCategory.setDead(true);
-//                notifyListener(new ItemStateChangeEvent(mCategory));
-//                break;
-//            case R.id.action_save:
-//                mCategory.setName(mEditTextName.getText().toString());
-//                // Get sub items from layout and update mCategory
-//
-//                ViewGroup subCategoryView = mLinearLayoutSubCategory;
-//                EditText editTextSubCategory;
-//                String subCategoryName;
-//                List<String> subCategories = new ArrayList();
-//                for (int i = 0; i < subCategoryView.getChildCount(); i++) {
-//                    View view = subCategoryView.getChildAt(i);
-//                    editTextSubCategory = (EditText) view
-//                            .findViewById(R.id.editTextName);
-//                    subCategoryName = editTextSubCategory.getText().toString();
-//
-//                    if (subCategoryName.trim().length() != 0) {
-//                        subCategories.add(subCategoryName);
-//                    }
-//                }
-//
-//                String[] subs = new String[subCategories.size()];
-//                subCategories.toArray(subs);
-//                mCategory.setSubCategories(subs);
-//
-//                ValidationStatus validationStatus = getObjectValidator().Validate(mCategory);
-//
-//                if (validationStatus.isValid()) {
-//                    notifyListener(new ItemStateChangeEvent(mCategory));
-//                } else {
-//                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-//                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
-//                }
-//
-//                break;
-//            case android.R.id.home:
-//                notifyListener(new ItemStateChangeEvent());
-//                break;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
+        switch (id) {
+            case R.id.action_save:
+                // Get sub items from layout and update mCategory
+                ViewGroup subCategoryView = mLinearLayoutCategory;
+                EditText editTextCategory;
+                String categoryName;
+                List<String> categories = new ArrayList();
+                for (int i = 0; i < subCategoryView.getChildCount(); i++) {
+                    View view = subCategoryView.getChildAt(i);
+                    editTextCategory = (EditText) view
+                            .findViewById(R.id.editTextName);
+                    categoryName = editTextCategory.getText().toString();
+
+                    if (categoryName.trim().length() != 0) {
+                        categories.add(categoryName);
+                    }
+                }
+
+                Category category = Category.create(categories);
+                ValidationStatus validationStatus = getObjectValidator().Validate(category);
+
+                if (validationStatus.isValid()) {
+                    notifyListener(new ItemStateChangeEvent(category));
+                } else {
+                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
+                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                }
+
+                break;
+            case android.R.id.home:
+                notifyListener(new ItemStateChangeEvent());
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
         return true;
 

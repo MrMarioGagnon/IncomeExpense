@@ -29,17 +29,27 @@ public class CategoryValidator implements ObjectValidator {
     public static CategoryValidator create(Context context, List<String> names) {
 
         Map<Integer, String> messages = new HashMap<>();
-        messages.put(R.string.validation_name_mandatory, context.getString(R.string.validation_name_mandatory));
-        messages.put(R.string.validation_name_already_exists, context.getString(R.string.validation_name_already_exists));
-        messages.put(R.string.validation_sub_categories_mandatory, context.getString(R.string.validation_sub_categories_mandatory));
-
+        messages.put(R.string.validation_category_mandatory, context.getString(R.string.validation_category_mandatory));
+        messages.put(R.string.validation_category_duplicate, context.getString(R.string.validation_category_duplicate));
 
         return new CategoryValidator(names, messages);
     }
 
-    private boolean isNameExists(String name) {
+    private boolean hasDuplicate(List<String> categories) {
+        String stringToCompare = null;
 
-        return mNames.contains(name.toUpperCase());
+        for (String category : categories) {
+            if (null == stringToCompare) {
+                stringToCompare = category;
+            } else {
+                if (stringToCompare.equals(category)) {
+                    return true;
+                }
+                stringToCompare = category;
+            }
+        }
+
+        return false;
 
     }
 
@@ -52,16 +62,11 @@ public class CategoryValidator implements ObjectValidator {
         }
 
         Category category = (Category) objectToValidate;
-        String name = category.getName().trim();
 
-        if (name.length() == 0) {
-            messages.add(mValidationMessages.get(R.string.validation_name_mandatory));
-        } else if (isNameExists(name)) {
-            messages.add(mValidationMessages.get(R.string.validation_name_already_exists));
-        }
-
-        if (category.getSubCategoryCount() == 0) {
-            messages.add((mValidationMessages.get(R.string.validation_sub_categories_mandatory)));
+        if (category.getCategories().size() == 0) {
+            messages.add(mValidationMessages.get(R.string.validation_category_mandatory));
+        } else if (hasDuplicate(category.getCategories())) {
+            messages.add(mValidationMessages.get(R.string.validation_category_duplicate));
         }
 
         return ValidationStatus.create(Tools.join(messages, "\n"));

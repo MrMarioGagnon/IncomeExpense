@@ -1,5 +1,6 @@
 package com.mg.incomeexpense.category;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,12 +62,11 @@ public class CategoryEditorActivity extends AppCompatActivity implements ItemSta
         if (event.isCancelled()) {
             setResult(RESULT_CANCELED);
         } else {
-
-//            CategoryRepositorySynchronizer synchronizer = new CategoryRepositorySynchronizer(getContentResolver(),
-//                    IncomeExpenseContract.CategoryEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, CategoryRepositorySynchronizer.class.getSimpleName()));
-
-//            synchronizer.Save(event.getItem());
-            setResult(RESULT_OK);
+            ArrayList<String> categories = new ArrayList<>();
+            Collections.copy(categories, ((Category)event.getItem()).getCategories());
+            Intent intent = new Intent();
+            intent.putExtra("item", categories);
+            setResult(RESULT_OK, intent);
         }
 
         finish();

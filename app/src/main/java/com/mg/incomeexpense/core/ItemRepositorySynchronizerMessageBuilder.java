@@ -53,14 +53,6 @@ public class ItemRepositorySynchronizerMessageBuilder {
                 messages.put(R.string.log_info_updating_item, context.getString(R.string.log_info_updating_item));
                 messages.put(R.string.log_info_updated_item, context.getString(R.string.log_info_updated_item));
                 break;
-            case "CategoryRepositorySynchronizer":
-                messages.put(R.string.log_info_adding_item, context.getString(R.string.log_info_adding_item));
-                messages.put(R.string.log_info_added_item, context.getString(R.string.log_info_added_item));
-                messages.put(R.string.log_info_deleting_item, context.getString(R.string.log_info_deleting_item));
-                messages.put(R.string.log_info_deleted_item, context.getString(R.string.log_info_deleted_item));
-                messages.put(R.string.log_info_updating_item, context.getString(R.string.log_info_updating_item));
-                messages.put(R.string.log_info_updated_item, context.getString(R.string.log_info_updated_item));
-                break;
             case "TransactionRepositorySynchronizer":
                 messages.put(R.string.log_info_adding_item, context.getString(R.string.log_info_adding_item));
                 messages.put(R.string.log_info_added_item, context.getString(R.string.log_info_added_item));

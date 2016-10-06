@@ -49,11 +49,6 @@
             android:parentActivityName=".paymentmethod.PaymentMethodListActivity" >
         </activity>
         <activity
-            android:name=".category.CategoryListActivity"
-            android:label="@string/title_category_list"
-            android:parentActivityName=".MainActivity" >
-        </activity>
-        <activity
             android:name=".category.CategoryEditorActivity"
             android:label="@string/title_category_editor"
             android:parentActivityName=".category.CategoryListActivity" >

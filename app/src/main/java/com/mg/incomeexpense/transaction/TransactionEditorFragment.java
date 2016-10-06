@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
-import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DatePickerFragment;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
