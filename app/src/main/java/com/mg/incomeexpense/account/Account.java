@@ -204,7 +204,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         for (String item : mCategories) {
             a.add(item);
         }
-        return Tools.join(a, ";");
+        return Tools.join(a, ",");
     }
 
 }

@@ -10,8 +10,6 @@ import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by mario on 2016-07-19.
@@ -32,9 +30,9 @@ public class CategoryEditorActivity extends AppCompatActivity implements ItemSta
             if (null == bundle)
                 throw new NullPointerException("A bundle with and Category item is mandatory");
 
-            List<String> categories = (List<String>) bundle.getSerializable("item");
+            Category categories = (Category) bundle.getSerializable("item");
             if (null == categories)
-                throw new NullPointerException("An list of category is mandatory");
+                throw new NullPointerException("An Category object is mandatory");
 
             ActionBar actionBar = getSupportActionBar();
 

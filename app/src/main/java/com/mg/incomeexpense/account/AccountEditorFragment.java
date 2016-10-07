@@ -183,7 +183,8 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
 
         Intent intent = new Intent(getActivity(), CategoryEditorActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("item", new ArrayList<>()); // TODO Passer les bonnes categories
+        String[] categories = mTextViewCategory.getText().toString().split(",");
+        bundle.putSerializable("item", Category.create(categories));
         bundle.putBoolean("hideHomeButton", true);
         intent.putExtras(bundle);
         startActivityForResult(intent, CATEGORY_EDITOR_ACTIVITY);
@@ -198,7 +199,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
                     List<String> categories = (List<String>) data.getSerializableExtra("item");
 
                     if (categories != null) {
-                        mTextViewCategory.setText(Tools.join(categories,","));
+                        mTextViewCategory.setText(Tools.join(categories, ","));
                         mTextViewCategory.setTag(categories);
                     }
 
@@ -241,9 +242,9 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
             case R.id.action_save:
                 mAccount.setName(mEditTextName.getText().toString());
 
-                Category category = (Category) mTextViewCategory.getTag();
+                List<String> category = (List<String>) mTextViewCategory.getTag();
                 if (category != null) {
-                    mAccount.setCategories(null);
+                    mAccount.setCategories(category);
                 }
 
                 String budget = mEditTextBudget.getText().toString();

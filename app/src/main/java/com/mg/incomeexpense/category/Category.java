@@ -3,6 +3,8 @@ package com.mg.incomeexpense.category;
 import com.mg.incomeexpense.core.ObjectBase;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +16,16 @@ public class Category extends ObjectBase implements Serializable {
     private List<String> mCategories;
 
     private Category() {
+    }
+
+    public static Category create(String[] categories) {
+        Category category = new Category();
+        category.mCategories = new ArrayList<>(Arrays.asList(categories));
+        category.mDirty = false;
+        category.mId = 1L;
+
+        return category;
+
     }
 
     public static Category create(List<String> categories) {

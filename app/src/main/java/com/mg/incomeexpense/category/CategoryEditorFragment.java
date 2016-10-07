@@ -83,7 +83,7 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
         if (null == bundle)
             throw new NullPointerException("A bundle is mandatory");
 
-        mCategories = (List<String>) bundle.getSerializable("item");
+        mCategories = ((Category) bundle.getSerializable("item")).getCategories();
         if (null == mCategories)
             throw new NullPointerException("A list of categories is mandatory");
     }
