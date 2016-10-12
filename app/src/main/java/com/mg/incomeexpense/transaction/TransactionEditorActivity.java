@@ -40,10 +40,7 @@ public class TransactionEditorActivity extends AppCompatActivity implements Item
                 actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add : R.string.title_transaction_editor_update));
             }
 
-            bundle.putSerializable("accounts", IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver()));
-//            bundle.putSerializable("categories", IncomeExpenseRequestWrapper.getAvailableCategories(getContentResolver()));
             bundle.putSerializable("paymentMethods", IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getContentResolver()));
-            bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver(), transaction.getAccount()));
 
             TransactionEditorFragment fragment = new TransactionEditorFragment();
             fragment.addListener(this);

@@ -3,7 +3,6 @@ package com.mg.incomeexpense.transaction;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,8 +21,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DatePickerFragment;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
@@ -54,8 +51,7 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
 
-    private Spinner mSpinnerAccount;
-    private AccountSpinnerAdapter mAccountSpinnerAdapter;
+    private TextView mTextViewAccountName;
 
     private Spinner mSpinnerPaymentMethod;
     private PaymentMethodSpinnerAdapter mPaymentMethodSpinnerAdapter;
@@ -76,7 +72,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
     private ImageView mImageViewDate;
 
-    private List<Account> mAccounts;
     private List<PaymentMethod> mPaymentMethods;
     private List<String> mCategories;
 
@@ -138,23 +133,18 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         if (null == mTransaction)
             throw new NullPointerException("An transaction is mandatory");
 
-        mAccounts = (ArrayList<Account>) bundle.getSerializable("accounts");
         mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
-        mCategories = (ArrayList<String>) bundle.getSerializable("categories");
-
-        mAccountSpinnerAdapter = new AccountSpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item,
-                mAccounts);
 
         mPaymentMethodSpinnerAdapter = new PaymentMethodSpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 mPaymentMethods);
 
+        mCategories = mTransaction.getAccount().getCategories();
         mCategorySpinnerAdapter = new CategorySpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 mCategories);
 
-        mAvailableContributors = (List<Contributor>) bundle.getSerializable("contributors");
+        mAvailableContributors = mTransaction.getAccount().getContributors();
         if (null == mAvailableContributors)
             throw new NullPointerException("A list of contributors is mandatory");
 
@@ -172,9 +162,7 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
         View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
 
-        mSpinnerAccount = (Spinner) rootView.findViewById(R.id.spinner_account);
-        mSpinnerAccount.setAdapter(mAccountSpinnerAdapter); // Set the custom adapter to the spinner
-
+        mTextViewAccountName = (TextView) rootView.findViewById(R.id.text_view_account_name);
         mRadioGroupType = (RadioGroup) rootView.findViewById(R.id.radioGroupType);
 
         mSpinnerPaymentMethod = (Spinner) rootView.findViewById(R.id.spinner_payment_method);
@@ -243,20 +231,19 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 mTransaction.setCurrency(Tools.getDefaultCurrency(getActivity()));
             }
 
-            Tools.setSpinner(mTransaction.getAccount(), mSpinnerAccount);
             Tools.setSpinner(mTransaction.getCategory(), mSpinnerCategory);
             if (mTransaction.getType() == Transaction.TransactionType.Expense) {
                 mRadioButtonExpense.setChecked(true);
             } else {
                 mRadioButtonIncome.setChecked(true);
             }
+            mTextViewAccountName.setText(mTransaction.getAccount().getName());
             mTextViewDate.setText(mTransaction.getDate());
             mEditTextAmount.setText(mTransaction.getAmount().toString());
             mEditTextExchangeRate.setText(mTransaction.getExchangeRate().toString());
             Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
             mEditTextNote.setText(mTransaction.getNote());
             mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
-            mSpinnerAccount.setEnabled(false);
 
         }
 
@@ -302,9 +289,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
                 notifyListener(new ItemStateChangeEvent(mTransaction));
                 break;
             case R.id.action_save:
-
-                Account account = (Account) mSpinnerAccount.getSelectedItem();
-                mTransaction.setAccount(account);
 
                 String category = (String) mSpinnerCategory.getSelectedItem();
                 mTransaction.setCategory(category);
