@@ -10,9 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -24,7 +28,6 @@ import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
-import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
@@ -56,8 +59,11 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
     private TextView mTextViewContributors;
     private List<Contributor> mAvailableContributors;
     private List<Contributor> mSelectedContributors;
+
     private ImageView mImageViewCategory;
-    private TextView mTextViewCategory;
+    private ListView mListViewCategory;
+    private List<String> mCategories;
+    private ArrayAdapter<String> mAdapter;
 
     public AccountEditorFragment() {
 
@@ -134,6 +140,9 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
             throw new NullPointerException("A list of contributors is mandatory");
 
         mSelectedContributors.addAll(mAccount.getContributors());
+        mCategories = mAccount.getCategories();
+
+        mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mCategories);
     }
 
     @Override
@@ -160,8 +169,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
                 ShowCategoryEditor();
             }
         });
-        mTextViewCategory = (TextView) rootView.findViewById(R.id.text_view_category_name);
-
+        mListViewCategory = (ListView) rootView.findViewById(R.id.list_view_category);
 
         if (null == savedInstanceState) {
             mEditTextName.setText(mAccount.getName());
@@ -172,8 +180,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
             mSwitchClose.setChecked(mAccount.getIsClose());
             mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
             mTextViewContributors.setText(mAccount.getContributorsForDisplay());
-            if (mAccount.getCategoriesAsString() != null)
-                mTextViewCategory.setText(mAccount.getCategoriesAsString());
+            mListViewCategory.setAdapter(mAdapter);
         }
 
         return rootView;
@@ -183,8 +190,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
 
         Intent intent = new Intent(getActivity(), CategoryEditorActivity.class);
         Bundle bundle = new Bundle();
-        String[] categories = mTextViewCategory.getText().toString().split(",");
-        bundle.putSerializable("item", Category.create(categories));
+        bundle.putSerializable("item", Category.create(mCategories));
         bundle.putBoolean("hideHomeButton", true);
         intent.putExtras(bundle);
         startActivityForResult(intent, CATEGORY_EDITOR_ACTIVITY);
@@ -196,13 +202,9 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
         switch (requestCode) {
             case CATEGORY_EDITOR_ACTIVITY:
                 if (data != null) {
-                    List<String> categories = (List<String>) data.getSerializableExtra("item");
-
-                    if (categories != null) {
-                        mTextViewCategory.setText(Tools.join(categories, ","));
-                        mTextViewCategory.setTag(categories);
-                    }
-
+                    mCategories = (List<String>) data.getSerializableExtra("item");
+                    mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mCategories);
+                    mListViewCategory.setAdapter(mAdapter);
                 }
                 break;
         }
@@ -242,10 +244,7 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
             case R.id.action_save:
                 mAccount.setName(mEditTextName.getText().toString());
 
-                List<String> category = (List<String>) mTextViewCategory.getTag();
-                if (category != null) {
-                    mAccount.setCategories(category);
-                }
+                mAccount.setCategories(mCategories);
 
                 String budget = mEditTextBudget.getText().toString();
                 if (budget.trim().length() > 0)
