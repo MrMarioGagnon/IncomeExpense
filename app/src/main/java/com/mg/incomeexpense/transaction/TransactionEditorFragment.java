@@ -243,7 +243,14 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             mEditTextExchangeRate.setText(mTransaction.getExchangeRate().toString());
             Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
             mEditTextNote.setText(mTransaction.getNote());
-            mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
+
+            if(mTransaction.getAccount().getContributors().size() == 1){
+                mSelectedContributors = mTransaction.getAccount().getContributors();
+                mTextViewContributors.setText(mTransaction.getAccount().getContributorsForDisplay());
+                mImageButtonContributors.setVisibility(View.GONE);
+            }else {
+                mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
+            }
 
         }
 
