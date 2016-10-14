@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
 import com.mg.incomeexpense.core.ItemSelectedListener;
 
@@ -21,6 +22,7 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
     private static final int EDITOR_ACTIVITY_ADD = 1;
     private static final int EDITOR_ACTIVITY_UPDATE = 2;
     private com.mg.floatingactionbutton.FloatingActionsMenu mFabMenu;
+    private Account mAccount;
 
     private final OnClickListener mFabOnClickListener = new OnClickListener() {
         @Override
@@ -29,6 +31,7 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
             mFabMenu.collapseImmediately();
             Transaction transaction = Transaction.createNew();
             transaction.setType( view.getId() == R.id.fabAddExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income  );
+            transaction.setAccount(mAccount);
 
             Intent intent = new Intent(TransactionListActivity.this, TransactionEditorActivity.class);
             Bundle bundle = new Bundle();
@@ -45,6 +48,7 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
         setContentView(R.layout.transaction_list_activity);
 
         Bundle bundle = getIntent().getExtras();
+        mAccount = (Account)bundle.getSerializable("account");
 
         com.mg.floatingactionbutton.FloatingActionButton fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddExpense);
         if (fab != null) {
