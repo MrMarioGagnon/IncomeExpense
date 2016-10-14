@@ -2,20 +2,18 @@ package com.mg.incomeexpense.account;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.ItemRepositorySynchronizerMessageBuilder;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ItemStateChangeListener;
-import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
 /**
  * Created by mario on 2016-07-19.
  */
-public class AccountEditorActivity extends AppCompatActivity implements ItemStateChangeListener {
+public class AccountEditorActivity extends AppCompatActivityBase {
 
     private static final String LOG_TAG = AccountEditorActivity.class.getSimpleName();
 

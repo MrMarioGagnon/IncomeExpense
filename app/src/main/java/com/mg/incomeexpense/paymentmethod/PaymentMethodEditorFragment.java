@@ -20,6 +20,7 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.contributor.ContributorSpinnerAdapter;
+import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ItemStateChangeHandler;
 import com.mg.incomeexpense.core.ItemStateChangeListener;
@@ -36,11 +37,10 @@ import java.util.List;
 /**
  * Created by mario on 2016-07-19.
  */
-public class PaymentMethodEditorFragment extends Fragment implements ItemStateChangeHandler {
+public class PaymentMethodEditorFragment extends FragmentBase {
 
     private static final String LOG_TAG = PaymentMethodEditorFragment.class.getSimpleName();
 
-    private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private PaymentMethod mPaymentMethod = null;
     private EditText mEditTextName;
     private EditText mEditTextExchangeRate;
@@ -204,29 +204,6 @@ public class PaymentMethodEditorFragment extends Fragment implements ItemStateCh
         }
 
         return true;
-
-    }
-
-    @Override
-    public void addListener(ItemStateChangeListener listener) {
-
-        if (null == listener)
-            return;
-
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-
-    }
-
-    @Override
-    public void notifyListener(ItemStateChangeEvent event) {
-        if (null == event)
-            return;
-
-        for (Object item : mListeners) {
-            ((ItemStateChangeListener) item).onItemStateChange(event);
-        }
 
     }
 

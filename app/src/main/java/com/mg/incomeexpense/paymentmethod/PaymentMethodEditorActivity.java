@@ -2,15 +2,12 @@ package com.mg.incomeexpense.paymentmethod;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.account.AccountEditorFragment;
 import com.mg.incomeexpense.account.AccountRepositorySynchronizer;
+import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.ItemRepositorySynchronizerMessageBuilder;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
@@ -18,7 +15,7 @@ import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 /**
  * Created by mario on 2016-07-19.
  */
-public class PaymentMethodEditorActivity extends AppCompatActivity implements ItemStateChangeListener {
+public class PaymentMethodEditorActivity extends AppCompatActivityBase {
 
     private static final String LOG_TAG = PaymentMethodEditorActivity.class.getSimpleName();
 
@@ -44,7 +41,7 @@ public class PaymentMethodEditorActivity extends AppCompatActivity implements It
                 actionBar.setTitle(getString(paymentMethod.isNew() ? R.string.title_payment_method_editor_add : R.string.title_payment_method_editor_update));
             }
 
-            if(paymentMethod.isNew()){
+            if (paymentMethod.isNew()) {
                 paymentMethod.setCurrency(Tools.getDefaultCurrency(this));
             }
 

@@ -3,18 +3,17 @@ package com.mg.incomeexpense.category;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ItemStateChangeListener;
 
 import java.util.ArrayList;
 
 /**
  * Created by mario on 2016-07-19.
  */
-public class CategoryEditorActivity extends AppCompatActivity implements ItemStateChangeListener {
+public class CategoryEditorActivity extends AppCompatActivityBase {
 
     private static final String LOG_TAG = CategoryEditorActivity.class.getSimpleName();
 

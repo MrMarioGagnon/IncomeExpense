@@ -2,22 +2,20 @@ package com.mg.incomeexpense.core;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by mario on 2016-08-22.
  */
-public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener  {
+public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private DatePickerDialog.OnDateSetListener mListener;
 
-    public void setListener(DatePickerDialog.OnDateSetListener listener){
+    public void setListener(DatePickerDialog.OnDateSetListener listener) {
         mListener = listener;
     }
 
@@ -27,9 +25,9 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         Bundle bundle = getArguments();
 
-        if(bundle != null){
+        if (bundle != null) {
 
-            mListener = (DatePickerDialog.OnDateSetListener)bundle.getSerializable("listener");
+            mListener = (DatePickerDialog.OnDateSetListener) bundle.getSerializable("listener");
 
         }
 
@@ -50,7 +48,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
 
-        if(mListener != null){
+        if (mListener != null) {
             mListener.onDateSet(view, year, month, day);
         }
 

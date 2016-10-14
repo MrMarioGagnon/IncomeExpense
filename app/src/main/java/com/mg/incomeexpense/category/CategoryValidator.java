@@ -18,21 +18,19 @@ import java.util.Map;
  */
 public class CategoryValidator implements ObjectValidator {
 
-    private final List<String> mNames;
     private final Map<Integer, String> mValidationMessages;
 
-    public CategoryValidator(List<String> names, Map<Integer, String> validationMessages) {
-        mNames = names;
+    public CategoryValidator(Map<Integer, String> validationMessages) {
         mValidationMessages = validationMessages;
     }
 
-    public static CategoryValidator create(Context context, List<String> names) {
+    public static CategoryValidator create(Context context) {
 
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_category_mandatory, context.getString(R.string.validation_category_mandatory));
         messages.put(R.string.validation_category_duplicate, context.getString(R.string.validation_category_duplicate));
 
-        return new CategoryValidator(names, messages);
+        return new CategoryValidator(messages);
     }
 
     private boolean hasDuplicate(List<String> categories) {

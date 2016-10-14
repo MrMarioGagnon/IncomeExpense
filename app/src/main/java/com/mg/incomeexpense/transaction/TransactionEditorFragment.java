@@ -2,7 +2,6 @@ package com.mg.incomeexpense.transaction;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,9 +22,8 @@ import android.widget.TextView;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DatePickerFragment;
+import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ItemStateChangeHandler;
-import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
@@ -41,12 +39,11 @@ import java.util.List;
 /**
  * Created by mario on 2016-07-19.
  */
-public class TransactionEditorFragment extends Fragment implements ItemStateChangeHandler, DatePickerDialog.OnDateSetListener {
+public class TransactionEditorFragment extends FragmentBase implements DatePickerDialog.OnDateSetListener {
 
     private static final String LOG_TAG = TransactionEditorFragment.class.getSimpleName();
     private static final int CATEGORY_LIST_ACTIVITY = 1;
 
-    private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private Transaction mTransaction = null;
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
@@ -244,11 +241,11 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
             Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
             mEditTextNote.setText(mTransaction.getNote());
 
-            if(mTransaction.getAccount().getContributors().size() == 1){
+            if (mTransaction.getAccount().getContributors().size() == 1) {
                 mSelectedContributors = mTransaction.getAccount().getContributors();
                 mTextViewContributors.setText(mTransaction.getAccount().getContributorsForDisplay());
                 mImageButtonContributors.setVisibility(View.GONE);
-            }else {
+            } else {
                 mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
             }
 
@@ -261,6 +258,7 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
 
         DatePickerFragment picker = new DatePickerFragment();
         picker.setListener(this);
+
 
         picker.show(getFragmentManager(), "datePicker");
     }
@@ -342,29 +340,6 @@ public class TransactionEditorFragment extends Fragment implements ItemStateChan
         }
 
         return true;
-
-    }
-
-    @Override
-    public void addListener(ItemStateChangeListener listener) {
-
-        if (null == listener)
-            return;
-
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-
-    }
-
-    @Override
-    public void notifyListener(ItemStateChangeEvent event) {
-        if (null == event)
-            return;
-
-        for (Object item : mListeners) {
-            ((ItemStateChangeListener) item).onItemStateChange(event);
-        }
 
     }
 

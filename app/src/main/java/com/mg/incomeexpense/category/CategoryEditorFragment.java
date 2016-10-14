@@ -1,7 +1,6 @@
 package com.mg.incomeexpense.category;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,9 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ItemStateChangeHandler;
-import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
 
@@ -27,14 +25,12 @@ import java.util.List;
 /**
  * Created by mario on 2016-07-19.
  */
-public class CategoryEditorFragment extends Fragment implements ItemStateChangeHandler {
+public class CategoryEditorFragment extends FragmentBase {
 
     private static final String LOG_TAG = CategoryEditorFragment.class.getSimpleName();
-    private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private List<String> mCategories;
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
-    private ArrayList<String> mNames;
     private int mLayoutPosition = 0;
     private LinearLayout mLinearLayoutCategory;
     private View.OnClickListener mRemoveCategoryClickListener = new View.OnClickListener() {
@@ -63,7 +59,7 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
     public ObjectValidator getObjectValidator() {
 
         if (null == mObjectValidator) {
-            mObjectValidator = CategoryValidator.create(getActivity(), mNames);
+            mObjectValidator = CategoryValidator.create(getActivity());
         }
 
         return mObjectValidator;
@@ -202,29 +198,5 @@ public class CategoryEditorFragment extends Fragment implements ItemStateChangeH
         return true;
 
     }
-
-    @Override
-    public void addListener(ItemStateChangeListener listener) {
-
-        if (null == listener)
-            return;
-
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-
-    }
-
-    @Override
-    public void notifyListener(ItemStateChangeEvent event) {
-        if (null == event)
-            return;
-
-        for (Object item : mListeners) {
-            ((ItemStateChangeListener) item).onItemStateChange(event);
-        }
-
-    }
-
 
 }

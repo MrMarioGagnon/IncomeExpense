@@ -1,7 +1,6 @@
 package com.mg.incomeexpense.contributor;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,23 +11,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ItemStateChangeHandler;
-import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by mario on 2016-07-19.
  */
-public class ContributorEditorFragment extends Fragment implements ItemStateChangeHandler {
+public class ContributorEditorFragment extends FragmentBase {
 
     private static final String LOG_TAG = ContributorEditorFragment.class.getSimpleName();
 
-    private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private Contributor mContributor = null;
     private EditText mEditTextName;
     private TextView mTextViewValidationErrorMessage;
@@ -130,26 +126,4 @@ public class ContributorEditorFragment extends Fragment implements ItemStateChan
 
     }
 
-    @Override
-    public void addListener(ItemStateChangeListener listener) {
-
-        if (null == listener)
-            return;
-
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-
-    }
-
-    @Override
-    public void notifyListener(ItemStateChangeEvent event) {
-        if (null == event)
-            return;
-
-        for (Object item : mListeners) {
-            ((ItemStateChangeListener) item).onItemStateChange(event);
-        }
-
-    }
 }

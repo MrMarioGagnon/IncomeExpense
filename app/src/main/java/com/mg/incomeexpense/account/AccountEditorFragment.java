@@ -3,16 +3,13 @@ package com.mg.incomeexpense.account;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,9 +21,8 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.category.CategoryEditorActivity;
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ItemStateChangeHandler;
-import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
@@ -39,12 +35,11 @@ import java.util.List;
 /**
  * Created by mario on 2016-07-19.
  */
-public class AccountEditorFragment extends Fragment implements ItemStateChangeHandler {
+public class AccountEditorFragment extends FragmentBase {
 
     private static final String LOG_TAG = AccountEditorFragment.class.getSimpleName();
     private static final int CATEGORY_EDITOR_ACTIVITY = 1;
 
-    private final List<ItemStateChangeListener> mListeners = new ArrayList<>();
     private Account mAccount = null;
     private EditText mEditTextName;
     private EditText mEditTextBudget;
@@ -272,29 +267,6 @@ public class AccountEditorFragment extends Fragment implements ItemStateChangeHa
         }
 
         return true;
-
-    }
-
-    @Override
-    public void addListener(ItemStateChangeListener listener) {
-
-        if (null == listener)
-            return;
-
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-
-    }
-
-    @Override
-    public void notifyListener(ItemStateChangeEvent event) {
-        if (null == event)
-            return;
-
-        for (Object item : mListeners) {
-            ((ItemStateChangeListener) item).onItemStateChange(event);
-        }
 
     }
 
