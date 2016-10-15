@@ -39,8 +39,16 @@
     <string name="title_category_editor_add">Add Category</string>
     <string name="title_category_editor_update">Update Category</string>
     <string name="title_transaction_editor">Transactions</string>
+
     <string name="title_transaction_editor_add">Add Transaction</string>
     <string name="title_transaction_editor_update">Update Transaction</string>
+
+    <string name="title_transaction_editor_add_income">Add Income Transaction</string>
+    <string name="title_transaction_editor_update_income">Update Income Transaction</string>
+    <string name="title_transaction_editor_add_expense">Add Expense Transaction</string>
+    <string name="title_transaction_editor_update_expense">Update Expense Transaction</string>
+
+
     <string name="title_today">Today</string>
     <string name="title_this_week">This Week</string>
     <string name="title_this_month">This Month</string>

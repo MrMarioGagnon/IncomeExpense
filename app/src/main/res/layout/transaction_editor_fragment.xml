@@ -40,48 +40,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_layout_type"
-            style="@style/TransactionEditorSectionStyle">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_view_type" />
-
-
-                <RadioGroup
-                    android:id="@+id/radioGroupType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkedButton="@+id/radioButtonExpense"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radioButtonExpense"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/radio_button_expense" />
-
-                    <RadioButton
-                        android:id="@+id/radioButtonIncome"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/radio_button_income" />
-
-                </RadioGroup>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -198,12 +156,10 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_view_exchange_rate" />
 
-                <EditText
-                    android:id="@+id/edit_text_exchange_rate"
+                <TextView
+                    android:id="@+id/text_view_exchange_rate"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

@@ -36,6 +36,14 @@ public class TransactionEditorActivity extends AppCompatActivityBase {
             ActionBar actionBar = getSupportActionBar();
 
             if (actionBar != null) {
+
+                if(transaction.getType().equals(Transaction.TransactionType.Expense)){
+                    actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add_expense : R.string.title_transaction_editor_update_expense));
+                }else{
+                    actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add_income : R.string.title_transaction_editor_update_income));
+                }
+
+            }else{
                 actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add : R.string.title_transaction_editor_update));
             }
 

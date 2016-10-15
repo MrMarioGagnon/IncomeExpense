@@ -14,8 +14,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -57,14 +55,11 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private CategorySpinnerAdapter mCategorySpinnerAdapter;
 
     private TextView mTextViewCurrency;
+    private TextView mTextViewExchangeRate;
 
     private TextView mTextViewDate;
-    private RadioGroup mRadioGroupType;
-    private RadioButton mRadioButtonExpense;
-    private RadioButton mRadioButtonIncome;
 
     private EditText mEditTextAmount;
-    private EditText mEditTextExchangeRate;
     private EditText mEditTextNote;
 
     private ImageView mImageViewDate;
@@ -160,7 +155,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
 
         mTextViewAccountName = (TextView) rootView.findViewById(R.id.text_view_account_name);
-        mRadioGroupType = (RadioGroup) rootView.findViewById(R.id.radioGroupType);
 
         mSpinnerPaymentMethod = (Spinner) rootView.findViewById(R.id.spinner_payment_method);
         mSpinnerPaymentMethod.setAdapter(mPaymentMethodSpinnerAdapter); // Set the custom adapter to the spinner
@@ -173,8 +167,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
                 PaymentMethod paymentMethod = mPaymentMethodSpinnerAdapter.getItem(position);
                 Double exchangeRate = paymentMethod.getExchangeRate();
-                mEditTextExchangeRate.setEnabled(exchangeRate == 1.0 ? true : false);
-                mEditTextExchangeRate.setText(exchangeRate.toString());
+                mTextViewExchangeRate.setText(exchangeRate.toString());
 
                 mTextViewCurrency.setText(paymentMethod.getCurrency());
 
@@ -196,7 +189,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         mTextViewDate = (TextView) rootView.findViewById(R.id.text_view_date);
 
         mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
-        mEditTextExchangeRate = (EditText) rootView.findViewById(R.id.edit_text_exchange_rate);
+        mTextViewExchangeRate = (TextView) rootView.findViewById(R.id.text_view_exchange_rate);
         mEditTextNote = (EditText) rootView.findViewById(R.id.edit_text_note);
 
         mImageViewDate = (ImageView) rootView.findViewById(R.id.image_view_date);
@@ -206,9 +199,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 ShowCalendar();
             }
         });
-
-        mRadioButtonExpense = (RadioButton) rootView.findViewById(R.id.radioButtonExpense);
-        mRadioButtonIncome = (RadioButton) rootView.findViewById(R.id.radioButtonIncome);
 
         mImageButtonContributors = (ImageButton) rootView.findViewById(R.id.imagebutton_contributors);
         mImageButtonContributors.setOnClickListener(mOnContributorImageButtonClickListener);
@@ -228,16 +218,10 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 mTransaction.setCurrency(Tools.getDefaultCurrency(getActivity()));
             }
 
-            Tools.setSpinner(mTransaction.getCategory(), mSpinnerCategory);
-            if (mTransaction.getType() == Transaction.TransactionType.Expense) {
-                mRadioButtonExpense.setChecked(true);
-            } else {
-                mRadioButtonIncome.setChecked(true);
-            }
             mTextViewAccountName.setText(mTransaction.getAccount().getName());
             mTextViewDate.setText(mTransaction.getDate());
             mEditTextAmount.setText(mTransaction.getAmount().toString());
-            mEditTextExchangeRate.setText(mTransaction.getExchangeRate().toString());
+            mTextViewExchangeRate.setText(mTransaction.getExchangeRate().toString());
             Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
             mEditTextNote.setText(mTransaction.getNote());
 
@@ -298,9 +282,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 String category = (String) mSpinnerCategory.getSelectedItem();
                 mTransaction.setCategory(category);
 
-                int selectedRadioButtonId = mRadioGroupType.getCheckedRadioButtonId();
-                mTransaction.setType(selectedRadioButtonId == R.id.radioButtonExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income);
-
                 PaymentMethod paymentMethod = (PaymentMethod) mSpinnerPaymentMethod.getSelectedItem();
                 mTransaction.setPaymentMethod(paymentMethod);
 
@@ -314,7 +295,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 if (amount.trim().length() > 0)
                     mTransaction.setAmount(Double.parseDouble(amount));
 
-                String exchangeRate = mEditTextExchangeRate.getText().toString();
+                String exchangeRate = mTextViewExchangeRate.getText().toString();
                 if (exchangeRate.trim().length() > 0)
                     mTransaction.setExchangeRate(Double.parseDouble(exchangeRate));
 
