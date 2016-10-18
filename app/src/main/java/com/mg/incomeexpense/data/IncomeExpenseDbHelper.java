@@ -18,6 +18,11 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -44,13 +49,6 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.PaymentMethodEntry.COLUMN_CLOSE + " INTEGER NOT NULL DEFAULT 0" +
                 " );";
 
-//        final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + IncomeExpenseContract.CategoryEntry.TABLE_NAME + " (" +
-//                IncomeExpenseContract.CategoryEntry._ID + " INTEGER PRIMARY KEY," +
-//                IncomeExpenseContract.CategoryEntry.COLUMN_ACCOUNT_ID + " INTEGER NOT NULL," +
-//                IncomeExpenseContract.CategoryEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL," +
-//                IncomeExpenseContract.CategoryEntry.COLUMN_SUB_CATEGORY + " TEXT NOT NULL" +
-//                " );";
-
         final String SQL_CREATE_TRANSACTION_TABLE = "CREATE TABLE " + IncomeExpenseContract.TransactionEntry.TABLE_NAME + " (" +
                 IncomeExpenseContract.TransactionEntry._ID + " INTEGER PRIMARY KEY," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID + " INTEGER NOT NULL," +
@@ -61,9 +59,11 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY + " TEXT NOT NULL," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE + " NUMERIC NOT NULL DEFAULT 1," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID + " INTEGER NOT NULL," +
-                IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS + " TEXT NOT NULL," +
-                IncomeExpenseContract.TransactionEntry.COLUMN_NOTE + " TEXT" +
-                " );";
+                IncomeExpenseContract.TransactionEntry.COLUMN_CONTRIBUTORS + " TEXT NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_NOTE + " TEXT," +
+                "FOREIGN KEY(" + IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID + ") REFERENCES " + IncomeExpenseContract.AccountEntry.TABLE_NAME + "(" + IncomeExpenseContract.AccountEntry._ID + ")," +
+                "FOREIGN KEY(" + IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID + ") REFERENCES " + IncomeExpenseContract.PaymentMethodEntry.TABLE_NAME + "(" + IncomeExpenseContract.PaymentMethodEntry._ID + ")" +
+                ");";
 
         db.execSQL(SQL_CREATE_CONTRIBUTOR_TABLE);
         db.execSQL(SQL_CREATE_ACCOUNT_TABLE);
