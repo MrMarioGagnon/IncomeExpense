@@ -1,12 +1,15 @@
 package com.mg.incomeexpense.account;
 
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.ItemRepositorySynchronizerMessageBuilder;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
+import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
@@ -58,16 +61,29 @@ public class AccountEditorActivity extends AppCompatActivityBase {
 
         if (event.isCancelled()) {
             setResult(RESULT_CANCELED);
+            finish();
         } else {
 
             AccountRepositorySynchronizer synchronizer = new AccountRepositorySynchronizer(getContentResolver(),
                     IncomeExpenseContract.AccountEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, AccountRepositorySynchronizer.class.getSimpleName()));
 
-            synchronizer.Save(event.getItem());
-            setResult(RESULT_OK);
+            Account account = (Account) event.getItem();
+            try {
+                synchronizer.Save(account);
+                setResult(RESULT_OK);
+                finish();
+            } catch (SQLiteConstraintException e) {
+                String message = getString(R.string.error_foreign_key_constraint, "Account", account.getName());
+                Log.i(LOG_TAG, message);
+                DialogUtils.messageBox(this, message, getString(R.string.dialog_title_error_deleting_item, "Account")).show();
+
+                account.setDead(false);
+            }
+
+
         }
 
-        finish();
+
     }
 
 }

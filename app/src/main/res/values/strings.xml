@@ -1,6 +1,7 @@
 <resources>
 
     <string name="dialog_title_select_to_edit">Select to edit</string>
+    <string name="dialog_title_error_deleting_item">Deleting %1$s</string>
 
     <string name="app_name">IncomeExpense</string>
     <string name="action_settings">Settings</string>
@@ -11,6 +12,7 @@
     <string name="action_utility">Utility</string>
 
     <string name="error_unable_to_fetch_all_contributor">Unable to fetch all contributor.</string>
+    <string name="error_foreign_key_constraint">Unable to delete %1$s : %2$s, it\'s in use.</string>
 
     <string name="dialog_title_contributor_setter">Contributor Setter</string>
     <string name="dialog_title_category_setter">Category Setter</string>
