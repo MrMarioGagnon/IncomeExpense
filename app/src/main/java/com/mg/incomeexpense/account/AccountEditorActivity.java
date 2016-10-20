@@ -73,9 +73,9 @@ public class AccountEditorActivity extends AppCompatActivityBase {
                 setResult(RESULT_OK);
                 finish();
             } catch (SQLiteConstraintException e) {
-                String message = getString(R.string.error_foreign_key_constraint, "Account", account.getName());
+                String message = getString(R.string.error_foreign_key_constraint, getString(R.string.account), account.getName());
                 Log.i(LOG_TAG, message);
-                DialogUtils.messageBox(this, message, getString(R.string.dialog_title_error_deleting_item, "Account")).show();
+                DialogUtils.messageBox(this, message, getString(R.string.dialog_title_error_deleting_item, getString(R.string.account))).show();
 
                 account.setDead(false);
             }

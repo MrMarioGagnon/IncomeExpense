@@ -1,5 +1,9 @@
 <resources>
 
+    <string name="account">Account</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="contributor">Contributor</string>
+
     <string name="dialog_title_select_to_edit">Select to edit</string>
     <string name="dialog_title_error_deleting_item">Deleting %1$s</string>
 

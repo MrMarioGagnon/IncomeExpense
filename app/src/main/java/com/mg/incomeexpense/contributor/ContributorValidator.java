@@ -3,6 +3,7 @@ package com.mg.incomeexpense.contributor;
 import android.content.Context;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
@@ -60,5 +61,17 @@ public class ContributorValidator implements ObjectValidator {
         }
 
         return ValidationStatus.create(Tools.join(messages, "\n"));
+    }
+
+    public Boolean canDelete(ObjectBase objectToDelete, List<Account> accounts)
+    {
+        for(Account account : accounts){
+
+            if(account.getContributors().contains(objectToDelete)){
+                return false;
+            }
+        }
+
+        return true;
     }
 }

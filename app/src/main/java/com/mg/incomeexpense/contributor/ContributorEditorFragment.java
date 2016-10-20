@@ -11,12 +11,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
+import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mario on 2016-07-19.
@@ -101,8 +104,17 @@ public class ContributorEditorFragment extends FragmentBase {
 
         switch (id) {
             case R.id.action_delete:
-                mContributor.setDead(true);
-                notifyListener(new ItemStateChangeEvent(mContributor));
+
+                List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver());
+
+                if(((ContributorValidator)getObjectValidator()).canDelete(mContributor,accounts )) {
+                    mContributor.setDead(true);
+                    notifyListener(new ItemStateChangeEvent(mContributor));
+                }else{
+                    String message = getString(R.string.error_foreign_key_constraint, getString(R.string.contributor), mContributor.getName());
+                    mTextViewValidationErrorMessage.setText(message);
+                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.action_save:
                 mContributor.setName(mEditTextName.getText().toString());
