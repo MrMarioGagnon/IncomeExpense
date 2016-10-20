@@ -1,8 +1,6 @@
 package com.mg.incomeexpense.paymentmethod;
 
-import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,25 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.contributor.ContributorSpinnerAdapter;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ItemStateChangeHandler;
-import com.mg.incomeexpense.core.ItemStateChangeListener;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
-import com.mg.incomeexpense.core.dialog.DialogUtils;
-import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
-import com.mg.incomeexpense.transaction.AccountSpinnerAdapter;
+import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
+import com.mg.incomeexpense.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,8 +167,17 @@ public class PaymentMethodEditorFragment extends FragmentBase {
 
         switch (id) {
             case R.id.action_delete:
-                mPaymentMethod.setDead(true);
-                notifyListener(new ItemStateChangeEvent(mPaymentMethod));
+
+                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForPaymentMethod(getActivity().getContentResolver(), mPaymentMethod);
+
+                if (((PaymentMethodValidator) getObjectValidator()).canDelete(transactions)) {
+                    mPaymentMethod.setDead(true);
+                    notifyListener(new ItemStateChangeEvent(mPaymentMethod));
+                } else {
+                    String message = getString(R.string.error_foreign_key_constraint, getString(R.string.payment_method), mPaymentMethod.getName());
+                    mTextViewValidationErrorMessage.setText(message);
+                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.action_save:
                 mPaymentMethod.setName(mEditTextName.getText().toString());

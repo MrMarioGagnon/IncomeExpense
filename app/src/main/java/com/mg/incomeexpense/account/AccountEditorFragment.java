@@ -27,6 +27,8 @@ import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
+import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
+import com.mg.incomeexpense.transaction.Transaction;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -233,8 +235,18 @@ public class AccountEditorFragment extends FragmentBase {
 
         switch (id) {
             case R.id.action_delete:
-                mAccount.setDead(true);
-                notifyListener(new ItemStateChangeEvent(mAccount));
+
+                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
+
+                if (((AccountValidator) getObjectValidator()).canDelete(transactions)) {
+                    mAccount.setDead(true);
+                    notifyListener(new ItemStateChangeEvent(mAccount));
+                } else {
+                    String message = getString(R.string.error_foreign_key_constraint, getString(R.string.account), mAccount.getName());
+                    mTextViewValidationErrorMessage.setText(message);
+                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                }
+
                 break;
             case R.id.action_save:
                 mAccount.setName(mEditTextName.getText().toString());

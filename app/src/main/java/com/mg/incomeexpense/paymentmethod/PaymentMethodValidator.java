@@ -5,11 +5,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
+import com.mg.incomeexpense.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public class PaymentMethodValidator implements ObjectValidator {
 
     }
 
-    public ValidationStatus Validate(@NonNull ObjectBase objectToValidate){
+    public ValidationStatus Validate(@NonNull ObjectBase objectToValidate) {
 
         List<String> messages = new ArrayList<>();
 
@@ -71,11 +71,15 @@ public class PaymentMethodValidator implements ObjectValidator {
         }
 
         Log.d(LOG_TAG, exchangeRate.toString());
-        if(exchangeRate <= 0){
+        if (exchangeRate <= 0) {
             messages.add(mValidationMessages.get(R.string.validation_exchange_rate_mandatory));
         }
 
         return ValidationStatus.create(Tools.join(messages, "\n"));
+    }
+
+    public Boolean canDelete(List<Transaction> transactions) {
+        return transactions.size() == 0;
     }
 
 }

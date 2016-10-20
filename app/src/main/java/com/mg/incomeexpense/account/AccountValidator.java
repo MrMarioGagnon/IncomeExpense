@@ -7,6 +7,7 @@ import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
+import com.mg.incomeexpense.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,11 @@ public class AccountValidator implements ObjectValidator {
 
         return ValidationStatus.create(Tools.join(messages, "\n"));
     }
+
+    public Boolean canDelete(List<Transaction> transactions) {
+        return transactions.size() == 0;
+    }
+
 
 }
 

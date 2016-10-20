@@ -27,7 +27,62 @@ public class IncomeExpenseRequestWrapper {
 
     private static final String LOG_TAG = IncomeExpenseRequestWrapper.class.getSimpleName();
 
-    public static ArrayList<String> getAvailableAccountName(@NonNull ContentResolver contentResolver, ObjectBase account) {
+    public static ArrayList<Transaction> getAllTransactionForAccount(@NonNull ContentResolver contentResolver, @NonNull Account account) {
+
+        ArrayList<Transaction> transactions = new ArrayList<>();
+
+        Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
+
+        Cursor cursor = null;
+        try {
+
+            String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
+            String[] selectionArgument = new String[]{account.getId().toString()};
+
+            cursor = contentResolver.query(uri, null, selection, selectionArgument, null);
+            Transaction transaction;
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                transaction = Transaction.create(cursor, contentResolver);
+                transactions.add(transaction);
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return transactions;
+    }
+
+    public static ArrayList<Transaction> getAllTransactionForPaymentMethod(@NonNull ContentResolver contentResolver, @NonNull PaymentMethod paymentMethod) {
+
+        ArrayList<Transaction> transactions = new ArrayList<>();
+
+        Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
+
+        Cursor cursor = null;
+        try {
+
+            String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID);
+            String[] selectionArgument = new String[]{paymentMethod.getId().toString()};
+
+            cursor = contentResolver.query(uri, null, selection, selectionArgument, null);
+            Transaction transaction;
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                transaction = Transaction.create(cursor, contentResolver);
+                transactions.add(transaction);
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return transactions;
+    }
+
+
+    public static ArrayList<String> getAvailableAccountName(@NonNull ContentResolver contentResolver, @NonNull ObjectBase account) {
 
         ArrayList<String> names = new ArrayList<>();
 
