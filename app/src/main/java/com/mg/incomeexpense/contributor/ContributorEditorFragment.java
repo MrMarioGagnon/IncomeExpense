@@ -17,6 +17,7 @@ import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
+import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,11 +107,12 @@ public class ContributorEditorFragment extends FragmentBase {
             case R.id.action_delete:
 
                 List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver());
+                List<PaymentMethod> paymentMethods = IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getActivity().getContentResolver());
 
-                if(((ContributorValidator)getObjectValidator()).canDelete(mContributor,accounts )) {
+                if (((ContributorValidator) getObjectValidator()).canDelete(mContributor, accounts, paymentMethods)) {
                     mContributor.setDead(true);
                     notifyListener(new ItemStateChangeEvent(mContributor));
-                }else{
+                } else {
                     String message = getString(R.string.error_foreign_key_constraint, getString(R.string.contributor), mContributor.getName());
                     mTextViewValidationErrorMessage.setText(message);
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);

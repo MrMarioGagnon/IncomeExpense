@@ -8,6 +8,7 @@ import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
+import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,14 +64,21 @@ public class ContributorValidator implements ObjectValidator {
         return ValidationStatus.create(Tools.join(messages, "\n"));
     }
 
-    public Boolean canDelete(ObjectBase objectToDelete, List<Account> accounts)
-    {
-        for(Account account : accounts){
+    public Boolean canDelete(ObjectBase objectToDelete, List<Account> accounts, List<PaymentMethod> paymentMethods) {
+        for (Account account : accounts) {
 
-            if(account.getContributors().contains(objectToDelete)){
+            if (account.getContributors().contains(objectToDelete)) {
                 return false;
             }
         }
+
+        for (PaymentMethod paymentMethod : paymentMethods) {
+
+            if (paymentMethod.getOwner().equals(objectToDelete)) {
+                return false;
+            }
+        }
+
 
         return true;
     }
