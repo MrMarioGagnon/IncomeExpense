@@ -31,23 +31,26 @@ public class IncomeExpenseRequestWrapper {
 
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
+        if(!account.isNew()) {
 
-        Cursor cursor = null;
-        try {
+            Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
 
-            String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
-            String[] selectionArgument = new String[]{account.getId().toString()};
+            Cursor cursor = null;
+            try {
 
-            cursor = contentResolver.query(uri, null, selection, selectionArgument, null);
-            Transaction transaction;
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                transaction = Transaction.create(cursor, contentResolver);
-                transactions.add(transaction);
-            }
-        } finally {
-            if (null != cursor) {
-                cursor.close();
+                String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
+                String[] selectionArgument = new String[]{account.getId().toString()};
+
+                cursor = contentResolver.query(uri, null, selection, selectionArgument, null);
+                Transaction transaction;
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    transaction = Transaction.create(cursor, contentResolver);
+                    transactions.add(transaction);
+                }
+            } finally {
+                if (null != cursor) {
+                    cursor.close();
+                }
             }
         }
 

@@ -102,6 +102,7 @@ public class ContributorEditorFragment extends FragmentBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        ValidationStatus validationStatus;
 
         switch (id) {
             case R.id.action_delete:
@@ -109,18 +110,19 @@ public class ContributorEditorFragment extends FragmentBase {
                 List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver());
                 List<PaymentMethod> paymentMethods = IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getActivity().getContentResolver());
 
-                if (((ContributorValidator) getObjectValidator()).canDelete(mContributor, accounts, paymentMethods)) {
+                validationStatus = ((ContributorValidator)getObjectValidator()).canDelete(mContributor, accounts, paymentMethods);
+
+                if (validationStatus.isValid()) {
                     mContributor.setDead(true);
                     notifyListener(new ItemStateChangeEvent(mContributor));
                 } else {
-                    String message = getString(R.string.error_foreign_key_constraint, getString(R.string.contributor), mContributor.getName());
-                    mTextViewValidationErrorMessage.setText(message);
+                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.action_save:
                 mContributor.setName(mEditTextName.getText().toString());
-                ValidationStatus validationStatus = getObjectValidator().Validate(mContributor);
+                validationStatus = getObjectValidator().Validate(mContributor);
 
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mContributor));

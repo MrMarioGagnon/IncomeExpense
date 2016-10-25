@@ -17,6 +17,9 @@
 
     <string name="error_unable_to_fetch_all_contributor">Unable to fetch all contributor.</string>
     <string name="error_foreign_key_constraint">Unable to delete %1$s : %2$s, it\'s in use.</string>
+    <string name="error_foreign_key_constraint_contributor1">Unable to delete this contributor</string>
+    <string name="error_foreign_key_constraint_contributor2">In use in Accounts</string>
+    <string name="error_foreign_key_constraint_contributor3">In use in Payment Methods</string>
 
     <string name="dialog_title_contributor_setter">Contributor Setter</string>
     <string name="dialog_title_category_setter">Category Setter</string>
@@ -109,6 +112,7 @@
     <string name="validation_budget_must_be_positive">Budget amount must be positive</string>
     <string name="validation_contributors_mandatory">No contributor selected</string>
     <string name="validation_category_duplicate">Duplicate category name found</string>
+    <string name="validation_remove_contributor_from_account">Unable to remove contributor %1$s from account, it\'s in use.</string>
 
     <string name="log_error_adding_item">Error adding item</string>
     <string name="log_error_deleting_item">Error deleting item</string>
@@ -156,7 +160,6 @@
     <string name="text_view_note">Note</string>
     <string name="radio_button_expense">Expense</string>
     <string name="radio_button_income">Income</string>
-
 
 
 </resources>

@@ -1,11 +1,8 @@
 package com.mg.incomeexpense.contributor;
 
-import android.content.ContentResolver;
 import android.database.Cursor;
 
-import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.ObjectBase;
-import com.mg.incomeexpense.data.IdToItemConvertor;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;

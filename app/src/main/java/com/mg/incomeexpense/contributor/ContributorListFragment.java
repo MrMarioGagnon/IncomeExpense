@@ -42,15 +42,11 @@ public class ContributorListFragment extends Fragment implements LoaderManager.L
     private int mPosition = ListView.INVALID_POSITION;
     private ListView mListView;
 
-
-    public ContributorListFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mContributorAdapter = new ContributorListAdapter(getActivity(), null, 0);
         // Add this line in order for this fragment to handle menu events.
         //setHasOptionsMenu(true);
 
@@ -60,11 +56,33 @@ public class ContributorListFragment extends Fragment implements LoaderManager.L
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mContributorAdapter = new ContributorListAdapter(getActivity(), null, 0);
-
         View rootView = inflater.inflate(R.layout.contributor_list_fragment, container, false);
 
-        setupListView(rootView);
+        mListView = (ListView) rootView.findViewById(R.id.listview_contributor);
+        mListView.setAdapter(mContributorAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                if (null != cursor) {
+
+                    long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
+                    String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
+
+                    Contributor contributor = Contributor.create(id, name);
+
+                    ContributorListFragment.this.notifyListener(new ItemSelectedEvent(contributor));
+
+                }
+
+                mPosition = position;
+            }
+        });
+
+        mListView.setEmptyView(rootView.findViewById(R.id.textView_no_contributor));
 
         // If there's instance state, mine it for useful information.
         // The end-goal here is that the user never knows that turning their device sideways
@@ -95,36 +113,6 @@ public class ContributorListFragment extends Fragment implements LoaderManager.L
             outState.putInt(SELECTED_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);
-    }
-
-    private void setupListView(View v) {
-
-        mListView = (ListView) v.findViewById(R.id.listview_contributor);
-        mListView.setAdapter(mContributorAdapter);
-
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if (null != cursor) {
-
-                    long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
-                    String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
-
-                    Contributor contributor = Contributor.create(id, name);
-
-                    ContributorListFragment.this.notifyListener(new ItemSelectedEvent(contributor));
-
-                }
-
-                mPosition = position;
-            }
-        });
-
-        mListView.setEmptyView(v.findViewById(R.id.textView_no_contributor));
-
     }
 
     @Override

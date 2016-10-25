@@ -34,7 +34,9 @@ public class ContributorValidator implements ObjectValidator {
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_name_mandatory, context.getString(R.string.validation_name_mandatory));
         messages.put(R.string.validation_name_already_exists, context.getString(R.string.validation_name_already_exists));
-
+        messages.put(R.string.error_foreign_key_constraint_contributor1, context.getString(R.string.error_foreign_key_constraint_contributor1));
+        messages.put(R.string.error_foreign_key_constraint_contributor2, context.getString(R.string.error_foreign_key_constraint_contributor2));
+        messages.put(R.string.error_foreign_key_constraint_contributor3, context.getString(R.string.error_foreign_key_constraint_contributor3));
         return new ContributorValidator(names, messages);
     }
 
@@ -64,22 +66,31 @@ public class ContributorValidator implements ObjectValidator {
         return ValidationStatus.create(Tools.join(messages, "\n"));
     }
 
-    public Boolean canDelete(ObjectBase objectToDelete, List<Account> accounts, List<PaymentMethod> paymentMethods) {
+    public ValidationStatus canDelete(ObjectBase objectToValidate, List<Account> accounts, List<PaymentMethod> paymentMethods) {
+
+        Contributor contributor = (Contributor) objectToValidate;
+        List<String> messages = new ArrayList<>();
+
         for (Account account : accounts) {
 
-            if (account.getContributors().contains(objectToDelete)) {
-                return false;
+            if (account.getContributors().contains(contributor)) {
+                messages.add(mValidationMessages.get(R.string.error_foreign_key_constraint_contributor1));
+                messages.add(mValidationMessages.get(R.string.error_foreign_key_constraint_contributor2));
+                break;
             }
         }
 
         for (PaymentMethod paymentMethod : paymentMethods) {
 
-            if (paymentMethod.getOwner().equals(objectToDelete)) {
-                return false;
+            if (paymentMethod.getOwner().equals(contributor)) {
+                if (messages.size() == 0) {
+                    messages.add(mValidationMessages.get(R.string.error_foreign_key_constraint_contributor1));
+                }
+                messages.add(mValidationMessages.get(R.string.error_foreign_key_constraint_contributor3));
+                break;
             }
         }
 
-
-        return true;
+        return ValidationStatus.create(Tools.join(messages, "\n"));
     }
 }

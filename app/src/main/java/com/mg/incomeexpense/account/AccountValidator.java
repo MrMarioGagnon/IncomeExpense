@@ -3,6 +3,7 @@ package com.mg.incomeexpense.account;
 import android.content.Context;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
@@ -36,6 +37,9 @@ public class AccountValidator implements ObjectValidator {
         messages.put(R.string.validation_contributors_mandatory, context.getString(R.string.validation_contributors_mandatory));
         messages.put(R.string.validation_category_mandatory, context.getString(R.string.validation_category_mandatory));
         messages.put(R.string.validation_budget_must_be_positive, context.getString(R.string.validation_budget_must_be_positive));
+        messages.put(R.string.validation_remove_contributor_from_account, context.getString(R.string.validation_remove_contributor_from_account));
+        messages.put(R.string.error_foreign_key_constraint, context.getString(R.string.error_foreign_key_constraint));
+        messages.put(R.string.account, context.getString(R.string.account));
 
         return new AccountValidator(names, messages);
     }
@@ -78,10 +82,34 @@ public class AccountValidator implements ObjectValidator {
         return ValidationStatus.create(Tools.join(messages, "\n"));
     }
 
-    public Boolean canDelete(List<Transaction> transactions) {
-        return transactions.size() == 0;
+    public ValidationStatus canDelete(ObjectBase objectToValidate, List<Transaction> transactions) {
+
+        Account account = (Account) objectToValidate;
+        String message = "";
+
+        if (transactions.size() != 0) {
+            message = String.format(mValidationMessages.get(R.string.error_foreign_key_constraint), mValidationMessages.get(R.string.account), account.getName());
+        }
+
+        return ValidationStatus.create(message);
     }
 
+    public ValidationStatus canRemoveContributor(ObjectBase objectToValidate, List<Contributor> newContributors, List<Transaction> transactions) {
 
+        Account account = (Account) objectToValidate;
+        String message = "";
+
+        for (Contributor contributor : account.getContributors()) {
+            if (!newContributors.contains(contributor)) {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getContributors().contains(contributor)) {
+                        message = String.format(mValidationMessages.get(R.string.validation_remove_contributor_from_account), contributor.getName());
+                        break;
+                    }
+                }
+            }
+        }
+        return ValidationStatus.create(message);
+    }
 }
 

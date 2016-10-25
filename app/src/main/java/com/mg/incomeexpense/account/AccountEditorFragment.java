@@ -87,16 +87,36 @@ public class AccountEditorFragment extends FragmentBase {
         mContributorMultipleChoiceEventHandler = new MultipleChoiceEventHandler() { // Creating an anonymous Class Object
             @Override
             public void execute(boolean[] idSelected) {
-                mSelectedContributors.clear();
-                StringBuilder sb = new StringBuilder();
+
+                // Ajouter validation si contributeur enleve
+                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
+                List<Contributor> selectedContributors = new ArrayList<>();
                 for (int i = 0; i < idSelected.length; i++) {
                     if (idSelected[i]) {
                         Contributor contributor = mAvailableContributors.get(i);
-                        mSelectedContributors.add(contributor);
-                        sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), contributor.getName()));
+                        selectedContributors.add(contributor);
                     }
                 }
-                mTextViewContributors.setText(sb.toString());
+
+                AccountValidator validator = (AccountValidator) getObjectValidator();
+                ValidationStatus vs = validator.canRemoveContributor(mAccount, selectedContributors, transactions);
+                if (vs.isValid()) {
+                    mSelectedContributors.clear();
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < idSelected.length; i++) {
+                        if (idSelected[i]) {
+                            Contributor contributor = mAvailableContributors.get(i);
+                            mSelectedContributors.add(contributor);
+                            sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), contributor.getName()));
+                        }
+                    }
+                    mTextViewContributors.setText(sb.toString());
+
+                } else {
+                    mTextViewValidationErrorMessage.setText(vs.getMessage());
+                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                }
+
             }
         };
     }
@@ -232,18 +252,19 @@ public class AccountEditorFragment extends FragmentBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        ValidationStatus validationStatus;
         switch (id) {
             case R.id.action_delete:
 
                 List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
 
-                if (((AccountValidator) getObjectValidator()).canDelete(transactions)) {
+                validationStatus = ((AccountValidator) getObjectValidator()).canDelete(mAccount, transactions);
+
+                if (validationStatus.isValid()) {
                     mAccount.setDead(true);
                     notifyListener(new ItemStateChangeEvent(mAccount));
                 } else {
-                    String message = getString(R.string.error_foreign_key_constraint, getString(R.string.account), mAccount.getName());
-                    mTextViewValidationErrorMessage.setText(message);
+                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
                 }
 
@@ -261,7 +282,7 @@ public class AccountEditorFragment extends FragmentBase {
 
                 mAccount.setContributors(mSelectedContributors);
 
-                ValidationStatus validationStatus = getObjectValidator().Validate(mAccount);
+                validationStatus = getObjectValidator().Validate(mAccount);
 
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mAccount));
