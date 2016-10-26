@@ -26,7 +26,6 @@ public class ContributorListFragment extends FragmentListBase {
             IncomeExpenseContract.ContributorEntry._ID,
             IncomeExpenseContract.ContributorEntry.COLUMN_NAME
     };
-    private static final String LOG_TAG = ContributorListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTRIBUTOR_LOADER = 0;
 
@@ -113,7 +112,7 @@ public class ContributorListFragment extends FragmentListBase {
         // fragment only uses one loader, so we don't care about checking the id.
 
         // Sort order:  Ascending, by date.
-        String sortOrder = IncomeExpenseContract.ContributorEntry.COLUMN_NAME + " ASC";
+        String sortOrder = "LOWER(" + IncomeExpenseContract.ContributorEntry.COLUMN_NAME + ") ASC";
 
         Uri contributorUri = IncomeExpenseContract.ContributorEntry.CONTENT_URI;
 
