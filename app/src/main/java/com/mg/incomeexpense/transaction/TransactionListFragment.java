@@ -3,8 +3,6 @@ package com.mg.incomeexpense.transaction;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -15,18 +13,14 @@ import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.core.FragmentListBase;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
-import com.mg.incomeexpense.core.ItemSelectedHandler;
-import com.mg.incomeexpense.core.ItemSelectedListener;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by mario on 2016-07-19.
  */
-public class TransactionListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ItemSelectedHandler {
+public class TransactionListFragment extends FragmentListBase {
 
        /*
         Account
@@ -69,8 +63,6 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
     private static final String SELECTED_KEY = "selected_position";
     private static final int TRANSACTION_LOADER = 0;
 
-    private final List mListeners = new ArrayList<>();
-
     private TransactionListAdapter mTransactionAdapter;
     private int mPosition = ListView.INVALID_POSITION;
     private ListView mListView;
@@ -86,8 +78,8 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getArguments();
-        if(bundle != null){
-            mSelectedAccount = (Account)bundle.getSerializable("account");
+        if (bundle != null) {
+            mSelectedAccount = (Account) bundle.getSerializable("account");
         }
         // Add this line in order for this fragment to handle menu events.
         //setHasOptionsMenu(true);
@@ -148,7 +140,7 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (null != cursor) {
 
-                    Transaction transaction = Transaction.create(cursor,TransactionListFragment.this.getActivity().getContentResolver());
+                    Transaction transaction = Transaction.create(cursor, TransactionListFragment.this.getActivity().getContentResolver());
 
                     TransactionListFragment.this.notifyListener(new ItemSelectedEvent(transaction));
 
@@ -175,8 +167,8 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
         String selection = null;
         String[] selectionArgs = null;
 
-        if(mSelectedAccount!=null){
-            selection = String.format("%1$s=?",IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
+        if (mSelectedAccount != null) {
+            selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
             selectionArgs = new String[]{mSelectedAccount.getId().toString()};
         }
 
@@ -202,28 +194,6 @@ public class TransactionListFragment extends Fragment implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mTransactionAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void addListener(ItemSelectedListener listener) {
-
-        if(null == listener)
-            return;
-
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-    }
-
-    @Override
-    public void notifyListener(ItemSelectedEvent event) {
-
-        if(null == event)
-            return;
-
-        for (Object item : mListeners) {
-            ((ItemSelectedListener) item).onItemSelected(event);
-        }
     }
 
 }

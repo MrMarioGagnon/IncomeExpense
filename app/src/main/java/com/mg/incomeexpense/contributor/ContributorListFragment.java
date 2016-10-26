@@ -3,8 +3,6 @@ package com.mg.incomeexpense.contributor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -14,18 +12,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.core.FragmentListBase;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
-import com.mg.incomeexpense.core.ItemSelectedHandler;
-import com.mg.incomeexpense.core.ItemSelectedListener;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by mario on 2016-07-19.
  */
-public class ContributorListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ItemSelectedHandler {
+public class ContributorListFragment extends FragmentListBase {
 
     public static final int COL_NAME = 1;
     private static final String[] CONTRIBUTOR_COLUMNS = {
@@ -35,8 +29,6 @@ public class ContributorListFragment extends Fragment implements LoaderManager.L
     private static final String LOG_TAG = ContributorListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTRIBUTOR_LOADER = 0;
-
-    private final List mListeners = new ArrayList<>();
 
     private ContributorListAdapter mContributorAdapter;
     private int mPosition = ListView.INVALID_POSITION;
@@ -147,28 +139,6 @@ public class ContributorListFragment extends Fragment implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mContributorAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void addListener(ItemSelectedListener listener) {
-
-        if (null == listener)
-            return;
-
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-    }
-
-    @Override
-    public void notifyListener(ItemSelectedEvent event) {
-
-        if (null == event)
-            return;
-
-        for (Object item : mListeners) {
-            ((ItemSelectedListener) item).onItemSelected(event);
-        }
     }
 
 }
