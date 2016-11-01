@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.core.RepositorySynchronizerBase;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.util.Map;
@@ -15,19 +16,15 @@ import java.util.Map;
 /**
  * Created by mario on 2016-07-26.
  */
-public class AccountRepositorySynchronizer {
+public class AccountRepositorySynchronizer extends RepositorySynchronizerBase {
 
     private static final String LOG_TAG = AccountRepositorySynchronizer.class.getSimpleName();
-    private final ContentResolver mContentResolver;
-    private final Uri mItemUri;
-    private final Map<Integer, String> mMessages;
 
     public AccountRepositorySynchronizer(@NonNull ContentResolver contentResolver, @NonNull Uri itemUri, @NonNull Map<Integer, String> messages) {
-        mMessages = messages;
-        mItemUri = itemUri;
-        mContentResolver = contentResolver;
+        super(contentResolver, itemUri, messages);
     }
 
+    @Override
     public ObjectBase Save(@NonNull ObjectBase item) {
 
         // region Precondition

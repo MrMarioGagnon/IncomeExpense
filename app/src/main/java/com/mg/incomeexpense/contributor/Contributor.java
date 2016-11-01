@@ -7,6 +7,7 @@ import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Contributor extends ObjectBase implements Serializable, Comparable<Contributor> {
 
@@ -18,8 +19,7 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
 
     public static Contributor create(@NonNull Cursor cursor) {
 
-        if (null == cursor)
-            throw new NullPointerException("Parameter cursor of type Cursor is mandatory.");
+        Objects.requireNonNull(cursor, "Parameter cursor of type Cursor is mandatory.");
 
         Contributor newInstance = new Contributor();
         newInstance.mNew = false;
@@ -37,11 +37,8 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
 
     public static Contributor create(@NonNull Long id, @NonNull String name) {
 
-        if (null == id)
-            throw new NullPointerException("Parameter id of type Long is mandatory");
-
-        if (null == name)
-            throw new NullPointerException("Parameter name of type String is mandatory");
+        Objects.requireNonNull(id, "Parameter id of type Long is mandatory");
+        Objects.requireNonNull(name, "Parameter name of type String is mandatory");
 
         Contributor newInstance = new Contributor();
         newInstance.mNew = false;
@@ -69,8 +66,7 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
 
     public void setName(@NonNull String name) {
 
-        if (null == name)
-            throw new NullPointerException("Parameter name of type String is mandatory");
+        Objects.requireNonNull(name, "Parameter name of type String is mandatory");
 
         if (!mName.equals(name)) {
             mDirty = true;
@@ -80,6 +76,7 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
 
     @Override
     public boolean equals(Object o) {
+        if(null == o) return false;
         if (this == o) return true;
         if (!(o instanceof Contributor)) return false;
 
@@ -103,8 +100,8 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
 
     @Override
     public int compareTo(@NonNull Contributor instanceToCompare) {
-        if (null == instanceToCompare)
-            throw new NullPointerException("Parameter instanceToCompare of type Contributor is mandatory");
+
+        Objects.requireNonNull(instanceToCompare, "Parameter instanceToCompare of type Contributor is mandatory");
 
         return getName().compareToIgnoreCase(instanceToCompare.getName());
     }

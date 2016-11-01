@@ -12,6 +12,8 @@ import com.mg.incomeexpense.core.ItemSelectedEvent;
 import com.mg.incomeexpense.core.ItemSelectedHandler;
 import com.mg.incomeexpense.core.ItemSelectedListener;
 
+import java.util.Objects;
+
 /**
  * Created by mario on 2016-07-19.
  */
@@ -51,8 +53,7 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
     @Override
     public void onItemSelected(@NonNull ItemSelectedEvent event) {
 
-        if(null == event)
-            throw new NullPointerException("Parameter event of the ItemSelectedEvent is mandatory");
+        Objects.requireNonNull(event, "Parameter event of the ItemSelectedEvent is mandatory");
 
         Intent intent = new Intent(this, ContributorEditorActivity.class);
         Bundle bundle = new Bundle();

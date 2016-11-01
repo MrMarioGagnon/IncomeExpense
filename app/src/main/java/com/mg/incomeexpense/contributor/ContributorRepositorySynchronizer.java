@@ -3,11 +3,11 @@ package com.mg.incomeexpense.contributor;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.core.RepositorySynchronizerBase;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.util.Map;
@@ -15,44 +15,22 @@ import java.util.Map;
 /**
  * Created by mario on 2016-07-23.
  */
-public class ContributorRepositorySynchronizer {
+public class ContributorRepositorySynchronizer extends RepositorySynchronizerBase {
 
     private static final String LOG_TAG = ContributorRepositorySynchronizer.class.getSimpleName();
-    private final ContentResolver mContentResolver;
-    private final Uri mItemUri;
-    private final Map<Integer, String> mMessages;
 
-    public ContributorRepositorySynchronizer(@NonNull ContentResolver contentResolver, @NonNull Uri itemUri, @NonNull Map<Integer, String> messages) {
+    public ContributorRepositorySynchronizer(ContentResolver contentResolver, Uri itemUri, Map<Integer, String> messages) {
+        super(contentResolver, itemUri, messages);
 
-        if(null == contentResolver)
-            throw new NullPointerException("Parameter contentResolver of type ContentResolver is mandatory");
-
-        if(null == itemUri)
-            throw new NullPointerException("Parameter itemUri of type Uri is mandatory");
-
-        if(null == messages)
-            throw new NullPointerException("Parameter messages of type Map<Integer, String>");
-
-        mMessages = messages;
-        mItemUri = itemUri;
-        mContentResolver = contentResolver;
     }
 
-    public ObjectBase Save(@NonNull ObjectBase item) {
+    @Override
+    public ObjectBase Save(ObjectBase item) {
+        super.Save(item);
 
-        // region Precondition
         if (!(item instanceof Contributor)) {
             throw new IllegalArgumentException("Parameter item must be an instance of Contributor");
         }
-
-        if ((!item.isNew()) && item.getId() == null) {
-            throw new NullPointerException("Item is not new, item id is mandatory.");
-        }
-
-        if (!item.isDirty()) {
-            return item;
-        }
-        // endregion Precondition
 
         final Contributor itemToBeSave = (Contributor) item;
         final String itemType = itemToBeSave.getClass().getSimpleName();

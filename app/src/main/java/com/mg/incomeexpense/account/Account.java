@@ -2,8 +2,10 @@ package com.mg.incomeexpense.account;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IdToItemConvertor;
@@ -11,7 +13,6 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,7 +30,14 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     }
 
-    public static Account create(Cursor cursor, ContentResolver contentResolver) {
+    public static Account create(@NonNull Cursor cursor, @NonNull ContentResolver contentResolver) {
+
+        if (null == cursor)
+            throw new NullPointerException("Parameter cursor of type Cursor is mandatory.");
+
+        if (null == contentResolver)
+            throw new NullPointerException("Parameter contentResolver of type ContentResolver is mandatory.");
+
         Account newInstance = new Account();
         newInstance.mNew = false;
         newInstance.mDirty = false;
@@ -44,14 +52,38 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mId = id;
         newInstance.mName = name;
         newInstance.mIsClose = close == 1 ? true : false;
-        newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
-        newInstance.mCategories = Tools.split(categories, ";");
+        newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ApplicationConstant.storageSeparator);
+        newInstance.mCategories = Tools.split(categories, ApplicationConstant.storageSeparator);
         newInstance.mBudget = budget;
 
         return newInstance;
     }
 
-    public static Account create(Long id, String name, Boolean isClose, List<Contributor> contributors, Double budget, List<String> categories) {
+    public static Account create(@NonNull Long id, @NonNull String name, Boolean isClose, @NonNull List<Contributor> contributors, Double budget, @NonNull List<String> categories) {
+
+        if (null == id)
+            throw new NullPointerException("Parameter id of type Long is mandatory");
+
+        if (null == name)
+            throw new NullPointerException("Parameter name of type String is mandatory");
+
+        if (null == contributors)
+            throw new NullPointerException("Parameter contributors of type List<Contributor> is mandatory");
+
+        if (contributors.size() == 0)
+            throw new IllegalArgumentException("The size of the list of contributor must be greater than zero");
+
+        if (null == categories)
+            throw new NullPointerException("Parameter categories of type List<String> is mandatory");
+
+        if (categories.size() == 0)
+            throw new IllegalArgumentException("The size of the list of category must be greater than zero");
+
+        if (null == isClose)
+            isClose = false;
+
+        if (null == budget)
+            budget = 0d;
 
         Account newInstance = new Account();
         newInstance.mNew = false;
@@ -75,7 +107,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mIsClose = false;
         newInstance.mContributors = new ArrayList<>();
         newInstance.mCategories = new ArrayList<>();
-        newInstance.mBudget = null;
+        newInstance.mBudget = 0d;
 
         return newInstance;
 
@@ -85,29 +117,43 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         return mContributors;
     }
 
-    public void setContributors(List<Contributor> contributors) {
-        Contributor[] a1 = new Contributor[mContributors.size()];
-        mContributors.toArray(a1);
-        Contributor[] a2 = new Contributor[contributors.size()];
-        contributors.toArray(a2);
+    public void setContributors(@NonNull List<Contributor> contributors) {
 
-        if (!Arrays.equals(a1, a2)) {
+        if (null == contributors)
+            throw new NullPointerException("Parameter contributors of type List<Contributor> is mandatory");
+
+        if (!mContributors.equals(contributors)) {
             mDirty = true;
             this.mContributors = contributors;
         }
+
+
+//        Contributor[] a1 = new Contributor[mContributors.size()];
+//        mContributors.toArray(a1);
+//        Contributor[] a2 = new Contributor[contributors.size()];
+//        contributors.toArray(a2);
+//
+//        if (!Arrays.equals(a1, a2)) {
+//            mDirty = true;
+//            this.mContributors = contributors;
+//        }
     }
 
     public List<String> getCategories() {
         return mCategories;
     }
 
-    public void setCategories(List<String> categories) {
-        String[] a1 = new String[mCategories.size()];
-        mCategories.toArray(a1);
-        String[] a2 = new String[categories.size()];
-        categories.toArray(a2);
+    public void setCategories(@NonNull List<String> categories) {
 
-        if (!Arrays.equals(a1, a2)) {
+        if (null == categories)
+            throw new NullPointerException("Parameter categories of type List<String> is mandatory");
+
+//        String[] a1 = new String[mCategories.size()];
+//        mCategories.toArray(a1);
+//        String[] a2 = new String[categories.size()];
+//        categories.toArray(a2);
+
+        if (!mCategories.equals(categories)) {
             mDirty = true;
             this.mCategories = categories;
         }
@@ -116,10 +162,13 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     public String getName() {
 
-        return null == mName ? "" : mName;
+        return mName;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
+
+        if (null == name)
+            throw new NullPointerException("Parameter name of type String is mandatory");
 
         if (!mName.equals(name)) {
             mDirty = true;
@@ -133,7 +182,11 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     }
 
     public void setBudget(Double budget) {
-        if (null == mBudget || !mBudget.equals(budget)) {
+
+        if (null == budget)
+            budget = 0d;
+
+        if (!mBudget.equals(budget)) {
             mDirty = true;
             mBudget = budget;
         }
@@ -145,6 +198,9 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     public void setIsClose(Boolean isClose) {
 
+        if (null == isClose)
+            isClose = false;
+
         if (!mIsClose.equals(isClose)) {
             mDirty = true;
             mIsClose = isClose;
@@ -153,6 +209,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -183,12 +240,16 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     }
 
     @Override
-    public int compareTo(Account instanceToCompare) {
+    public int compareTo(@NonNull Account instanceToCompare) {
+
+        if (null == instanceToCompare)
+            throw new NullPointerException("Parameter instanceToCompare of type Account is mandatory");
+
         return getName().compareToIgnoreCase(instanceToCompare.getName());
     }
 
     public String getContributorsForDisplay() {
-        return Tools.join(mContributors, ",");
+        return Tools.join(mContributors, ApplicationConstant.displaySeparator);
     }
 
     public String getContributorsIds() {
@@ -196,7 +257,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         for (Contributor item : mContributors) {
             a.add(item.getId().toString());
         }
-        return Tools.join(a, ";");
+        return Tools.join(a, ApplicationConstant.storageSeparator);
     }
 
     public String getCategoriesAsString() {
@@ -204,7 +265,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         for (String item : mCategories) {
             a.add(item);
         }
-        return Tools.join(a, ";");
+        return Tools.join(a, ApplicationConstant.storageSeparator);
     }
 
 }

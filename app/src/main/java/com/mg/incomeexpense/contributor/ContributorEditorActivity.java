@@ -11,6 +11,8 @@ import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
+import java.util.Objects;
+
 /**
  * Created by mario on 2016-07-19.
  */
@@ -54,19 +56,18 @@ public class ContributorEditorActivity extends AppCompatActivityBase {
     @Override
     public void onItemStateChange(@NonNull ItemStateChangeEvent event) {
 
-        if (null == event) {
+        Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
+
+
+        if (event.isCancelled()) {
             setResult(RESULT_CANCELED);
         } else {
-            if (event.isCancelled()) {
-                setResult(RESULT_CANCELED);
-            } else {
 
-                ContributorRepositorySynchronizer synchronizer = new ContributorRepositorySynchronizer(getContentResolver(),
-                        IncomeExpenseContract.ContributorEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, ContributorRepositorySynchronizer.class.getSimpleName()));
+            ContributorRepositorySynchronizer synchronizer = new ContributorRepositorySynchronizer(getContentResolver(),
+                    IncomeExpenseContract.ContributorEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, ContributorRepositorySynchronizer.class.getSimpleName()));
 
-                synchronizer.Save(event.getItem());
-                setResult(RESULT_OK);
-            }
+            synchronizer.Save(event.getItem());
+            setResult(RESULT_OK);
         }
 
         finish();
