@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.contributor;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 
 import com.mg.incomeexpense.R;
@@ -14,8 +15,6 @@ import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
  * Created by mario on 2016-07-19.
  */
 public class ContributorEditorActivity extends AppCompatActivityBase {
-
-    private static final String LOG_TAG = ContributorEditorActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +52,21 @@ public class ContributorEditorActivity extends AppCompatActivityBase {
     }
 
     @Override
-    public void onItemStateChange(ItemStateChangeEvent event) {
+    public void onItemStateChange(@NonNull ItemStateChangeEvent event) {
 
-        if (event.isCancelled()) {
+        if (null == event) {
             setResult(RESULT_CANCELED);
         } else {
+            if (event.isCancelled()) {
+                setResult(RESULT_CANCELED);
+            } else {
 
-            ContributorRepositorySynchronizer synchronizer = new ContributorRepositorySynchronizer(getContentResolver(),
-                    IncomeExpenseContract.ContributorEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, ContributorRepositorySynchronizer.class.getSimpleName()));
+                ContributorRepositorySynchronizer synchronizer = new ContributorRepositorySynchronizer(getContentResolver(),
+                        IncomeExpenseContract.ContributorEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, ContributorRepositorySynchronizer.class.getSimpleName()));
 
-            synchronizer.Save(event.getItem());
-            setResult(RESULT_OK);
+                synchronizer.Save(event.getItem());
+                setResult(RESULT_OK);
+            }
         }
 
         finish();

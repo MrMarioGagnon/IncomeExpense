@@ -6,6 +6,7 @@
 
     <string name="dialog_title_select_to_edit">Select to edit</string>
     <string name="dialog_title_error_deleting_item">Deleting %1$s</string>
+    <string name="dialog_title_deleting_contributor">Deleting contributor</string>
 
     <string name="app_name">IncomeExpense</string>
     <string name="action_settings">Settings</string>
@@ -161,5 +162,6 @@
     <string name="radio_button_expense">Expense</string>
     <string name="radio_button_income">Income</string>
 
+    <string name="ask_delete_contributor">Do you really want to delete this contributor?</string>
 
 </resources>

@@ -3,6 +3,7 @@ package com.mg.incomeexpense.contributor;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mg.incomeexpense.R;
@@ -21,13 +22,23 @@ public class ContributorRepositorySynchronizer {
     private final Uri mItemUri;
     private final Map<Integer, String> mMessages;
 
-    public ContributorRepositorySynchronizer(ContentResolver contentResolver, Uri itemUri, Map<Integer, String> messages) {
+    public ContributorRepositorySynchronizer(@NonNull ContentResolver contentResolver, @NonNull Uri itemUri, @NonNull Map<Integer, String> messages) {
+
+        if(null == contentResolver)
+            throw new NullPointerException("Parameter contentResolver of type ContentResolver is mandatory");
+
+        if(null == itemUri)
+            throw new NullPointerException("Parameter itemUri of type Uri is mandatory");
+
+        if(null == messages)
+            throw new NullPointerException("Parameter messages of type Map<Integer, String>");
+
         mMessages = messages;
         mItemUri = itemUri;
         mContentResolver = contentResolver;
     }
 
-    public ObjectBase Save(ObjectBase item) {
+    public ObjectBase Save(@NonNull ObjectBase item) {
 
         // region Precondition
         if (!(item instanceof Contributor)) {

@@ -172,7 +172,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.ContributorEntry.COLUMN_NAME);
+            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, "LOWER(" + IncomeExpenseContract.ContributorEntry.COLUMN_NAME + ")");
             Contributor contributor;
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));

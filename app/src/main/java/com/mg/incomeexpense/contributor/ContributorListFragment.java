@@ -112,7 +112,7 @@ public class ContributorListFragment extends FragmentListBase {
         // fragment only uses one loader, so we don't care about checking the id.
 
         // Sort order:  Ascending, by date.
-        String sortOrder = "LOWER(" + IncomeExpenseContract.ContributorEntry.COLUMN_NAME + ") ASC";
+        String sortOrder = "LOWER(" + CONTRIBUTOR_COLUMNS[COL_NAME] + ") ASC";
 
         Uri contributorUri = IncomeExpenseContract.ContributorEntry.CONTENT_URI;
 

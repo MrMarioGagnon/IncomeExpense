@@ -14,7 +14,6 @@ import com.mg.incomeexpense.R;
  * Created by mario on 2016-07-19.
  */
 public class ContributorListAdapter extends CursorAdapter {
-    private static final String LOG_TAG = ContributorListAdapter.class.getSimpleName();
 
     public ContributorListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);

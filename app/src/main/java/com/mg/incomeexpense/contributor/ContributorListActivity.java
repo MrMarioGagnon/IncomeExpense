@@ -2,6 +2,7 @@ package com.mg.incomeexpense.contributor;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,7 +17,6 @@ import com.mg.incomeexpense.core.ItemSelectedListener;
  */
 public class ContributorListActivity extends AppCompatActivity implements ItemSelectedListener {
 
-    private static final String LOG_TAG = ContributorListActivity.class.getSimpleName();
     private static final int EDITOR_ACTIVITY = 1;
 
     @Override
@@ -49,7 +49,10 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
     }
 
     @Override
-    public void onItemSelected(ItemSelectedEvent event) {
+    public void onItemSelected(@NonNull ItemSelectedEvent event) {
+
+        if(null == event)
+            throw new NullPointerException("Parameter event of the ItemSelectedEvent is mandatory");
 
         Intent intent = new Intent(this, ContributorEditorActivity.class);
         Bundle bundle = new Bundle();

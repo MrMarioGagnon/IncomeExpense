@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.contributor;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
@@ -15,7 +16,11 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
 
     }
 
-    public static Contributor create(Cursor cursor) {
+    public static Contributor create(@NonNull Cursor cursor) {
+
+        if (null == cursor)
+            throw new NullPointerException("Parameter cursor of type Cursor is mandatory.");
+
         Contributor newInstance = new Contributor();
         newInstance.mNew = false;
         newInstance.mDirty = false;
@@ -30,10 +35,13 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
     }
 
 
-    public static Contributor create(Long id, String name) {
+    public static Contributor create(@NonNull Long id, @NonNull String name) {
 
         if (null == id)
-            throw new NullPointerException("id parameter is mandatory");
+            throw new NullPointerException("Parameter id of type Long is mandatory");
+
+        if (null == name)
+            throw new NullPointerException("Parameter name of type String is mandatory");
 
         Contributor newInstance = new Contributor();
         newInstance.mNew = false;
@@ -56,10 +64,13 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
     }
 
     public String getName() {
-        return null == mName ? "" : mName;
+        return mName;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
+
+        if (null == name)
+            throw new NullPointerException("Parameter name of type String is mandatory");
 
         if (!mName.equals(name)) {
             mDirty = true;
@@ -91,7 +102,7 @@ public class Contributor extends ObjectBase implements Serializable, Comparable<
     }
 
     @Override
-    public int compareTo(Contributor instanceToCompare) {
+    public int compareTo(@NonNull Contributor instanceToCompare) {
         if (null == instanceToCompare)
             throw new NullPointerException("Parameter instanceToCompare of type Contributor is mandatory");
 

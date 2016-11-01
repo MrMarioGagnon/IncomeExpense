@@ -14,8 +14,9 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
+import com.mg.incomeexpense.core.dialog.DialogUtils;
+import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
@@ -27,29 +28,14 @@ import java.util.List;
  */
 public class ContributorEditorFragment extends FragmentBase {
 
-    private static final String LOG_TAG = ContributorEditorFragment.class.getSimpleName();
-
     private Contributor mContributor = null;
     private EditText mEditTextName;
     private TextView mTextViewValidationErrorMessage;
-    private ObjectValidator mObjectValidator = null;
+    private ContributorValidator mObjectValidator = null;
     private ArrayList<String> mNames;
 
     public ContributorEditorFragment() {
         // Required empty public constructor
-    }
-
-    public ObjectValidator getObjectValidator() {
-
-        if (null == mObjectValidator) {
-            mObjectValidator = ContributorValidator.create(getActivity(), mNames);
-        }
-
-        return mObjectValidator;
-    }
-
-    public void setObjectValidator(ObjectValidator mObjectValidator) {
-        this.mObjectValidator = mObjectValidator;
     }
 
     @Override
@@ -69,6 +55,8 @@ public class ContributorEditorFragment extends FragmentBase {
         mNames = (ArrayList<String>) bundle.getSerializable("names");
         if (null == mNames)
             throw new NullPointerException("A list of contributors name is mandatory");
+
+        mObjectValidator = ContributorValidator.create(getActivity(), mNames);
     }
 
     @Override
@@ -107,22 +95,35 @@ public class ContributorEditorFragment extends FragmentBase {
         switch (id) {
             case R.id.action_delete:
 
-                List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver());
-                List<PaymentMethod> paymentMethods = IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getActivity().getContentResolver());
+                DialogUtils.twoButtonMessageBox(getContext(), getString(R.string.ask_delete_contributor), getString(R.string.dialog_title_deleting_contributor), new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
 
-                validationStatus = ((ContributorValidator)getObjectValidator()).canDelete(mContributor, accounts, paymentMethods);
+                        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver());
+                        List<PaymentMethod> paymentMethods = IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getActivity().getContentResolver());
 
-                if (validationStatus.isValid()) {
-                    mContributor.setDead(true);
-                    notifyListener(new ItemStateChangeEvent(mContributor));
-                } else {
-                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
-                }
+                        ValidationStatus validationStatus = mObjectValidator.canDelete(mContributor, accounts, paymentMethods);
+
+                        if (validationStatus.isValid()) {
+                            mContributor.setDead(true);
+                            notifyListener(new ItemStateChangeEvent(mContributor));
+                        } else {
+                            mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
+                            mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }, new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
+                        // Do nothing
+                    }
+                }).show();
+
                 break;
             case R.id.action_save:
                 mContributor.setName(mEditTextName.getText().toString());
-                validationStatus = getObjectValidator().Validate(mContributor);
+                validationStatus = mObjectValidator.Validate(mContributor);
 
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mContributor));
