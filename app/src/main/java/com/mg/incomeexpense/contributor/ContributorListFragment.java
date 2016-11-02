@@ -21,11 +21,6 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
  */
 public class ContributorListFragment extends FragmentListBase {
 
-    public static final int COL_NAME = 1;
-    private static final String[] CONTRIBUTOR_COLUMNS = {
-            IncomeExpenseContract.ContributorEntry._ID,
-            IncomeExpenseContract.ContributorEntry.COLUMN_NAME
-    };
     private static final String SELECTED_KEY = "selected_position";
     private static final int CONTRIBUTOR_LOADER = 0;
 
@@ -111,14 +106,13 @@ public class ContributorListFragment extends FragmentListBase {
         // This is called when a new Loader needs to be created.  This
         // fragment only uses one loader, so we don't care about checking the id.
 
-        // Sort order:  Ascending, by date.
-        String sortOrder = "LOWER(" + CONTRIBUTOR_COLUMNS[COL_NAME] + ") ASC";
+        String sortOrder = String.format("LOWER(%1$s) ASC", IncomeExpenseContract.ContributorEntry.COLUMN_NAME);
 
         Uri contributorUri = IncomeExpenseContract.ContributorEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 contributorUri,
-                CONTRIBUTOR_COLUMNS,
+                null,
                 null,
                 null,
                 sortOrder);

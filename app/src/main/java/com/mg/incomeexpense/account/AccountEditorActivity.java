@@ -2,6 +2,7 @@ package com.mg.incomeexpense.account;
 
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 
@@ -12,6 +13,8 @@ import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
+
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-19.
@@ -29,15 +32,12 @@ public class AccountEditorActivity extends AppCompatActivityBase {
         if (null == savedInstanceState) {
 
             Bundle bundle = getIntent().getExtras();
-            if (null == bundle)
-                throw new NullPointerException("A bundle with and Account item is mandatory");
+            Objects.requireNonNull(bundle, "A bundle with and Account item is mandatory");
 
             Account account = (Account) bundle.getSerializable("item");
-            if (null == account)
-                throw new NullPointerException("An account object is mandatory");
+            Objects.requireNonNull(account, "An account object is mandatory");
 
             ActionBar actionBar = getSupportActionBar();
-
             if (actionBar != null) {
                 actionBar.setTitle(getString(account.isNew() ? R.string.title_account_editor_add : R.string.title_account_editor_update));
             }
@@ -57,7 +57,9 @@ public class AccountEditorActivity extends AppCompatActivityBase {
     }
 
     @Override
-    public void onItemStateChange(ItemStateChangeEvent event) {
+    public void onItemStateChange(@NonNull ItemStateChangeEvent event) {
+
+        Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
 
         if (event.isCancelled()) {
             setResult(RESULT_CANCELED);

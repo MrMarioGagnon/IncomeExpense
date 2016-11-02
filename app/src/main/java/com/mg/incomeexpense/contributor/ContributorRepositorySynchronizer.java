@@ -3,6 +3,7 @@ package com.mg.incomeexpense.contributor;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mg.incomeexpense.R;
@@ -19,13 +20,13 @@ public class ContributorRepositorySynchronizer extends RepositorySynchronizerBas
 
     private static final String LOG_TAG = ContributorRepositorySynchronizer.class.getSimpleName();
 
-    public ContributorRepositorySynchronizer(ContentResolver contentResolver, Uri itemUri, Map<Integer, String> messages) {
+    public ContributorRepositorySynchronizer(@NonNull ContentResolver contentResolver, @NonNull Uri itemUri, @NonNull Map<Integer, String> messages) {
         super(contentResolver, itemUri, messages);
 
     }
 
     @Override
-    public ObjectBase Save(ObjectBase item) {
+    public ObjectBase Save(@NonNull ObjectBase item) {
         super.Save(item);
 
         if (!(item instanceof Contributor)) {

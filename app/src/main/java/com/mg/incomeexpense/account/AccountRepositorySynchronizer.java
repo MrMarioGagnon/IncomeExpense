@@ -26,20 +26,12 @@ public class AccountRepositorySynchronizer extends RepositorySynchronizerBase {
 
     @Override
     public ObjectBase Save(@NonNull ObjectBase item) {
+        super.Save(item);
 
         // region Precondition
         if (!(item instanceof Account)) {
             throw new IllegalArgumentException("Parameter item must be an instance of Account");
         }
-
-        if ((!item.isNew()) && item.getId() == null) {
-            throw new NullPointerException("Item is not new, item id is mandatory.");
-        }
-
-        if (!item.isDirty()) {
-            return item;
-        }
-        // endregion Precondition
 
         final Account itemToBeSave = (Account) item;
         final String itemType = itemToBeSave.getClass().getSimpleName();

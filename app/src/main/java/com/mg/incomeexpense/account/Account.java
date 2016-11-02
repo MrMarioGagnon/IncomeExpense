@@ -14,6 +14,7 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-23.
@@ -32,11 +33,8 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     public static Account create(@NonNull Cursor cursor, @NonNull ContentResolver contentResolver) {
 
-        if (null == cursor)
-            throw new NullPointerException("Parameter cursor of type Cursor is mandatory.");
-
-        if (null == contentResolver)
-            throw new NullPointerException("Parameter contentResolver of type ContentResolver is mandatory.");
+        Objects.requireNonNull(cursor, "Parameter cursor of type Cursor is mandatory.");
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory.");
 
         Account newInstance = new Account();
         newInstance.mNew = false;
@@ -54,27 +52,21 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mIsClose = close == 1 ? true : false;
         newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ApplicationConstant.storageSeparator);
         newInstance.mCategories = Tools.split(categories, ApplicationConstant.storageSeparator);
-        newInstance.mBudget = budget;
+        newInstance.mBudget = null == budget ? 0d : budget;
 
         return newInstance;
     }
 
     public static Account create(@NonNull Long id, @NonNull String name, Boolean isClose, @NonNull List<Contributor> contributors, Double budget, @NonNull List<String> categories) {
 
-        if (null == id)
-            throw new NullPointerException("Parameter id of type Long is mandatory");
-
-        if (null == name)
-            throw new NullPointerException("Parameter name of type String is mandatory");
-
-        if (null == contributors)
-            throw new NullPointerException("Parameter contributors of type List<Contributor> is mandatory");
+        Objects.requireNonNull(id, "Parameter id of type Long is mandatory");
+        Objects.requireNonNull(name, "Parameter name of type String is mandatory");
+        Objects.requireNonNull(contributors, "Parameter contributors of type List<Contributor> is mandatory");
 
         if (contributors.size() == 0)
             throw new IllegalArgumentException("The size of the list of contributor must be greater than zero");
 
-        if (null == categories)
-            throw new NullPointerException("Parameter categories of type List<String> is mandatory");
+        Objects.requireNonNull(categories, "Parameter categories of type List<String> is mandatory");
 
         if (categories.size() == 0)
             throw new IllegalArgumentException("The size of the list of category must be greater than zero");
@@ -119,24 +111,13 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     public void setContributors(@NonNull List<Contributor> contributors) {
 
-        if (null == contributors)
-            throw new NullPointerException("Parameter contributors of type List<Contributor> is mandatory");
+        Objects.requireNonNull(contributors, "Parameter contributors of type List<Contributor> is mandatory");
 
         if (!mContributors.equals(contributors)) {
             mDirty = true;
             this.mContributors = contributors;
         }
 
-
-//        Contributor[] a1 = new Contributor[mContributors.size()];
-//        mContributors.toArray(a1);
-//        Contributor[] a2 = new Contributor[contributors.size()];
-//        contributors.toArray(a2);
-//
-//        if (!Arrays.equals(a1, a2)) {
-//            mDirty = true;
-//            this.mContributors = contributors;
-//        }
     }
 
     public List<String> getCategories() {
@@ -145,13 +126,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     public void setCategories(@NonNull List<String> categories) {
 
-        if (null == categories)
-            throw new NullPointerException("Parameter categories of type List<String> is mandatory");
-
-//        String[] a1 = new String[mCategories.size()];
-//        mCategories.toArray(a1);
-//        String[] a2 = new String[categories.size()];
-//        categories.toArray(a2);
+        Objects.requireNonNull(categories, "Parameter categories of type List<String> is mandatory");
 
         if (!mCategories.equals(categories)) {
             mDirty = true;
@@ -167,8 +142,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     public void setName(@NonNull String name) {
 
-        if (null == name)
-            throw new NullPointerException("Parameter name of type String is mandatory");
+        Objects.requireNonNull(name, "Parameter name of type String is mandatory");
 
         if (!mName.equals(name)) {
             mDirty = true;
@@ -192,6 +166,10 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         }
     }
 
+    public String getBudgetAsString(){
+        return Tools.formatAmount(getBudget());
+    }
+
     public Boolean getIsClose() {
         return mIsClose;
     }
@@ -210,6 +188,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     @Override
     public boolean equals(Object o) {
 
+        if (null == o) return false;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -242,8 +221,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     @Override
     public int compareTo(@NonNull Account instanceToCompare) {
 
-        if (null == instanceToCompare)
-            throw new NullPointerException("Parameter instanceToCompare of type Account is mandatory");
+        Objects.requireNonNull(instanceToCompare, "Parameter instanceToCompare of type Account is mandatory");
 
         return getName().compareToIgnoreCase(instanceToCompare.getName());
     }

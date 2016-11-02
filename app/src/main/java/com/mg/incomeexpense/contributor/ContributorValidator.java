@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-21.
@@ -25,11 +26,8 @@ public class ContributorValidator implements ObjectValidator {
 
     public ContributorValidator(@NonNull List<String> names, @NonNull Map<Integer, String> validationMessages) {
 
-        if (null == names)
-            throw new NullPointerException("Parameter names of type List<String> is mandatory");
-
-        if (null == validationMessages)
-            throw new NullPointerException("Parameter validationMessages of type Map<Integer, String> is mandatory");
+        Objects.requireNonNull(names, "Parameter names of type List<String> is mandatory");
+        Objects.requireNonNull(validationMessages, "Parameter validationMessages of type Map<Integer, String> is mandatory");
 
         mNames = names;
         mValidationMessages = validationMessages;
@@ -38,11 +36,8 @@ public class ContributorValidator implements ObjectValidator {
 
     public static ContributorValidator create(@NonNull Context context, @NonNull List<String> names) {
 
-        if (null == context)
-            throw new NullPointerException("Parameter context of type Context is mandatory");
-
-        if (null == names)
-            throw new NullPointerException("Parameter names of type List<String> is mandatory");
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
+        Objects.requireNonNull(names, "Parameter names of type List<String> is mandatory");
 
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_name_mandatory, context.getString(R.string.validation_name_mandatory));
@@ -64,8 +59,7 @@ public class ContributorValidator implements ObjectValidator {
 
     public ValidationStatus Validate(@NonNull ObjectBase objectToValidate) {
 
-        if (null == objectToValidate)
-            throw new NullPointerException("Parameter objectToValidate of type ObjectBase is mandatory");
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
 
         if (!(objectToValidate instanceof Contributor)) {
             return ValidationStatus.create("Wrong object type.");
@@ -87,18 +81,14 @@ public class ContributorValidator implements ObjectValidator {
 
     public ValidationStatus canDelete(@NonNull ObjectBase objectToValidate, @NonNull List<Account> accounts, @NonNull List<PaymentMethod> paymentMethods) {
 
-        if (null == objectToValidate)
-            throw new NullPointerException("Parameter objectToValidate of type ObjectBase is mandatory");
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
 
         if (!(objectToValidate instanceof Contributor)) {
             return ValidationStatus.create("Wrong object type.");
         }
 
-        if (null == accounts)
-            throw new NullPointerException("Parameter accounts of type List<Account> is mandatory");
-
-        if (null == paymentMethods)
-            throw new NullPointerException("Parameter paymentMethods of type List<PaymentMethod> is mandatory");
+        Objects.requireNonNull(accounts, "Parameter accounts of type List<Account> is mandatory");
+        Objects.requireNonNull(paymentMethods, "Parameter paymentMethods of type List<PaymentMethod> is mandatory");
 
         Contributor contributor = (Contributor) objectToValidate;
         List<String> messages = new ArrayList<>();

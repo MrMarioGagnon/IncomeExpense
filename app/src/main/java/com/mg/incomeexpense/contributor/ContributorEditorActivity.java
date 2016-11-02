@@ -58,7 +58,6 @@ public class ContributorEditorActivity extends AppCompatActivityBase {
 
         Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
 
-
         if (event.isCancelled()) {
             setResult(RESULT_CANCELED);
         } else {

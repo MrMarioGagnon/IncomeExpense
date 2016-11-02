@@ -21,21 +21,6 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
  */
 public class AccountListFragment extends FragmentListBase {
 
-    public static final int COL_NAME = 1;
-    public static final int COL_CURRENCY = 2;
-    public static final int COL_CONTRIBUTOR = 3;
-    public static final int COL_CLOSE = 4;
-    public static final int COL_BUDGET = 5;
-
-    private static final String[] ACCOUNT_COLUMNS = {
-            IncomeExpenseContract.AccountEntry._ID,
-            IncomeExpenseContract.AccountEntry.COLUMN_NAME,
-            IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES,
-            IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS,
-            IncomeExpenseContract.AccountEntry.COLUMN_CLOSE,
-            IncomeExpenseContract.AccountEntry.COLUMN_BUDGET
-    };
-    private static final String LOG_TAG = AccountListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
     private static final int ACCOUNT_LOADER = 0;
 
@@ -131,13 +116,13 @@ public class AccountListFragment extends FragmentListBase {
         // fragment only uses one loader, so we don't care about checking the id.
 
         // Sort order:  Ascending, by date.
-        String sortOrder = IncomeExpenseContract.AccountEntry.COLUMN_NAME + " ASC";
+        String sortOrder = String.format("LOWER(%1$s) ASC", IncomeExpenseContract.AccountEntry.COLUMN_NAME);
 
         Uri uri = IncomeExpenseContract.AccountEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 uri,
-                ACCOUNT_COLUMNS,
+                null,
                 null,
                 null,
                 sortOrder);

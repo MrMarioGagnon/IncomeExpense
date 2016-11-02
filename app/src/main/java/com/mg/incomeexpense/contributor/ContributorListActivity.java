@@ -19,8 +19,6 @@ import java.util.Objects;
  */
 public class ContributorListActivity extends AppCompatActivity implements ItemSelectedListener {
 
-    private static final int EDITOR_ACTIVITY = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +37,7 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
                     bundle.putSerializable("item", contributor);
                     intent.putExtras(bundle);
 
-                    ContributorListActivity.this.startActivityForResult(intent, EDITOR_ACTIVITY);
+                    startActivity(intent);
                 }
             });
         }
@@ -60,7 +58,7 @@ public class ContributorListActivity extends AppCompatActivity implements ItemSe
         bundle.putSerializable("item", event.getItem());
         intent.putExtras(bundle);
 
-        startActivityForResult(intent, EDITOR_ACTIVITY);
+        startActivity(intent);
 
     }
 }

@@ -67,9 +67,7 @@ public class ContributorEditorFragment extends FragmentBase {
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_contributor_name);
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
 
-        if (null == savedInstanceState) {
-            mEditTextName.setText(mContributor.getName());
-        }
+        mEditTextName.setText(mContributor.getName());
 
         return rootView;
     }

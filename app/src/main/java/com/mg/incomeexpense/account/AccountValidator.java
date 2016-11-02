@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.account;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.contributor.Contributor;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-23.
@@ -23,12 +25,19 @@ public class AccountValidator implements ObjectValidator {
     private final List<String> mNames;
     private final Map<Integer, String> mValidationMessages;
 
-    public AccountValidator(List<String> names, Map<Integer, String> validationMessages) {
+    public AccountValidator(@NonNull List<String> names, @NonNull Map<Integer, String> validationMessages) {
+
+        Objects.requireNonNull(names, "Parameter names of type List<String> is mandatory");
+        Objects.requireNonNull(validationMessages, "Parameter validationMessages of type Map<Integer, String> is mandatory");
+
         mNames = names;
         mValidationMessages = validationMessages;
     }
 
-    public static AccountValidator create(Context context, List<String> names) {
+    public static AccountValidator create(@NonNull Context context, @NonNull List<String> names) {
+
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
+        Objects.requireNonNull(names, "Parameter names of type List<String> is mandatory");
 
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_name_mandatory, context.getString(R.string.validation_name_mandatory));
@@ -46,11 +55,16 @@ public class AccountValidator implements ObjectValidator {
 
     private boolean isNameExists(String name) {
 
+        if (null == name)
+            return false;
+
         return mNames.contains(name.toUpperCase());
 
     }
 
-    public ValidationStatus Validate(ObjectBase objectToValidate) {
+    public ValidationStatus Validate(@NonNull ObjectBase objectToValidate) {
+
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
 
         List<String> messages = new ArrayList<>();
 
@@ -82,7 +96,15 @@ public class AccountValidator implements ObjectValidator {
         return ValidationStatus.create(Tools.join(messages, "\n"));
     }
 
-    public ValidationStatus canDelete(ObjectBase objectToValidate, List<Transaction> transactions) {
+    public ValidationStatus canDelete(@NonNull ObjectBase objectToValidate, @NonNull List<Transaction> transactions) {
+
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
+
+        if (!(objectToValidate instanceof Account)) {
+            return ValidationStatus.create("Wrong object type.");
+        }
+
+        Objects.requireNonNull(transactions, "Parameter accounts of type List<transactions> is mandatory");
 
         Account account = (Account) objectToValidate;
         String message = "";
@@ -94,7 +116,15 @@ public class AccountValidator implements ObjectValidator {
         return ValidationStatus.create(message);
     }
 
-    public ValidationStatus canRemoveContributor(ObjectBase objectToValidate, List<Contributor> newContributors, List<Transaction> transactions) {
+    public ValidationStatus canRemoveContributor(@NonNull ObjectBase objectToValidate, @NonNull List<Contributor> newContributors, @NonNull List<Transaction> transactions) {
+
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
+        Objects.requireNonNull(newContributors, "Parameter newContributors of type List<Contributor> is mandatory");
+        Objects.requireNonNull(transactions, "Parameter transactions of type List<Transaction> is mandatory");
+
+        if (!(objectToValidate instanceof Account)) {
+            return ValidationStatus.create("Wrong object type.");
+        }
 
         Account account = (Account) objectToValidate;
         String message = "";

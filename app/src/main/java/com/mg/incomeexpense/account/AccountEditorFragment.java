@@ -23,30 +23,28 @@ import com.mg.incomeexpense.category.CategoryEditorActivity;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.Transaction;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-19.
  */
 public class AccountEditorFragment extends FragmentBase {
 
-    private static final String LOG_TAG = AccountEditorFragment.class.getSimpleName();
     private static final int CATEGORY_EDITOR_ACTIVITY = 1;
 
     private Account mAccount = null;
     private EditText mEditTextName;
     private EditText mEditTextBudget;
     private TextView mTextViewValidationErrorMessage;
-    private ObjectValidator mObjectValidator = null;
+    private AccountValidator mObjectValidator;
     private ArrayList<String> mNames;
     private Switch mSwitchClose;
     private View.OnClickListener mOnSwitchClickListener;
@@ -88,7 +86,7 @@ public class AccountEditorFragment extends FragmentBase {
             @Override
             public void execute(boolean[] idSelected) {
 
-                // Ajouter validation si contributeur enleve
+                // Ajouter validation si un contributeur est enleve
                 List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
                 List<Contributor> selectedContributors = new ArrayList<>();
                 for (int i = 0; i < idSelected.length; i++) {
@@ -98,8 +96,7 @@ public class AccountEditorFragment extends FragmentBase {
                     }
                 }
 
-                AccountValidator validator = (AccountValidator) getObjectValidator();
-                ValidationStatus vs = validator.canRemoveContributor(mAccount, selectedContributors, transactions);
+                ValidationStatus vs = mObjectValidator.canRemoveContributor(mAccount, selectedContributors, transactions);
                 if (vs.isValid()) {
                     mSelectedContributors.clear();
                     StringBuilder sb = new StringBuilder();
@@ -121,19 +118,6 @@ public class AccountEditorFragment extends FragmentBase {
         };
     }
 
-    public ObjectValidator getObjectValidator() {
-
-        if (null == mObjectValidator) {
-            mObjectValidator = AccountValidator.create(getActivity(), mNames);
-        }
-
-        return mObjectValidator;
-    }
-
-    public void setObjectValidator(ObjectValidator mObjectValidator) {
-        this.mObjectValidator = mObjectValidator;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,25 +125,24 @@ public class AccountEditorFragment extends FragmentBase {
         setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
-        if (null == bundle)
-            throw new NullPointerException("A bundle is mandatory");
+        Objects.requireNonNull(bundle, "A bundle is mandatory");
 
         mAccount = (Account) bundle.getSerializable("item");
-        if (null == mAccount)
-            throw new NullPointerException("An account is mandatory");
+        Objects.requireNonNull(mAccount, "An account is mandatory");
 
         mNames = (ArrayList<String>) bundle.getSerializable("names");
-        if (null == mNames)
-            throw new NullPointerException("A list of accounts name is mandatory");
+        Objects.requireNonNull(mNames, "A list of accounts name is mandatory");
 
         mAvailableContributors = (List<Contributor>) bundle.getSerializable("contributors");
-        if (null == mAvailableContributors)
-            throw new NullPointerException("A list of contributors is mandatory");
+        Objects.requireNonNull(mAvailableContributors, "A list of contributors is mandatory");
 
-        mSelectedContributors.addAll(mAccount.getContributors());
+        mObjectValidator = AccountValidator.create(getActivity(), mNames);
+        mSelectedContributors = mAccount.getContributors();
         mCategories = mAccount.getCategories();
 
         mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mCategories);
+
+        //this.setRetainInstance(true);
     }
 
     @Override
@@ -188,17 +171,14 @@ public class AccountEditorFragment extends FragmentBase {
         });
         mListViewCategory = (ListView) rootView.findViewById(R.id.list_view_category);
 
-        if (null == savedInstanceState) {
-            mEditTextName.setText(mAccount.getName());
-            if (null != mAccount.getBudget()) {
-                DecimalFormat df = new DecimalFormat("#.00");
-                mEditTextBudget.setText(df.format(mAccount.getBudget()));
-            }
-            mSwitchClose.setChecked(mAccount.getIsClose());
-            mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
-            mTextViewContributors.setText(mAccount.getContributorsForDisplay());
-            mListViewCategory.setAdapter(mAdapter);
+        mEditTextName.setText(mAccount.getName());
+        if (null != mAccount.getBudget()) {
+            mEditTextBudget.setText(mAccount.getBudgetAsString());
         }
+        mSwitchClose.setChecked(mAccount.getIsClose());
+        mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
+        mTextViewContributors.setText(mAccount.getContributorsForDisplay());
+        mListViewCategory.setAdapter(mAdapter);
 
         return rootView;
     }
@@ -258,7 +238,7 @@ public class AccountEditorFragment extends FragmentBase {
 
                 List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
 
-                validationStatus = ((AccountValidator) getObjectValidator()).canDelete(mAccount, transactions);
+                validationStatus = mObjectValidator.canDelete(mAccount, transactions);
 
                 if (validationStatus.isValid()) {
                     mAccount.setDead(true);
@@ -282,7 +262,7 @@ public class AccountEditorFragment extends FragmentBase {
 
                 mAccount.setContributors(mSelectedContributors);
 
-                validationStatus = getObjectValidator().Validate(mAccount);
+                validationStatus = mObjectValidator.Validate(mAccount);
 
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mAccount));

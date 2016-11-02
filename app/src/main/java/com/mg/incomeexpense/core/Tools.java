@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-21.
@@ -73,6 +75,14 @@ public class Tools {
         parsed = format.format(date);
         return parsed;
 
+    }
+
+    public static String formatAmount(@NonNull Double amount){
+
+        Objects.requireNonNull(amount, "Parameter amount of type Double is mandatory");
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        return df.format(amount);
     }
 
     public static <T> T coalesce(T... items) {

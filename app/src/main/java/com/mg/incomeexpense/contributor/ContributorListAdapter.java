@@ -34,10 +34,10 @@ public class ContributorListAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        Contributor contributor = Contributor.create(cursor);
 
-        String name = cursor.getString(ContributorListFragment.COL_NAME);
-        viewHolder.textViewName.setText(name);
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        viewHolder.textViewName.setText(contributor.getName());
 
     }
 
