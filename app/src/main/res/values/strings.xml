@@ -7,6 +7,7 @@
     <string name="dialog_title_select_to_edit">Select to edit</string>
     <string name="dialog_title_error_deleting_item">Deleting %1$s</string>
     <string name="dialog_title_deleting_contributor">Deleting contributor</string>
+    <string name="dialog_title_deleting_account">Deleting account</string>
 
     <string name="app_name">IncomeExpense</string>
     <string name="action_settings">Settings</string>
@@ -24,7 +25,6 @@
 
     <string name="dialog_title_contributor_setter">Contributor Setter</string>
     <string name="dialog_title_category_setter">Category Setter</string>
-
 
     <string name="button_label_ok">Ok</string>
     <string name="button_label_cancel">Cancel</string>
@@ -57,7 +57,6 @@
     <string name="title_transaction_editor_update_income">Update Income Transaction</string>
     <string name="title_transaction_editor_add_expense">Add Expense Transaction</string>
     <string name="title_transaction_editor_update_expense">Update Expense Transaction</string>
-
 
     <string name="title_today">Today</string>
     <string name="title_this_week">This Week</string>
@@ -163,5 +162,6 @@
     <string name="radio_button_income">Income</string>
 
     <string name="ask_delete_contributor">Do you really want to delete this contributor?</string>
+    <string name="ask_delete_account">Do you really want to delete this account?</string>
 
 </resources>

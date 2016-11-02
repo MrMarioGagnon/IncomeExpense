@@ -71,21 +71,15 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         if (categories.size() == 0)
             throw new IllegalArgumentException("The size of the list of category must be greater than zero");
 
-        if (null == isClose)
-            isClose = false;
-
-        if (null == budget)
-            budget = 0d;
-
         Account newInstance = new Account();
         newInstance.mNew = false;
         newInstance.mDirty = false;
         newInstance.mId = id;
         newInstance.mName = name;
-        newInstance.mIsClose = isClose;
+        newInstance.mIsClose = null == isClose ? false : isClose;
         newInstance.mContributors = contributors;
         newInstance.mCategories = categories;
-        newInstance.mBudget = budget;
+        newInstance.mBudget = null == budget ? 0d : budget;
 
         return newInstance;
     }

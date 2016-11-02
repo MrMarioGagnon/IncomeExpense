@@ -26,6 +26,7 @@ import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
+import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.Transaction;
 
@@ -142,7 +143,6 @@ public class AccountEditorFragment extends FragmentBase {
 
         mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mCategories);
 
-        //this.setRetainInstance(true);
     }
 
     @Override
@@ -236,17 +236,29 @@ public class AccountEditorFragment extends FragmentBase {
         switch (id) {
             case R.id.action_delete:
 
-                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
+                DialogUtils.twoButtonMessageBox(getContext(), getString(R.string.ask_delete_account), getString(R.string.dialog_title_deleting_account), new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
 
-                validationStatus = mObjectValidator.canDelete(mAccount, transactions);
+                        List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
 
-                if (validationStatus.isValid()) {
-                    mAccount.setDead(true);
-                    notifyListener(new ItemStateChangeEvent(mAccount));
-                } else {
-                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
-                }
+                        ValidationStatus validationStatus = mObjectValidator.canDelete(mAccount, transactions);
+
+                        if (validationStatus.isValid()) {
+                            mAccount.setDead(true);
+                            notifyListener(new ItemStateChangeEvent(mAccount));
+                        } else {
+                            mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
+                            mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }, new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
+                        // Do nothing
+                    }
+                }).show();
 
                 break;
             case R.id.action_save:

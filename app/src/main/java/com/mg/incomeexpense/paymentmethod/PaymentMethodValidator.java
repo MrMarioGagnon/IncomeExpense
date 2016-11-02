@@ -15,22 +15,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-23.
  */
 public class PaymentMethodValidator implements ObjectValidator {
 
-    private static final String LOG_TAG = PaymentMethodValidator.class.getSimpleName();
     private final List<String> mNames;
     private final Map<Integer, String> mValidationMessages;
 
     public PaymentMethodValidator(@NonNull List<String> names, @NonNull Map<Integer, String> validationMessages) {
+
+        Objects.requireNonNull(names, "Parameter names of type List<String> is mandatory");
+        Objects.requireNonNull(validationMessages, "Parameter validationMessages of type Map<Integer, String> is mandatory");
+
         mNames = names;
         mValidationMessages = validationMessages;
     }
 
-    public static PaymentMethodValidator create(Context context, List<String> names) {
+    public static PaymentMethodValidator create(@NonNull Context context, @NonNull List<String> names) {
+
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
+        Objects.requireNonNull(names, "Parameter names of type List<String> is mandatory");
 
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_name_mandatory, context.getString(R.string.validation_name_mandatory));
@@ -43,11 +50,16 @@ public class PaymentMethodValidator implements ObjectValidator {
 
     private boolean isNameExists(String name) {
 
+        if (null == name)
+            return false;
+
         return mNames.contains(name.toUpperCase());
 
     }
 
     public ValidationStatus Validate(@NonNull ObjectBase objectToValidate) {
+
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
 
         List<String> messages = new ArrayList<>();
 

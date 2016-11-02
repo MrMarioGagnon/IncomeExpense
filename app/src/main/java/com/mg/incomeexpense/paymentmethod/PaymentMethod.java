@@ -10,10 +10,9 @@ import com.mg.incomeexpense.data.IdToItemConvertor;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class PaymentMethod extends ObjectBase implements Serializable, Comparable<PaymentMethod> {
-
-    private static final String LOG_TAG = PaymentMethod.class.getSimpleName();
 
     private String mName;
     private String mCurrency;
@@ -25,7 +24,11 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
 
     }
 
-    public static PaymentMethod create(Cursor cursor, ContentResolver contentResolver) {
+    public static PaymentMethod create(@NonNull Cursor cursor, @NonNull ContentResolver contentResolver) {
+
+        Objects.requireNonNull(cursor, "Parameter cursor of type Cursor is mandatory.");
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory.");
+
         PaymentMethod newInstance = new PaymentMethod();
         newInstance.mNew = false;
         newInstance.mDirty = false;
@@ -47,7 +50,12 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         return newInstance;
     }
 
-    public static PaymentMethod create(Long id, String name, String currency, Double exchangeRate, Boolean isClose, Contributor owner) {
+    public static PaymentMethod create(@NonNull Long id, @NonNull String name, @NonNull String currency, Double exchangeRate, Boolean isClose, @NonNull Contributor owner) {
+
+        Objects.requireNonNull(id, "Parameter id of type Long is mandatory");
+        Objects.requireNonNull(name, "Parameter name of type String is mandatory");
+        Objects.requireNonNull(currency, "Parameter currency of type String is mandatory");
+        Objects.requireNonNull(owner, "Parameter owner of type Contributor is mandatory");
 
         PaymentMethod newInstance = new PaymentMethod();
         newInstance.mNew = false;
@@ -55,8 +63,8 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         newInstance.mId = id;
         newInstance.mName = name;
         newInstance.mCurrency = currency;
-        newInstance.mExchangeRate = exchangeRate;
-        newInstance.mIsClose = isClose;
+        newInstance.mExchangeRate = null == exchangeRate ? 1.0 : exchangeRate;
+        newInstance.mIsClose = null == isClose ? false : isClose;
         newInstance.mOwner = owner;
 
         return newInstance;
@@ -82,6 +90,7 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
     }
 
     public void setOwner(Contributor owner) {
+
         if (null == mOwner || !mOwner.equals(owner)) {
             mDirty = true;
             this.mOwner = owner;
@@ -90,10 +99,12 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
 
     public String getName() {
 
-        return null == mName ? "" : mName;
+        return mName;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
+
+        Objects.requireNonNull(name, "Parameter name of type String is mandatory");
 
         if (!mName.equals(name)) {
             mDirty = true;
@@ -106,7 +117,9 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
         return null == mCurrency ? "" : mCurrency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(@NonNull String currency) {
+
+        Objects.requireNonNull(currency, "Parameter currency of type String is mandatory");
 
         if (!mCurrency.equals(currency)) {
             mDirty = true;
@@ -119,6 +132,10 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
     }
 
     public void setExchangeRate(Double exchangeRate){
+
+        if(null == exchangeRate)
+            exchangeRate = 1.0;
+
         if(!mExchangeRate.equals(exchangeRate)){
             mDirty = true;
             mExchangeRate = exchangeRate;
@@ -130,6 +147,10 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
     }
 
     public void setIsClose(Boolean isClose) {
+
+        if (null == isClose)
+            isClose = false;
+
         if (!mIsClose.equals(isClose)) {
             mDirty = true;
             mIsClose = isClose;
@@ -138,6 +159,7 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
 
     @Override
     public boolean equals(Object o) {
+        if(null == o) return false;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -168,6 +190,9 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
 
     @Override
     public int compareTo(@NonNull PaymentMethod instanceToCompare) {
+
+        Objects.requireNonNull(instanceToCompare, "Parameter instanceToCompare of type PaymentAccount is mandatory");
+
         return getName().compareToIgnoreCase(instanceToCompare.getName());
     }
 
