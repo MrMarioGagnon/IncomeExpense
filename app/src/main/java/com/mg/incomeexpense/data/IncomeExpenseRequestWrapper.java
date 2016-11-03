@@ -13,7 +13,7 @@ import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
-import com.mg.incomeexpense.transaction.DashboardData;
+import com.mg.incomeexpense.dashboard.DashboardData;
 import com.mg.incomeexpense.transaction.Transaction;
 import com.mg.incomeexpense.transaction.TransactionAmountAccumulator;
 

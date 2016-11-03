@@ -2,9 +2,11 @@ package com.mg.incomeexpense.transaction;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IdToItemConvertor;
@@ -13,15 +15,13 @@ import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-23.
  */
 public class Transaction extends ObjectBase implements Serializable, Comparable<Transaction> {
-
-    private static final String LOG_TAG = Transaction.class.getSimpleName();
 
     private Account mAccount;
     private String mCategory;
@@ -38,7 +38,11 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
     }
 
-    public static Transaction create(Cursor cursor, ContentResolver contentResolver) {
+    public static Transaction create(@NonNull Cursor cursor, @NonNull ContentResolver contentResolver) {
+
+        Objects.requireNonNull(cursor, "Parameter cursor of type Cursor is mandatory.");
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory.");
+
         Transaction newInstance = new Transaction();
         newInstance.mNew = false;
         newInstance.mDirty = false;
@@ -92,7 +96,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mNew = true;
         newInstance.mDirty = true;
         newInstance.mAccount = null;
-        newInstance.mCategory = null;
+        newInstance.mCategory = "";
         newInstance.mType = TransactionType.Expense;
         newInstance.mDate = Tools.now();
         newInstance.mAmount = 0.0;
@@ -110,13 +114,11 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mContributors;
     }
 
-    public void setContributors(List<Contributor> contributors) {
-        Contributor[] a1 = new Contributor[mContributors.size()];
-        mContributors.toArray(a1);
-        Contributor[] a2 = new Contributor[contributors.size()];
-        contributors.toArray(a2);
+    public void setContributors(@NonNull List<Contributor> contributors) {
 
-        if (!Arrays.equals(a1, a2)) {
+        Objects.requireNonNull(contributors, "Parameter contributors of type List<Contributor> is mandatory");
+
+        if (!mContributors.equals(contributors)) {
             mDirty = true;
             this.mContributors = contributors;
         }
@@ -127,7 +129,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mAccount;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(@NonNull Account account) {
+
+        Objects.requireNonNull(account, "Parameter account of type Account is mandatory");
+
         if (mAccount == null || !mAccount.equals(account)) {
             mDirty = true;
             mAccount = account;
@@ -138,7 +143,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mAmount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(@NonNull Double amount) {
+
+        Objects.requireNonNull(amount, "Parameter amount of type Double is mandatory");
+
         if (mAmount == null || !mAmount.equals(amount)) {
             mDirty = true;
             mAmount = amount;
@@ -149,8 +157,11 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mCategory;
     }
 
-    public void setCategory(String category) {
-        if (mCategory == null || !mCategory.equals(category)) {
+    public void setCategory(@NonNull String category) {
+
+        Objects.requireNonNull(category, "Parameter category of type String is mandatory");
+
+        if (!mCategory.equals(category)) {
             mDirty = true;
             mCategory = category;
         }
@@ -160,7 +171,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mCurrency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(@NonNull String currency) {
+
+        Objects.requireNonNull(currency, "Parameter currency of type String is mandatory");
+
         if (!mCurrency.equals(currency)) {
             mDirty = true;
             mCurrency = currency;
@@ -171,7 +185,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mDate;
     }
 
-    public void setDate(String date) {
+    public void setDate(@NonNull String date) {
+
+        Objects.requireNonNull(date, "Parameter date of type String is mandatory");
+
         if (!mDate.equals(date)) {
             mDirty = true;
             mDate = date;
@@ -186,7 +203,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mExchangeRate;
     }
 
-    public void setExchangeRate(Double exchangeRate) {
+    public void setExchangeRate(@NonNull Double exchangeRate) {
+
+        Objects.requireNonNull(exchangeRate, "Parameter exchangeRate of type Double is mandatory");
+
         if (mExchangeRate == null || !mExchangeRate.equals(exchangeRate)) {
             mDirty = true;
             mExchangeRate = exchangeRate;
@@ -197,7 +217,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mNote;
     }
 
-    public void setNote(String note) {
+    public void setNote(@NonNull String note) {
+
+        Objects.requireNonNull(note, "Parameter note of type String is mandatory");
+
         if (!mNote.equals(note)) {
             mDirty = true;
             mNote = note;
@@ -208,7 +231,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mPaymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
+    public void setPaymentMethod(@NonNull PaymentMethod paymentMethod) {
+
+        Objects.requireNonNull(paymentMethod, "Parameter paymentMethod of type PaymentMethod is mandatory");
+
         if (mPaymentMethod == null || !mPaymentMethod.equals(paymentMethod)) {
             mDirty = true;
             mPaymentMethod = paymentMethod;
@@ -219,8 +245,11 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mType;
     }
 
-    public void setType(TransactionType type) {
-        if (mType == null || !mType.equals(type)) {
+    public void setType(@NonNull TransactionType type) {
+
+        Objects.requireNonNull(type, "Parameter type of type TransactionType is mandatory");
+
+        if (!mType.equals(type)) {
             mDirty = true;
             mType = type;
         }
@@ -228,6 +257,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
     @Override
     public boolean equals(Object o) {
+        if (null == o) return false;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -267,7 +297,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     }
 
     public String getContributorsForDisplay() {
-        return Tools.join(mContributors, ",");
+        return Tools.join(mContributors, ApplicationConstant.displaySeparator);
     }
 
     public String getContributorsIds() {
@@ -275,12 +305,11 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         for (Contributor item : mContributors) {
             a.add(item.getId().toString());
         }
-        return Tools.join(a, ";");
+        return Tools.join(a, ApplicationConstant.storageSeparator);
     }
 
     public enum TransactionType {
         Expense, Income
     }
-
 
 }

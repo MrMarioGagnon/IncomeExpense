@@ -1,4 +1,6 @@
-package com.mg.incomeexpense.transaction;
+package com.mg.incomeexpense.dashboard;
+
+import com.mg.incomeexpense.transaction.TransactionAmountTotal;
 
 import java.util.List;
 

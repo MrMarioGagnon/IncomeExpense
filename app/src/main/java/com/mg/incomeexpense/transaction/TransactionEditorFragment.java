@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.category.CategorySpinnerAdapter;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DatePickerFragment;
 import com.mg.incomeexpense.core.FragmentBase;
@@ -28,6 +29,7 @@ import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
+import com.mg.incomeexpense.paymentmethod.PaymentMethodSpinnerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

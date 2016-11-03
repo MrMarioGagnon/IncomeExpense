@@ -1,4 +1,4 @@
-package com.mg.incomeexpense.transaction;
+package com.mg.incomeexpense.dashboard;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.transaction.TransactionAmountTotal;
 
 import java.text.DecimalFormat;
 import java.util.List;

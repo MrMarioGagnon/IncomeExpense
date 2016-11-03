@@ -2,7 +2,6 @@ package com.mg.incomeexpense.paymentmethod;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ObjectBase;
@@ -82,7 +81,6 @@ public class PaymentMethodValidator implements ObjectValidator {
             messages.add(mValidationMessages.get(R.string.validation_currency_mandatory));
         }
 
-        Log.d(LOG_TAG, exchangeRate.toString());
         if (exchangeRate <= 0) {
             messages.add(mValidationMessages.get(R.string.validation_exchange_rate_mandatory));
         }

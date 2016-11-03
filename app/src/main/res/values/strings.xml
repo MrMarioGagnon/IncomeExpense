@@ -8,6 +8,7 @@
     <string name="dialog_title_error_deleting_item">Deleting %1$s</string>
     <string name="dialog_title_deleting_contributor">Deleting contributor</string>
     <string name="dialog_title_deleting_account">Deleting account</string>
+    <string name="dialog_title_deleting_payment_method">Deleting payment method</string>
 
     <string name="app_name">IncomeExpense</string>
     <string name="action_settings">Settings</string>
@@ -163,5 +164,6 @@
 
     <string name="ask_delete_contributor">Do you really want to delete this contributor?</string>
     <string name="ask_delete_account">Do you really want to delete this account?</string>
+    <string name="ask_delete_payment_method">Do you really want to delete this payment method?</string>
 
 </resources>

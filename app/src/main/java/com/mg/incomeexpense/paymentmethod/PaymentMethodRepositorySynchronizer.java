@@ -1,7 +1,5 @@
 package com.mg.incomeexpense.paymentmethod;
 
-import android.content.ContentProviderOperation;
-import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
@@ -9,38 +7,29 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.core.ItemRepositorySynchronizerException;
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.core.RepositorySynchronizerBase;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * Created by mario on 3/14/2016.
  */
-public class PaymentMethodRepositorySynchronizer {
+public class PaymentMethodRepositorySynchronizer extends RepositorySynchronizerBase {
 
     private static final String LOG_TAG = PaymentMethodRepositorySynchronizer.class.getSimpleName();
-    private final ContentResolver mContentResolver;
-    private final Uri mItemUri;
-    private final Map<Integer, String> mMessages;
 
     public PaymentMethodRepositorySynchronizer(@NonNull ContentResolver contentResolver, @NonNull Uri itemUri, @NonNull Map<Integer, String> messages) {
-        mMessages = messages;
-        mItemUri = itemUri;
-        mContentResolver = contentResolver;
+        super(contentResolver, itemUri, messages);
     }
 
     public ObjectBase Save(@NonNull ObjectBase item) {
+        super.Save(item);
 
         // region Precondition
         if (!(item instanceof PaymentMethod)) {
             throw new IllegalArgumentException("Parameter item must be an instance of PaymentMethod");
-        }
-
-        if ((!item.isNew()) && item.getId() == null) {
-            throw new NullPointerException("Item is not new, item id is mandatory.");
         }
 
         if (!item.isDirty()) {

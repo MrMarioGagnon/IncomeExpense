@@ -33,6 +33,10 @@ public class AccountRepositorySynchronizer extends RepositorySynchronizerBase {
             throw new IllegalArgumentException("Parameter item must be an instance of Account");
         }
 
+        if (!item.isDirty()) {
+            return item;
+        }
+
         final Account itemToBeSave = (Account) item;
         final String itemType = itemToBeSave.getClass().getSimpleName();
         Long id;

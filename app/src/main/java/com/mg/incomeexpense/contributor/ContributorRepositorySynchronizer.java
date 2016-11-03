@@ -33,6 +33,10 @@ public class ContributorRepositorySynchronizer extends RepositorySynchronizerBas
             throw new IllegalArgumentException("Parameter item must be an instance of Contributor");
         }
 
+        if (!item.isDirty()) {
+            return item;
+        }
+
         final Contributor itemToBeSave = (Contributor) item;
         final String itemType = itemToBeSave.getClass().getSimpleName();
         Long id;

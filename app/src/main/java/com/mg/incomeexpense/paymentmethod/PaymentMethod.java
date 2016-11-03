@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IdToItemConvertor;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
@@ -129,6 +130,10 @@ public class PaymentMethod extends ObjectBase implements Serializable, Comparabl
 
     public Double getExchangeRate() {
         return mExchangeRate;
+    }
+
+    public String getExchangeRateAsString(){
+        return Tools.formatAmount(getExchangeRate());
     }
 
     public void setExchangeRate(Double exchangeRate){

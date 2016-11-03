@@ -1,35 +1,38 @@
-package com.mg.incomeexpense.transaction;
+package com.mg.incomeexpense.paymentmethod;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-08-14.
  */
-public class CategorySpinnerAdapter extends ArrayAdapter<String> {
+public class PaymentMethodSpinnerAdapter extends ArrayAdapter<PaymentMethod> {
 
-    private Context mContext;
-    private List<String> mCategories;
+    private List<PaymentMethod> mPaymentMethods;
 
-    public CategorySpinnerAdapter(Context context, int resource, List<String> objects) {
+    public PaymentMethodSpinnerAdapter(@NonNull Context context, int resource, @NonNull List<PaymentMethod> objects) {
         super(context, resource, objects);
 
-        mContext = context;
-        mCategories = objects;
+        Objects.requireNonNull(context, "Parameter context of type parameter is mandatory");
+        Objects.requireNonNull(objects, "Parameter objects of type List<PaymentMethod> is mandatory");
+
+        mPaymentMethods = objects;
     }
 
     public int getCount() {
-        return mCategories.size();
+        return mPaymentMethods.size();
     }
 
-    public String getItem(int position) {
-        return mCategories.get(position);
+    public PaymentMethod getItem(int position) {
+        return mPaymentMethods.get(position);
     }
 
     public long getItemId(int position) {
@@ -40,11 +43,11 @@ public class CategorySpinnerAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // I created a dynamic TextView here, but you can reference your own  custom layout for each spinner item
-        TextView label = new TextView(mContext);
+        TextView label = new TextView(getContext());
         label.setTextColor(Color.BLACK);
         // Then you can get the current item using the values array (Users array) and the current position
         // You can NOW reference each method you has created in your bean object (User class)
-        label.setText(mCategories.get(position));
+        label.setText(mPaymentMethods.get(position).getName());
 
         // And finally return your dynamic (or custom) view for each spinner item
         return label;
@@ -55,9 +58,9 @@ public class CategorySpinnerAdapter extends ArrayAdapter<String> {
     @Override
     public View getDropDownView(int position, View convertView,
                                 ViewGroup parent) {
-        TextView label = new TextView(mContext);
+        TextView label = new TextView(getContext());
         label.setTextColor(Color.BLACK);
-        label.setText(mCategories.get(position));
+        label.setText(mPaymentMethods.get(position).getName());
 
         return label;
     }

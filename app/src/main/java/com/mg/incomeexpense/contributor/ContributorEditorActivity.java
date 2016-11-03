@@ -27,12 +27,10 @@ public class ContributorEditorActivity extends AppCompatActivityBase {
         if (null == savedInstanceState) {
 
             Bundle bundle = getIntent().getExtras();
-            if (null == bundle)
-                throw new NullPointerException("A bundle with and Contributor item is mandatory");
+            Objects.requireNonNull(bundle, "A bundle with and Contributor item is mandatory");
 
             Contributor contributor = (Contributor) bundle.getSerializable("item");
-            if (null == contributor)
-                throw new NullPointerException("A contributor object is mandatory");
+            Objects.requireNonNull(contributor, "A contributor object is mandatory");
 
             ActionBar actionBar = getSupportActionBar();
 

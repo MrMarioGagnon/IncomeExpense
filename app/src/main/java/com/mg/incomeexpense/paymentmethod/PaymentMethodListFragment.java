@@ -21,21 +21,6 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
  */
 public class PaymentMethodListFragment extends FragmentListBase {
 
-    public static final int COL_NAME = 1;
-    public static final int COL_CURRENCY = 2;
-    public static final int COL_EXCHANGE_RATE = 3;
-    public static final int COL_OWNER = 4;
-    public static final int COL_CLOSE = 5;
-
-    private static final String[] PAYMENT_METHOD_COLUMNS = {
-            IncomeExpenseContract.PaymentMethodEntry._ID,
-            IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME,
-            IncomeExpenseContract.PaymentMethodEntry.COLUMN_CURRENCY,
-            IncomeExpenseContract.PaymentMethodEntry.COLUMN_EXCHANGE_RATE,
-            IncomeExpenseContract.PaymentMethodEntry.COLUMN_OWNER_ID,
-            IncomeExpenseContract.PaymentMethodEntry.COLUMN_CLOSE
-    };
-    private static final String LOG_TAG = PaymentMethodListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
     private static final int PAYMENT_METHOD_LOADER = 0;
 
@@ -130,13 +115,13 @@ public class PaymentMethodListFragment extends FragmentListBase {
         // fragment only uses one loader, so we don't care about checking the id.
 
         // Sort order:  Ascending, by date.
-        String sortOrder = IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME + " ASC";
+        String sortOrder = String.format("LOWER(%1$s) ASC", IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME);
 
         Uri uri = IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 uri,
-                PAYMENT_METHOD_COLUMNS,
+                null,
                 null,
                 null,
                 sortOrder);

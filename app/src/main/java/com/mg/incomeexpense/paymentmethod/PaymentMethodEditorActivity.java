@@ -2,6 +2,7 @@ package com.mg.incomeexpense.paymentmethod;
 
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 
@@ -14,6 +15,8 @@ import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
+
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-19.
@@ -31,15 +34,12 @@ public class PaymentMethodEditorActivity extends AppCompatActivityBase {
         if (null == savedInstanceState) {
 
             Bundle bundle = getIntent().getExtras();
-            if (null == bundle)
-                throw new NullPointerException("A bundle with a Payment Method item is mandatory");
+            Objects.requireNonNull(bundle, "A bundle with and Account item is mandatory");
 
             PaymentMethod paymentMethod = (PaymentMethod) bundle.getSerializable("item");
-            if (null == paymentMethod)
-                throw new NullPointerException("A payment method object is mandatory");
+            Objects.requireNonNull(paymentMethod, "A payment method object is mandatory");
 
             ActionBar actionBar = getSupportActionBar();
-
             if (actionBar != null) {
                 actionBar.setTitle(getString(paymentMethod.isNew() ? R.string.title_payment_method_editor_add : R.string.title_payment_method_editor_update));
             }
@@ -47,7 +47,6 @@ public class PaymentMethodEditorActivity extends AppCompatActivityBase {
             if (paymentMethod.isNew()) {
                 paymentMethod.setCurrency(Tools.getDefaultCurrency(this));
             }
-
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailablePaymentMethodName(getContentResolver(), paymentMethod));
             bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver(), null));
@@ -64,7 +63,9 @@ public class PaymentMethodEditorActivity extends AppCompatActivityBase {
     }
 
     @Override
-    public void onItemStateChange(ItemStateChangeEvent event) {
+    public void onItemStateChange(@NonNull ItemStateChangeEvent event) {
+
+        Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
 
         if (event.isCancelled()) {
             setResult(RESULT_CANCELED);
@@ -74,10 +75,10 @@ public class PaymentMethodEditorActivity extends AppCompatActivityBase {
             PaymentMethodRepositorySynchronizer synchronizer = new PaymentMethodRepositorySynchronizer(getContentResolver(),
                     IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, AccountRepositorySynchronizer.class.getSimpleName()));
 
-            PaymentMethod paymentMethod = (PaymentMethod)event.getItem();
-            try{
-            synchronizer.Save(paymentMethod);
-            setResult(RESULT_OK);
+            PaymentMethod paymentMethod = (PaymentMethod) event.getItem();
+            try {
+                synchronizer.Save(paymentMethod);
+                setResult(RESULT_OK);
                 finish();
             } catch (SQLiteConstraintException e) {
                 String message = getString(R.string.error_foreign_key_constraint, getString(R.string.payment_method), paymentMethod.getName());

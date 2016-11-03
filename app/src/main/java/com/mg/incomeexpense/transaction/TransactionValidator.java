@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.transaction;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ObjectBase;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-23.
@@ -20,11 +22,16 @@ public class TransactionValidator implements ObjectValidator {
 
     private final Map<Integer, String> mValidationMessages;
 
-    public TransactionValidator(Map<Integer, String> validationMessages) {
+    public TransactionValidator(@NonNull Map<Integer, String> validationMessages) {
+
+        Objects.requireNonNull(validationMessages, "Parameter validationMessages of type Map<Integer, String> is mandatory");
+
         mValidationMessages = validationMessages;
     }
 
-    public static TransactionValidator create(Context context) {
+    public static TransactionValidator create(@NonNull Context context) {
+
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
 
         Map<Integer, String> messages = new HashMap<>();
         messages.put(R.string.validation_account_mandatory, context.getString(R.string.validation_account_mandatory));
@@ -41,7 +48,9 @@ public class TransactionValidator implements ObjectValidator {
         return new TransactionValidator(messages);
     }
 
-    public ValidationStatus Validate(ObjectBase objectToValidate) {
+    public ValidationStatus Validate(@NonNull ObjectBase objectToValidate) {
+
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
 
         List<String> messages = new ArrayList<>();
         String message;

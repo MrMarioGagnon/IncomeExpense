@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.dashboard.DashboardFragment;
 
 import java.util.List;
 

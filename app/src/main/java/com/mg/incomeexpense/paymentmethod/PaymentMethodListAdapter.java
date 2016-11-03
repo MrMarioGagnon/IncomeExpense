@@ -3,7 +3,9 @@ package com.mg.incomeexpense.paymentmethod;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.CursorAdapter;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,6 @@ import java.text.DecimalFormat;
  * Created by mario on 2016-07-19.
  */
 public class PaymentMethodListAdapter extends CursorAdapter {
-    private static final String LOG_TAG = PaymentMethodListAdapter.class.getSimpleName();
 
     public PaymentMethodListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -43,12 +44,22 @@ public class PaymentMethodListAdapter extends CursorAdapter {
         viewHolder.textViewName.setText(paymentMethod.getName());
         viewHolder.textViewCurrency.setText(paymentMethod.getCurrency());
         viewHolder.textViewOwner.setText(paymentMethod.getOwner().getName());
-        DecimalFormat df = new DecimalFormat("#.00");
-        viewHolder.textViewExchangeRate.setText(df.format(paymentMethod.getExchangeRate()));
+        viewHolder.textViewExchangeRate.setText(paymentMethod.getExchangeRateAsString());
         if(paymentMethod.getIsClose()){
             view.setBackgroundColor(Color.RED);
         }else{
-            // TODO Manage background color
+            TypedValue a = new TypedValue();
+            context.getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
+
+            if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+                // windowBackground is a color
+                int color = a.data;
+                view.setBackgroundColor(color);
+            } else {
+                // TODO What to do if windowBackground is not a color, probably a drawable
+                Drawable d = context.getResources().getDrawable(a.resourceId);
+            }
+
         }
     }
 

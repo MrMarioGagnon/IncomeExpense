@@ -28,7 +28,6 @@ public class AccountListFragment extends FragmentListBase {
     private int mPosition = ListView.INVALID_POSITION;
     private ListView mListView;
 
-
     public AccountListFragment() {
         // Required empty public constructor
     }

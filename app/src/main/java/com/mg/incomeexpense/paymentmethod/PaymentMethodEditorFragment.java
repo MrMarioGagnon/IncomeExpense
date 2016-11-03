@@ -18,27 +18,27 @@ import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.contributor.ContributorSpinnerAdapter;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
+import com.mg.incomeexpense.core.dialog.DialogUtils;
+import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-19.
  */
 public class PaymentMethodEditorFragment extends FragmentBase {
 
-    private static final String LOG_TAG = PaymentMethodEditorFragment.class.getSimpleName();
-
     private PaymentMethod mPaymentMethod = null;
     private EditText mEditTextName;
     private EditText mEditTextExchangeRate;
     private TextView mTextViewValidationErrorMessage;
-    private ObjectValidator mObjectValidator = null;
+    private PaymentMethodValidator mObjectValidator;
     private ArrayList<String> mNames;
     private Spinner mSpinnerCurrency;
     private ArrayAdapter<CharSequence> mSpinnerCurrencyAdapter;
@@ -64,19 +64,6 @@ public class PaymentMethodEditorFragment extends FragmentBase {
 
     }
 
-    public ObjectValidator getObjectValidator() {
-
-        if (null == mObjectValidator) {
-            mObjectValidator = PaymentMethodValidator.create(getActivity(), mNames);
-        }
-
-        return mObjectValidator;
-    }
-
-    public void setObjectValidator(ObjectValidator mObjectValidator) {
-        this.mObjectValidator = mObjectValidator;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,21 +71,18 @@ public class PaymentMethodEditorFragment extends FragmentBase {
         setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
-        if (null == bundle)
-            throw new NullPointerException("A bundle is mandatory");
+        Objects.requireNonNull(bundle, "A bundle is mandatory");
 
         mPaymentMethod = (PaymentMethod) bundle.getSerializable("item");
-        if (null == mPaymentMethod)
-            throw new NullPointerException("A payment method is mandatory");
+        Objects.requireNonNull(mPaymentMethod, "A payment method is mandatory");
 
         mNames = (ArrayList<String>) bundle.getSerializable("names");
-        if (null == mNames)
-            throw new NullPointerException("A list of payment methods name is mandatory");
+        Objects.requireNonNull(mNames, "A list of payment methods name is mandatory");
 
         mOwners = (ArrayList<Contributor>) bundle.getSerializable("contributors");
-        if (null == mOwners)
-            throw new NullPointerException("A list of contributors is mandatory");
+        Objects.requireNonNull(mOwners, "A list of contributors is mandatory");
 
+        mObjectValidator = PaymentMethodValidator.create(getActivity(), mNames);
 
         mOwnerSpinnerAdapter = new ContributorSpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -127,15 +111,12 @@ public class PaymentMethodEditorFragment extends FragmentBase {
         mSpinnerOwner = (Spinner) rootView.findViewById(R.id.spinner_owner);
         mSpinnerOwner.setAdapter(mOwnerSpinnerAdapter); // Set the custom adapter to the spinner
 
-        if (null == savedInstanceState) {
-            mEditTextName.setText(mPaymentMethod.getName());
-            mEditTextExchangeRate.setText(mPaymentMethod.getExchangeRate().toString());
-            mSwitchClose.setChecked(mPaymentMethod.getIsClose());
-            mSwitchClose.setText(mPaymentMethod.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
-            Tools.setSpinner(mPaymentMethod.getOwner(), mSpinnerOwner);
-            mSpinnerCurrency.setSelection(((ArrayAdapter<String>) mSpinnerCurrency.getAdapter()).getPosition(mPaymentMethod.getCurrency()), false);
-
-        }
+        mEditTextName.setText(mPaymentMethod.getName());
+        mEditTextExchangeRate.setText(mPaymentMethod.getExchangeRate().toString());
+        mSwitchClose.setChecked(mPaymentMethod.getIsClose());
+        mSwitchClose.setText(mPaymentMethod.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
+        Tools.setSpinner(mPaymentMethod.getOwner(), mSpinnerOwner);
+        mSpinnerCurrency.setSelection(((ArrayAdapter<String>) mSpinnerCurrency.getAdapter()).getPosition(mPaymentMethod.getCurrency()), false);
 
         return rootView;
     }
@@ -168,16 +149,29 @@ public class PaymentMethodEditorFragment extends FragmentBase {
         switch (id) {
             case R.id.action_delete:
 
-                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForPaymentMethod(getActivity().getContentResolver(), mPaymentMethod);
+                DialogUtils.twoButtonMessageBox(getContext(), getString(R.string.ask_delete_payment_method), getString(R.string.dialog_title_deleting_payment_method), new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
 
-                if (((PaymentMethodValidator) getObjectValidator()).canDelete(transactions)) {
-                    mPaymentMethod.setDead(true);
-                    notifyListener(new ItemStateChangeEvent(mPaymentMethod));
-                } else {
-                    String message = getString(R.string.error_foreign_key_constraint, getString(R.string.payment_method), mPaymentMethod.getName());
-                    mTextViewValidationErrorMessage.setText(message);
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
-                }
+                        List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForPaymentMethod(getActivity().getContentResolver(), mPaymentMethod);
+
+                        if (mObjectValidator.canDelete(transactions)) {
+                            mPaymentMethod.setDead(true);
+                            notifyListener(new ItemStateChangeEvent(mPaymentMethod));
+                        } else {
+                            String message = getString(R.string.error_foreign_key_constraint, getString(R.string.payment_method), mPaymentMethod.getName());
+                            mTextViewValidationErrorMessage.setText(message);
+                            mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }, new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
+                        // Do nothing
+                    }
+                }).show();
+
                 break;
             case R.id.action_save:
                 mPaymentMethod.setName(mEditTextName.getText().toString());
@@ -189,7 +183,7 @@ public class PaymentMethodEditorFragment extends FragmentBase {
 
                 mPaymentMethod.setOwner((Contributor) mSpinnerOwner.getSelectedItem());
 
-                ValidationStatus validationStatus = getObjectValidator().Validate(mPaymentMethod);
+                ValidationStatus validationStatus = mObjectValidator.Validate(mPaymentMethod);
 
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mPaymentMethod));

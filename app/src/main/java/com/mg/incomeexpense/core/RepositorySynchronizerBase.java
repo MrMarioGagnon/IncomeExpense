@@ -36,10 +36,6 @@ public abstract class RepositorySynchronizerBase {
             throw new NullPointerException("Item is not new, item id is mandatory.");
         }
 
-        if (!item.isDirty()) {
-            return item;
-        }
-
         return item;
     }
 

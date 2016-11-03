@@ -52,7 +52,7 @@ public class AccountListAdapter extends CursorAdapter {
                 int color = a.data;
                 view.setBackgroundColor(color);
             } else {
-                // windowBackground is not a color, probably a drawable
+                // TODO What to do if windowBackground is not a color, probably a drawable
                 Drawable d = context.getResources().getDrawable(a.resourceId);
             }
         }

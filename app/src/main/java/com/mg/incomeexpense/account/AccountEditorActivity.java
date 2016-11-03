@@ -82,9 +82,7 @@ public class AccountEditorActivity extends AppCompatActivityBase {
                 account.setDead(false);
             }
 
-
         }
-
 
     }
 
