@@ -28,7 +28,6 @@ public class AccountRepositorySynchronizer extends RepositorySynchronizerBase {
     public ObjectBase Save(@NonNull ObjectBase item) {
         super.Save(item);
 
-        // region Precondition
         if (!(item instanceof Account)) {
             throw new IllegalArgumentException("Parameter item must be an instance of Account");
         }

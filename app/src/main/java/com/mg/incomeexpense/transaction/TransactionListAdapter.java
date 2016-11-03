@@ -17,8 +17,6 @@ import java.text.DecimalFormat;
  */
 public class TransactionListAdapter extends CursorAdapter {
 
-    private static final String LOG_TAG = TransactionListAdapter.class.getSimpleName();
-
     public TransactionListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
@@ -41,8 +39,7 @@ public class TransactionListAdapter extends CursorAdapter {
 
         viewHolder.textViewDate.setText(transaction.getDate());
         viewHolder.textViewCategory.setText(transaction.getCategory());
-        DecimalFormat df = new DecimalFormat("#.00");
-        viewHolder.textViewAmount.setText(df.format(transaction.getAmount()));
+        viewHolder.textViewAmount.setText(transaction.getAmountAsString());
 
         int color = context.getResources().getColor(transaction.getType() == Transaction.TransactionType.Expense ? R.color.colorExpense : R.color.colorIncome, null);
         viewHolder.textViewAmount.setTextColor(color);

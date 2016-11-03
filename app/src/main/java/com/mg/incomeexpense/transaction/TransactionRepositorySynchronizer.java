@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.ObjectBase;
+import com.mg.incomeexpense.core.RepositorySynchronizerBase;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.util.Map;
@@ -15,34 +16,23 @@ import java.util.Map;
 /**
  * Created by mario on 3/14/2016.
  */
-public class TransactionRepositorySynchronizer {
+public class TransactionRepositorySynchronizer extends RepositorySynchronizerBase {
 
     private static final String LOG_TAG = TransactionRepositorySynchronizer.class.getSimpleName();
-    private final ContentResolver mContentResolver;
-    private final Uri mItemUri;
-    private final Map<Integer, String> mMessages;
 
     public TransactionRepositorySynchronizer(@NonNull ContentResolver contentResolver, @NonNull Uri itemUri, @NonNull Map<Integer, String> messages) {
-        mMessages = messages;
-        mItemUri = itemUri;
-        mContentResolver = contentResolver;
-    }
+        super(contentResolver, itemUri, messages);    }
 
     public ObjectBase Save(@NonNull ObjectBase item) {
+        super.Save(item);
 
-        // region Precondition
         if (!(item instanceof Transaction)) {
             throw new IllegalArgumentException("Parameter item must be an instance of Transaction");
-        }
-
-        if ((!item.isNew()) && item.getId() == null) {
-            throw new NullPointerException("Item is not new, item id is mandatory.");
         }
 
         if (!item.isDirty()) {
             return item;
         }
-        // endregion Precondition
 
         final Transaction itemToBeSave = (Transaction) item;
         final String itemType = itemToBeSave.getClass().getSimpleName();

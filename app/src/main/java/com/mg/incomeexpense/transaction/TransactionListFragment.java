@@ -17,49 +17,13 @@ import com.mg.incomeexpense.core.FragmentListBase;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
+import java.util.Objects;
+
 /**
  * Created by mario on 2016-07-19.
  */
 public class TransactionListFragment extends FragmentListBase {
 
-       /*
-        Account
-        Category
-        Type
-        Date
-        Amount
-        Currency
-        ExchangeRate
-        PaymentMethod
-        Note
-         */
-
-    public static final int COL_DATE = 1;
-    public static final int COL_ACCOUNT_ID = 2;
-    public static final int COL_CATEGORY = 3;
-    public static final int COL_COLUMN_TYPE = 4;
-    public static final int COL_COLUMN_DATE = 5;
-    public static final int COL_COLUMN_AMOUNT = 6;
-    public static final int COL_COLUMN_CURRENCY = 7;
-    public static final int COL_COLUMN_EXCHANGERATE = 8;
-    public static final int COL_COLUMN_PAYMENT_METHOD_ID = 9;
-    public static final int COL_COLUMN_NOTE = 10;
-    public static final int COL_COLUMN_CONTRIBUTOR = 11;
-
-    private static final String[] TRANSACTION_COLUMNS = {
-            IncomeExpenseContract.TransactionEntry._ID,
-            IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID,
-            IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY,
-            IncomeExpenseContract.TransactionEntry.COLUMN_TYPE,
-            IncomeExpenseContract.TransactionEntry.COLUMN_DATE,
-            IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT,
-            IncomeExpenseContract.TransactionEntry.COLUMN_CURRENCY,
-            IncomeExpenseContract.TransactionEntry.COLUMN_EXCHANGERATE,
-            IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID,
-            IncomeExpenseContract.TransactionEntry.COLUMN_NOTE,
-            IncomeExpenseContract.TransactionEntry.COLUMN_CONTRIBUTORS
-    };
-    private static final String LOG_TAG = TransactionListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
     private static final int TRANSACTION_LOADER = 0;
 
@@ -78,12 +42,10 @@ public class TransactionListFragment extends FragmentListBase {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getArguments();
-        if (bundle != null) {
-            mSelectedAccount = (Account) bundle.getSerializable("account");
-        }
-        // Add this line in order for this fragment to handle menu events.
-        //setHasOptionsMenu(true);
+        Objects.requireNonNull(bundle, "A bundle is mandatory");
 
+        mSelectedAccount = (Account) bundle.getSerializable("account");
+        Objects.requireNonNull(mSelectedAccount, "An Account object is mandatory");
     }
 
     @Override
@@ -174,7 +136,7 @@ public class TransactionListFragment extends FragmentListBase {
 
         return new CursorLoader(getActivity(),
                 uri,
-                TRANSACTION_COLUMNS,
+                null,
                 selection,
                 selectionArgs,
                 sortOrder);

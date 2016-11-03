@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.transaction;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -9,6 +10,7 @@ import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.dashboard.DashboardFragment;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-08-16.
@@ -17,8 +19,11 @@ public class TransactionDashboardPagerAdapter extends FragmentStatePagerAdapter 
 
     List<Account> mAccount;
 
-    public TransactionDashboardPagerAdapter(FragmentManager fm, List<Account> accounts) {
+    public TransactionDashboardPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Account> accounts) {
         super(fm);
+
+        Objects.requireNonNull(accounts, "Parameter accounts of type List<Account> is mandatory");
+
         mAccount = accounts;
     }
 

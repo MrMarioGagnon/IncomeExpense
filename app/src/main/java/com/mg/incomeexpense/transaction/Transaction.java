@@ -143,6 +143,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mAmount;
     }
 
+    public String getAmountAsString(){
+        return Tools.formatAmount(getAmount());
+    }
+
     public void setAmount(@NonNull Double amount) {
 
         Objects.requireNonNull(amount, "Parameter amount of type Double is mandatory");
@@ -201,6 +205,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
     public Double getExchangeRate() {
         return mExchangeRate;
+    }
+
+    public String getExchangeRateAsString(){
+        return Tools.formatAmount(getExchangeRate());
     }
 
     public void setExchangeRate(@NonNull Double exchangeRate) {

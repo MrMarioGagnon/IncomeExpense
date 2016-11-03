@@ -19,15 +19,17 @@ import com.mg.incomeexpense.transaction.TransactionAmountAccumulator;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-23.
  */
 public class IncomeExpenseRequestWrapper {
 
-    private static final String LOG_TAG = IncomeExpenseRequestWrapper.class.getSimpleName();
-
     public static ArrayList<Transaction> getAllTransactionForAccount(@NonNull ContentResolver contentResolver, @NonNull Account account) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(account, "Parameter account of type Account is mandatory");
 
         ArrayList<Transaction> transactions = new ArrayList<>();
 
@@ -59,25 +61,30 @@ public class IncomeExpenseRequestWrapper {
 
     public static ArrayList<Transaction> getAllTransactionForPaymentMethod(@NonNull ContentResolver contentResolver, @NonNull PaymentMethod paymentMethod) {
 
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(paymentMethod, "Parameter paymentMethod of type PaymentMethod is mandatory");
+
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
+        if(!paymentMethod.isNew()) {
+            Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
 
-        Cursor cursor = null;
-        try {
+            Cursor cursor = null;
+            try {
 
-            String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID);
-            String[] selectionArgument = new String[]{paymentMethod.getId().toString()};
+                String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID);
+                String[] selectionArgument = new String[]{paymentMethod.getId().toString()};
 
-            cursor = contentResolver.query(uri, null, selection, selectionArgument, null);
-            Transaction transaction;
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                transaction = Transaction.create(cursor, contentResolver);
-                transactions.add(transaction);
-            }
-        } finally {
-            if (null != cursor) {
-                cursor.close();
+                cursor = contentResolver.query(uri, null, selection, selectionArgument, null);
+                Transaction transaction;
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    transaction = Transaction.create(cursor, contentResolver);
+                    transactions.add(transaction);
+                }
+            } finally {
+                if (null != cursor) {
+                    cursor.close();
+                }
             }
         }
 
@@ -85,7 +92,10 @@ public class IncomeExpenseRequestWrapper {
     }
 
 
-    public static ArrayList<String> getAvailableAccountName(@NonNull ContentResolver contentResolver, @NonNull ObjectBase account) {
+    public static ArrayList<String> getAvailableAccountName(@NonNull ContentResolver contentResolver, @NonNull Account account) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(account, "Parameter account of type Account is mandatory");
 
         ArrayList<String> names = new ArrayList<>();
 
@@ -112,7 +122,10 @@ public class IncomeExpenseRequestWrapper {
         return names;
     }
 
-    public static ArrayList<String> getAvailableContributorName(ContentResolver contentResolver, Contributor contributor) {
+    public static ArrayList<String> getAvailableContributorName(@NonNull ContentResolver contentResolver, @NonNull Contributor contributor) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(contributor, "Parameter contributor of type Contributor is mandatory");
 
         ArrayList<String> names = new ArrayList<>();
 
@@ -139,7 +152,10 @@ public class IncomeExpenseRequestWrapper {
         return names;
     }
 
-    public static ArrayList<String> getAvailablePaymentMethodName(ContentResolver contentResolver, PaymentMethod paymentMethod) {
+    public static ArrayList<String> getAvailablePaymentMethodName(@NonNull ContentResolver contentResolver, @NonNull PaymentMethod paymentMethod) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(paymentMethod, "Parameter paymentMethod of type PaymentMethod is mandatory");
 
         ArrayList<String> names = new ArrayList<>();
 
@@ -166,24 +182,17 @@ public class IncomeExpenseRequestWrapper {
         return names;
     }
 
-    public static ArrayList<Contributor> getAvailableContributors(ContentResolver contentResolver, Account account) {
+    public static ArrayList<Contributor> getAvailableContributors(@NonNull ContentResolver contentResolver) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
 
         ArrayList<Contributor> contributors = new ArrayList<>();
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, "LOWER(" + IncomeExpenseContract.ContributorEntry.COLUMN_NAME + ")");
-            Contributor contributor;
+            cursor = contentResolver.query(IncomeExpenseContract.ContributorEntry.CONTENT_URI, null, null, null, String.format("LOWER(%1$s)", IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_ID));
-                String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.ContributorEntry.COLUMN_NAME));
-                contributor = Contributor.create(id, name);
-                if (null == account) {
-                    contributors.add(contributor);
-                } else {
-                    if (account.getContributors().contains(contributor))
-                        contributors.add(contributor);
-                }
+                contributors.add(Contributor.create(cursor));
             }
         } finally {
             if (null != cursor) {
@@ -194,13 +203,15 @@ public class IncomeExpenseRequestWrapper {
         return contributors;
     }
 
-    public static ArrayList<Account> getAvailableAccounts(ContentResolver contentResolver) {
+    public static ArrayList<Account> getAvailableAccounts(@NonNull ContentResolver contentResolver) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
 
         ArrayList<Account> assets = new ArrayList<>();
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.AccountEntry.COLUMN_NAME);
+            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null, String.format("LOWER(%1$s)", IncomeExpenseContract.AccountEntry.COLUMN_NAME));
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(Account.create(cursor, contentResolver));
             }
@@ -213,13 +224,15 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static ArrayList<PaymentMethod> getAvailablePaymentMethods(ContentResolver contentResolver) {
+    public static ArrayList<PaymentMethod> getAvailablePaymentMethods(@NonNull ContentResolver contentResolver) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
 
         ArrayList<PaymentMethod> assets = new ArrayList<>();
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, null, null, null, IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME);
+            cursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, null, null, null, String.format("LOWER(%1$s)", IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME));
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(PaymentMethod.create(cursor, contentResolver));
             }
@@ -232,7 +245,12 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static DashboardData getDashboardData(Context context, ContentResolver contentResolver, Account account, Date date) {
+    public static DashboardData getDashboardData(@NonNull Context context, @NonNull ContentResolver contentResolver, @NonNull Account account, @NonNull Date date) {
+
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(account, "Parameter account of type Account is mandatory");
+        Objects.requireNonNull(date, "Parameter date of type Date is mandatory");
 
         String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
         String[] selectionArgs = new String[]{account.getId().toString()};

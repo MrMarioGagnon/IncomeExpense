@@ -24,7 +24,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int EDITOR_ACTIVITY = 1;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -34,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Permet d'afficher la barre au haut de l'ecran
         setSupportActionBar(toolbar);
 
         List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver());
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
         com.mg.floatingactionbutton.FloatingActionButton fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddExpense);
         fab.setOnClickListener(new View.OnClickListener() {
