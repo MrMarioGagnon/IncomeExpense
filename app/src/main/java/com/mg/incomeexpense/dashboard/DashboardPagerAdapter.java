@@ -1,4 +1,4 @@
-package com.mg.incomeexpense.transaction;
+package com.mg.incomeexpense.dashboard;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,11 +15,11 @@ import java.util.Objects;
 /**
  * Created by mario on 2016-08-16.
  */
-public class TransactionDashboardPagerAdapter extends FragmentStatePagerAdapter {
+public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
 
     List<Account> mAccount;
 
-    public TransactionDashboardPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Account> accounts) {
+    public DashboardPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Account> accounts) {
         super(fm);
 
         Objects.requireNonNull(accounts, "Parameter accounts of type List<Account> is mandatory");
@@ -33,20 +33,15 @@ public class TransactionDashboardPagerAdapter extends FragmentStatePagerAdapter 
         Bundle bundle = new Bundle();
         bundle.putSerializable("item", mAccount.get(position));
 
-        DashboardFragment tab = new DashboardFragment();
-        tab.setArguments(bundle);
+        DashboardFragment fragment = new DashboardFragment();
+        fragment.setArguments(bundle);
 
-        return tab;
+        return fragment;
     }
 
     @Override
     public int getCount() {
         return mAccount.size();
     }
-
-    public Account getAccount(int i) {
-        return mAccount.get(i);
-    }
-
 
 }

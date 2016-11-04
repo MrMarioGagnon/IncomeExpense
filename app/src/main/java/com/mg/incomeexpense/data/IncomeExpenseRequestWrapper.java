@@ -10,12 +10,11 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DateUtil;
-import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
-import com.mg.incomeexpense.dashboard.DashboardData;
+import com.mg.incomeexpense.dashboard.DashboardPeriodTotal;
 import com.mg.incomeexpense.transaction.Transaction;
-import com.mg.incomeexpense.transaction.TransactionAmountAccumulator;
+import com.mg.incomeexpense.dashboard.DashboardAmountAccumulator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -245,7 +244,7 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static DashboardData getDashboardData(@NonNull Context context, @NonNull ContentResolver contentResolver, @NonNull Account account, @NonNull Date date) {
+    public static DashboardPeriodTotal getDashboardData(@NonNull Context context, @NonNull ContentResolver contentResolver, @NonNull Account account, @NonNull Date date) {
 
         Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
         Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
@@ -275,18 +274,18 @@ public class IncomeExpenseRequestWrapper {
         String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, "yyyy-MM-dd"), Tools.formatDate(dLastDateMonth, "yyyy-MM-dd"));
         String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, "yyyy-MM-dd"), Tools.formatDate(dLastDateYear, "yyyy-MM-dd"));
 
-        TransactionAmountAccumulator todayTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_today), sToday));
-        TransactionAmountAccumulator thisWeekTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_week), sThisWeek));
-        TransactionAmountAccumulator thisMonthTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_month), sThisMonth));
-        TransactionAmountAccumulator thisYearTotal = new TransactionAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_year), sThisYear));
+        DashboardAmountAccumulator todayTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_today), sToday));
+        DashboardAmountAccumulator thisWeekTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_week), sThisWeek));
+        DashboardAmountAccumulator thisMonthTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_month), sThisMonth));
+        DashboardAmountAccumulator thisYearTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_year), sThisYear));
 
         Cursor cursor = null;
         try {
             cursor = contentResolver.query(IncomeExpenseContract.TransactionEntry.CONTENT_URI, null, selection, selectionArgs, null);
+
             int transactionDate;
             Transaction transaction;
             Double amount;
-
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 transaction = Transaction.create(cursor, contentResolver);
@@ -316,7 +315,7 @@ public class IncomeExpenseRequestWrapper {
             }
         }
 
-        return new DashboardData(todayTotal.getTransactionAmountTotal(), thisWeekTotal.getTransactionAmountTotal(), thisMonthTotal.getTransactionAmountTotal(), thisYearTotal.getTransactionAmountTotal());
+        return new DashboardPeriodTotal(todayTotal.getPeriodAmountTotal(), thisWeekTotal.getPeriodAmountTotal(), thisMonthTotal.getPeriodAmountTotal(), thisYearTotal.getPeriodAmountTotal());
     }
 
 }

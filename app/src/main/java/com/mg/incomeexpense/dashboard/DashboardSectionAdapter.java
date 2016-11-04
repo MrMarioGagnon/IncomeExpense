@@ -9,17 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.transaction.TransactionAmountTotal;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 /**
  * Created by mario on 2016-08-24.
  */
-public class DashboardSectionAdapter extends ArrayAdapter<TransactionAmountTotal> {
+public class DashboardSectionAdapter extends ArrayAdapter<DashboardPeriodAmount> {
 
-    public DashboardSectionAdapter(Context context, List<TransactionAmountTotal> objects) {
+    public DashboardSectionAdapter(Context context, List<DashboardPeriodAmount> objects) {
         super(context, 0, objects);
     }
 
@@ -39,16 +37,15 @@ public class DashboardSectionAdapter extends ArrayAdapter<TransactionAmountTotal
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        TransactionAmountTotal item = getItem(position);
+        DashboardPeriodAmount item = getItem(position);
         if (item != null) {
-            DecimalFormat df = new DecimalFormat("#.00");
-            viewHolder.textViewName.setText(item.contributor.getName());
-            viewHolder.textViewExpense.setText(df.format(item.expense));
-            viewHolder.textViewIncome.setText(df.format(item.income));
+            viewHolder.textViewName.setText(item.getContributor().getName());
+            viewHolder.textViewExpense.setText(item.getExpenseAsString());
+            viewHolder.textViewIncome.setText(item.getIncomeAsString());
 
-            viewHolder.textViewExpense.setVisibility(item.contributor.getId() == 0L ? View.GONE : View.VISIBLE);
-            viewHolder.textViewIncome.setVisibility(item.contributor.getId() == 0L ? View.GONE : View.VISIBLE);
-            viewHolder.textViewName.setTypeface(item.contributor.getId() == 0L ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+            viewHolder.textViewExpense.setVisibility(item.getContributor().getId() == 0L ? View.GONE : View.VISIBLE);
+            viewHolder.textViewIncome.setVisibility(item.getContributor().getId() == 0L ? View.GONE : View.VISIBLE);
+            viewHolder.textViewName.setTypeface(item.getContributor().getId() == 0L ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
 
         }
 

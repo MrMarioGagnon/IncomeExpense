@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.transaction;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 
 import com.mg.incomeexpense.R;
@@ -10,12 +11,12 @@ import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 
+import java.util.Objects;
+
 /**
  * Created by mario on 2016-07-19.
  */
 public class TransactionEditorActivity extends AppCompatActivityBase {
-
-    private static final String LOG_TAG = TransactionEditorActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,24 +27,21 @@ public class TransactionEditorActivity extends AppCompatActivityBase {
         if (null == savedInstanceState) {
 
             Bundle bundle = getIntent().getExtras();
-            if (null == bundle)
-                throw new NullPointerException("A bundle with and Transaction item is mandatory");
+            Objects.requireNonNull(bundle, "A bundle with and Transaction item is mandatory");
 
             Transaction transaction = (Transaction) bundle.getSerializable("item");
-            if (null == transaction)
-                throw new NullPointerException("An transaction object is mandatory");
+            Objects.requireNonNull(transaction, "An transaction object is mandatory");
 
             ActionBar actionBar = getSupportActionBar();
-
             if (actionBar != null) {
 
-                if(transaction.getType().equals(Transaction.TransactionType.Expense)){
+                if (transaction.getType().equals(Transaction.TransactionType.Expense)) {
                     actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add_expense : R.string.title_transaction_editor_update_expense));
-                }else{
+                } else {
                     actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add_income : R.string.title_transaction_editor_update_income));
                 }
 
-            }else{
+            } else {
                 actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add : R.string.title_transaction_editor_update));
             }
 
@@ -61,7 +59,9 @@ public class TransactionEditorActivity extends AppCompatActivityBase {
     }
 
     @Override
-    public void onItemStateChange(ItemStateChangeEvent event) {
+    public void onItemStateChange(@NonNull ItemStateChangeEvent event) {
+
+        Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
 
         if (event.isCancelled()) {
             setResult(RESULT_CANCELED);

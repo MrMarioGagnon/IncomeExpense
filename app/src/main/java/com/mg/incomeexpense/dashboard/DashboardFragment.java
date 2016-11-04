@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +17,12 @@ import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.TransactionListActivity;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-08-16.
  */
 public class DashboardFragment extends Fragment {
-
-    private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
 
     private DashboardSectionAdapter mTodayAdapter;
     private DashboardSectionAdapter mThisWeekAdapter;
@@ -55,10 +53,10 @@ public class DashboardFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getArguments();
-        if (null == bundle)
-            throw new NullPointerException("A bundle is mandatory");
+        Objects.requireNonNull(bundle, "A bundle is mandatory");
 
         mAccount = (Account) bundle.getSerializable("item");
+        Objects.requireNonNull(mAccount, "An account is mandatory");
 
     }
 
@@ -86,27 +84,25 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    public void refresh(){
+    public void refresh() {
         new GetData().execute("");
     }
 
     /*
     http://stackoverflow.com/questions/9671546/asynctask-android-example
      */
-    private class GetData extends AsyncTask<String, Void, DashboardData> {
+    private class GetData extends AsyncTask<String, Void, DashboardPeriodTotal> {
 
         @Override
-        protected DashboardData doInBackground(String... params) {
+        protected DashboardPeriodTotal doInBackground(String... params) {
 
-            FragmentActivity fa = getActivity();
-
-            DashboardData d = IncomeExpenseRequestWrapper.getDashboardData(getActivity(), getActivity().getContentResolver(), mAccount, new Date());
+            DashboardPeriodTotal d = IncomeExpenseRequestWrapper.getDashboardData(getActivity(), getActivity().getContentResolver(), mAccount, new Date());
 
             return d;
         }
 
         @Override
-        protected void onPostExecute(DashboardData data) {
+        protected void onPostExecute(DashboardPeriodTotal data) {
 
             mTodayAdapter = new DashboardSectionAdapter(getActivity(), data.todayData);
             mListViewToday.setAdapter(mTodayAdapter);

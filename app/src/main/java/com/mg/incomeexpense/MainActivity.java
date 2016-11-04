@@ -2,6 +2,7 @@ package com.mg.incomeexpense;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +17,12 @@ import com.mg.incomeexpense.contributor.ContributorListActivity;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
 import com.mg.incomeexpense.transaction.Transaction;
-import com.mg.incomeexpense.transaction.TransactionDashboardPagerAdapter;
+import com.mg.incomeexpense.dashboard.DashboardPagerAdapter;
 import com.mg.incomeexpense.transaction.TransactionEditorActivity;
 import com.mg.incomeexpense.utility.UtilityActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,16 +44,15 @@ public class MainActivity extends AppCompatActivity {
         for (Account account : accounts) {
             tab = mTabLayout.newTab();
             tab.setText(account.getName());
-            tab.setTag(account.getId());
+            tab.setTag(account);
             mTabLayout.addTab(tab);
         }
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        final TransactionDashboardPagerAdapter adapter = new TransactionDashboardPagerAdapter
+        final DashboardPagerAdapter adapter = new DashboardPagerAdapter
                 (getSupportFragmentManager(), accounts);
         mViewPager.setAdapter(adapter);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -75,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 mFabMenu.collapseImmediately();
-                Account account = ((TransactionDashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
 
+                Account account = (Account) mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).getTag();
                 ShowTransactionEditor(account, Transaction.TransactionType.Expense);
 
             }
@@ -88,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 mFabMenu.collapseImmediately();
-                Account account = ((TransactionDashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
-
+                Account account = (Account) mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).getTag();
                 ShowTransactionEditor(account, Transaction.TransactionType.Income);
 
             }
@@ -98,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
         mFabMenu = (com.mg.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.floating_action_menu_Type);
     }
 
-    private void ShowTransactionEditor(Account account, Transaction.TransactionType type) {
+    private void ShowTransactionEditor(@NonNull Account account, @NonNull Transaction.TransactionType type) {
+
+        Objects.requireNonNull(account, "Parameter account of type Account is mandatory");
+        Objects.requireNonNull(type, "Parameter type of type TransactionType is mandatory");
 
         Transaction transaction = Transaction.createNew();
         transaction.setAccount(account);

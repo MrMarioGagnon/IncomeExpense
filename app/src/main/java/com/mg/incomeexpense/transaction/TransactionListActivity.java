@@ -2,6 +2,7 @@ package com.mg.incomeexpense.transaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -67,7 +68,9 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
     }
 
     @Override
-    public void onItemSelected(ItemSelectedEvent event) {
+    public void onItemSelected(@NonNull ItemSelectedEvent event) {
+
+        Objects.requireNonNull(event, "Parameter event of type ItemSelectedEvent is mandatory");
 
         Intent intent = new Intent(this, TransactionEditorActivity.class);
         Bundle bundle = new Bundle();

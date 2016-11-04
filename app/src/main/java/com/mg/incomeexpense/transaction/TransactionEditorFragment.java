@@ -23,7 +23,6 @@ import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DatePickerFragment;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
-import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
@@ -35,18 +34,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-19.
  */
 public class TransactionEditorFragment extends FragmentBase implements DatePickerDialog.OnDateSetListener {
 
-    private static final String LOG_TAG = TransactionEditorFragment.class.getSimpleName();
-    private static final int CATEGORY_LIST_ACTIVITY = 1;
-
     private Transaction mTransaction = null;
     private TextView mTextViewValidationErrorMessage;
-    private ObjectValidator mObjectValidator = null;
+    private TransactionValidator mObjectValidator;
 
     private TextView mTextViewAccountName;
 
@@ -78,6 +75,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
 
     public TransactionEditorFragment() {
+
         mSelectedContributors = new ArrayList<>();
         mOnContributorImageButtonClickListener = new View.OnClickListener() {
             @Override
@@ -104,15 +102,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
     }
 
-    public ObjectValidator getObjectValidator() {
-
-        if (null == mObjectValidator) {
-            mObjectValidator = TransactionValidator.create(getActivity());
-        }
-
-        return mObjectValidator;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,14 +109,17 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
-        if (null == bundle)
-            throw new NullPointerException("A bundle is mandatory");
+        Objects.requireNonNull(bundle, "A bundle is mandatory");
 
         mTransaction = (Transaction) bundle.getSerializable("item");
-        if (null == mTransaction)
-            throw new NullPointerException("An transaction is mandatory");
+        Objects.requireNonNull(mTransaction, "An transaction is mandatory");
+        Objects.requireNonNull(mTransaction.getAccount(), "An account is mandatory");
+        Objects.requireNonNull(mTransaction.getAccount().getCategories(), "A list of categories is mandatory");
+        Objects.requireNonNull(mTransaction.getAccount().getContributors(), "A list of contributors is mandatory");
+        Objects.requireNonNull(mTransaction.getAccount().getCategories(), "A list of category is mandatory");
 
         mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
+        Objects.requireNonNull(mPaymentMethods, "A payment method is mandatory");
 
         mPaymentMethodSpinnerAdapter = new PaymentMethodSpinnerAdapter(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -139,20 +131,14 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 mCategories);
 
         mAvailableContributors = mTransaction.getAccount().getContributors();
-        if (null == mAvailableContributors)
-            throw new NullPointerException("A list of contributors is mandatory");
-
         mSelectedContributors.addAll(mTransaction.getContributors());
 
+        mObjectValidator = TransactionValidator.create(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        int year;
-        int month;
-        int day;
 
         View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
 
@@ -207,34 +193,30 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
         mTextViewContributors = (TextView) rootView.findViewById(R.id.textview_contributors);
 
-        if (null == savedInstanceState) {
+        if (mTransaction.isNew()) {
+            // get the current date
+            Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            mTransaction.setDate(String.format("%d-%02d-%02d", year, month + 1,
+                    day));
+            mTransaction.setCurrency(Tools.getDefaultCurrency(getActivity()));
+        }
 
-            if (mTransaction.isNew()) {
-                // get the current date
-                Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-                mTransaction.setDate(String.format("%d-%02d-%02d", year, month + 1,
-                        day));
-                mTransaction.setCurrency(Tools.getDefaultCurrency(getActivity()));
-            }
+        mTextViewAccountName.setText(mTransaction.getAccount().getName());
+        mTextViewDate.setText(mTransaction.getDate());
+        mEditTextAmount.setText(mTransaction.getAmount().toString());
+        mTextViewExchangeRate.setText(mTransaction.getExchangeRate().toString());
+        Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
+        mEditTextNote.setText(mTransaction.getNote());
 
-            mTextViewAccountName.setText(mTransaction.getAccount().getName());
-            mTextViewDate.setText(mTransaction.getDate());
-            mEditTextAmount.setText(mTransaction.getAmount().toString());
-            mTextViewExchangeRate.setText(mTransaction.getExchangeRate().toString());
-            Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
-            mEditTextNote.setText(mTransaction.getNote());
-
-            if (mTransaction.getAccount().getContributors().size() == 1) {
-                mSelectedContributors = mTransaction.getAccount().getContributors();
-                mTextViewContributors.setText(mTransaction.getAccount().getContributorsForDisplay());
-                mImageButtonContributors.setVisibility(View.GONE);
-            } else {
-                mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
-            }
-
+        if (mTransaction.getAccount().getContributors().size() == 1) {
+            mSelectedContributors = mTransaction.getAccount().getContributors();
+            mTextViewContributors.setText(mTransaction.getAccount().getContributorsForDisplay());
+            mImageButtonContributors.setVisibility(View.GONE);
+        } else {
+            mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
         }
 
         return rootView;
@@ -247,14 +229,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
 
         picker.show(getFragmentManager(), "datePicker");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-//        mSwitchClose.setOnClickListener(mOnSwitchClickListener);
-
     }
 
     @Override
@@ -306,7 +280,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
                 mTransaction.setContributors(mSelectedContributors);
 
-                ValidationStatus validationStatus = getObjectValidator().Validate(mTransaction);
+                ValidationStatus validationStatus = mObjectValidator.Validate(mTransaction);
 
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mTransaction));
@@ -335,7 +309,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         String formattedDate = sdf.format(c.getTime());
 
         mTextViewDate.setText(formattedDate);
-
 
     }
 
