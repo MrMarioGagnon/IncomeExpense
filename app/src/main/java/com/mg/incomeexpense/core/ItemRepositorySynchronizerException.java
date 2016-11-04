@@ -1,5 +1,9 @@
 package com.mg.incomeexpense.core;
 
+import android.support.annotation.NonNull;
+
+import java.util.Objects;
+
 /**
  * Created by mario on 2016-07-23.
  */
@@ -7,8 +11,11 @@ public class ItemRepositorySynchronizerException extends Exception {
 
     private ItemRepositorySynchronizerAction mAction;
 
-    public ItemRepositorySynchronizerException(String detailMessage, ItemRepositorySynchronizerAction action) {
+    public ItemRepositorySynchronizerException(String detailMessage, @NonNull ItemRepositorySynchronizerAction action) {
         super(detailMessage);
+
+        Objects.requireNonNull(action, "Parameter action of type ItemRepositorySynchronizerAction is mandatory");
+
         mAction = action;
     }
 

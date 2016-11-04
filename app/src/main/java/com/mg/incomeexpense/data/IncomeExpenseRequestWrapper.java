@@ -16,6 +16,8 @@ import com.mg.incomeexpense.dashboard.DashboardPeriodTotal;
 import com.mg.incomeexpense.transaction.Transaction;
 import com.mg.incomeexpense.dashboard.DashboardAmountAccumulator;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -244,7 +246,7 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static DashboardPeriodTotal getDashboardData(@NonNull Context context, @NonNull ContentResolver contentResolver, @NonNull Account account, @NonNull Date date) {
+    public static DashboardPeriodTotal getDashboardData(@NonNull Context context, @NonNull ContentResolver contentResolver, @NonNull Account account, @NonNull LocalDate date) {
 
         Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
         Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
@@ -254,12 +256,12 @@ public class IncomeExpenseRequestWrapper {
         String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
         String[] selectionArgs = new String[]{account.getId().toString()};
 
-        Date dFirstDateYear = DateUtil.getFirstDateOfYear(date).getTime();
-        Date dLastDateYear = DateUtil.getLastDateOfYear(date).getTime();
-        Date dFirstDateMonth = DateUtil.getFirstDateOfMonth(date).getTime();
-        Date dLastDateMonth = DateUtil.getLastDateOfMonth(date).getTime();
-        Date dFirstDateWeek = DateUtil.getFirstDateOfWeek(date).getTime();
-        Date dLastDateWeek = DateUtil.getLastDateOfWeek(date).getTime();
+        LocalDate dFirstDateYear = DateUtil.getFirstDateOfYear(date);
+        LocalDate dLastDateYear = DateUtil.getLastDateOfYear(date);
+        LocalDate dFirstDateMonth = DateUtil.getFirstDateOfMonth(date);
+        LocalDate dLastDateMonth = DateUtil.getLastDateOfMonth(date);
+        LocalDate dFirstDateWeek = DateUtil.getFirstDateOfWeek(date);
+        LocalDate dLastDateWeek = DateUtil.getLastDateOfWeek(date);
 
         Integer firstDateYear = Integer.parseInt(Tools.formatDate(dFirstDateYear, "yyyyMMdd"));
         Integer lastDateYear = Integer.parseInt(Tools.formatDate(dLastDateYear, "yyyyMMdd"));

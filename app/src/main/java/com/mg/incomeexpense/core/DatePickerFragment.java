@@ -3,10 +3,12 @@ package com.mg.incomeexpense.core;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-08-22.
@@ -15,7 +17,10 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     private DatePickerDialog.OnDateSetListener mListener;
 
-    public void setListener(DatePickerDialog.OnDateSetListener listener) {
+    public void setListener(@NonNull DatePickerDialog.OnDateSetListener listener) {
+
+        Objects.requireNonNull(listener, "Parameter listener of type DatePickerDialog.OnDateSetListener is mandatory");
+
         mListener = listener;
     }
 
@@ -30,7 +35,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
             mListener = (DatePickerDialog.OnDateSetListener) bundle.getSerializable("listener");
 
         }
-
 
     }
 

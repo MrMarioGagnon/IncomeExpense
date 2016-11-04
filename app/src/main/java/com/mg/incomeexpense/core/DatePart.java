@@ -1,15 +1,17 @@
 package com.mg.incomeexpense.core;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by mario on 2016-07-21.
  */
 public class DatePart {
 
-    private int mYear;
-    private int mMonth;
-    private int mDay;
+    private Integer mYear;
+    private Integer mMonth;
+    private Integer mDay;
 
-    public DatePart(int year, int month, int day) {
+    public DatePart(@NonNull Integer year, @NonNull Integer month, @NonNull Integer day) {
 
         mYear = year;
         mMonth = month;
@@ -19,6 +21,7 @@ public class DatePart {
 
     @Override
     public boolean equals(Object obj) {
+        if (null == obj) return false;
         if (this == obj)
             return true;
         if (obj == null)
@@ -43,7 +46,7 @@ public class DatePart {
     /**
      * @param day the day to set
      */
-    public void setDay(int day) {
+    public void setDay(Integer day) {
         mDay = day;
     }
 
@@ -57,7 +60,7 @@ public class DatePart {
     /**
      * @param month the month to set
      */
-    public void setMonth(int month) {
+    public void setMonth(Integer month) {
         mMonth = month;
     }
 
@@ -71,7 +74,7 @@ public class DatePart {
     /**
      * @param year the year to set
      */
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         mYear = year;
     }
 

@@ -1,18 +1,23 @@
 package com.mg.incomeexpense.core;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.R;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-23.
  */
 public class ItemRepositorySynchronizerMessageBuilder {
 
-    public static Map<Integer, String> build(Context context, String objectType) {
+    public static Map<Integer, String> build(@NonNull Context context, @NonNull String objectType) {
+
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
+        Objects.requireNonNull(objectType, "Parameter objectType of type String is mandatory");
 
         Map<Integer, String> messages = new HashMap<>();
 

@@ -1,14 +1,21 @@
 package com.mg.incomeexpense.core;
 
+import android.support.annotation.NonNull;
+
+import org.threeten.bp.LocalDate;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-08-18.
  */
 public class DateUtil {
 
-    public static Calendar getFirstDateOfWeek(Date date){
+    public static Calendar getFirstDateOfWeek(@NonNull Date date) {
+
+        Objects.requireNonNull(date, "Parameter date of type Date is mandatory");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -17,7 +24,7 @@ public class DateUtil {
         int currentMonth = calendar.get(Calendar.MONTH);
         int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int firstDayOfWeek = 1;
-        switch(currentDayOfWeek){
+        switch (currentDayOfWeek) {
             case Calendar.MONDAY:
                 firstDayOfWeek = calendar.get(Calendar.DATE);
                 break;
@@ -40,12 +47,14 @@ public class DateUtil {
                 firstDayOfWeek = calendar.get(Calendar.DATE) - 6;
                 break;
         }
-        firstDayOfWeek = firstDayOfWeek < 1 ? 1:firstDayOfWeek;
-        calendar.set(currentYear, currentMonth,firstDayOfWeek);
+        firstDayOfWeek = firstDayOfWeek < 1 ? 1 : firstDayOfWeek;
+        calendar.set(currentYear, currentMonth, firstDayOfWeek);
         return calendar;
     }
 
-    public static Calendar getLastDateOfWeek(Date date){
+    public static Calendar getLastDateOfWeek(@NonNull Date date) {
+
+        Objects.requireNonNull(date, "Parameter date of type Date is mandatory");
 
         Calendar calendar = DateUtil.getFirstDateOfWeek(date);
         int day = calendar.get(Calendar.DATE);
@@ -54,53 +63,56 @@ public class DateUtil {
         int month = calendar.get(Calendar.MONTH);
         int maxDay = calendar.getMaximum(Calendar.DAY_OF_MONTH);
         day = day + 6 > maxDay ? maxDay : day + 6;
-        calendar.set( year, month,day);
+        calendar.set(year, month, day);
 
         return calendar;
     }
 
-    public static Calendar getFirstDateOfMonth(Date date){
+    public static Calendar getFirstDateOfMonth(@NonNull Date date) {
+
+        Objects.requireNonNull(date, "Parameter date of type Date is mandatory");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
         int currentYear = calendar.get(Calendar.YEAR);
         int currentMonth = calendar.get(Calendar.MONTH);
-        calendar.set(currentYear, currentMonth, 1) ;
+        calendar.set(currentYear, currentMonth, 1);
 
         return calendar;
     }
 
-    public static Calendar getLastDateOfMonth(Date date){
+    @NonNull
+    public static LocalDate getLastDateOfMonth(@NonNull LocalDate date) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int maxDay = calendar.getMaximum(Calendar.DAY_OF_MONTH);
+        Objects.requireNonNull(date, "Parameter date of type LocalDate is mandatory");
 
-        calendar.set(currentYear, currentMonth, maxDay);
-        return calendar;
+        return LocalDate.of(date.getYear(), date.getMonth(), date.lengthOfMonth());
+
     }
 
-    public static Calendar getFirstDateOfYear(Date date){
+    public static Calendar getFirstDateOfYear(@NonNull Date date) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int currentYear = calendar.get(Calendar.YEAR);
-
-        calendar.set(currentYear, Calendar.JANUARY, 1) ;
-
-        return calendar;
-    }
-
-    public static Calendar getLastDateOfYear(Date date){
+        Objects.requireNonNull(date, "Parameter date of type Date is mandatory");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int currentYear = calendar.get(Calendar.YEAR);
 
-        calendar.set(currentYear, Calendar.DECEMBER, 31) ;
+        calendar.set(currentYear, Calendar.JANUARY, 1);
+
+        return calendar;
+    }
+
+    public static Calendar getLastDateOfYear(@NonNull Date date) {
+
+        Objects.requireNonNull(date, "Parameter date of type Date is mandatory");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int currentYear = calendar.get(Calendar.YEAR);
+
+        calendar.set(currentYear, Calendar.DECEMBER, 31);
 
         return calendar;
     }
