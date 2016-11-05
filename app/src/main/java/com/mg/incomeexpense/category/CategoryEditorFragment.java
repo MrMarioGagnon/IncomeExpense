@@ -20,6 +20,8 @@ import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.ValidationStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -176,6 +178,13 @@ public class CategoryEditorFragment extends FragmentBase {
                         categories.add(categoryName);
                     }
                 }
+                Collections.sort(categories, new Comparator<String>() {
+                    @Override
+                    public int compare(String lhs, String rhs) {
+                        return lhs.compareToIgnoreCase(rhs);
+                    }
+                });
+
 
                 Category category = Category.create(categories);
                 ValidationStatus validationStatus = getObjectValidator().Validate(category);

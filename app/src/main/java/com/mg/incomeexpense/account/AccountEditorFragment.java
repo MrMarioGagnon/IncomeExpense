@@ -58,12 +58,13 @@ public class AccountEditorFragment extends FragmentBase {
 
     private ImageView mImageViewCategory;
     private ListView mListViewCategory;
-    private List<String> mCategories;
+    private List<String> mSelectedCategories;
     private ArrayAdapter<String> mAdapter;
 
     public AccountEditorFragment() {
 
         mSelectedContributors = new ArrayList<>();
+        mSelectedCategories = new ArrayList<>();
 
         mOnSwitchClickListener = new View.OnClickListener() {
             @Override
@@ -138,10 +139,10 @@ public class AccountEditorFragment extends FragmentBase {
         Objects.requireNonNull(mAvailableContributors, "A list of contributors is mandatory");
 
         mObjectValidator = AccountValidator.create(getActivity(), mNames);
-        mSelectedContributors = mAccount.getContributors();
-        mCategories = mAccount.getCategories();
+        mSelectedContributors.addAll(mAccount.getContributors());
+        mSelectedCategories.addAll(mAccount.getCategories());
 
-        mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mCategories);
+        mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
 
     }
 
@@ -187,7 +188,7 @@ public class AccountEditorFragment extends FragmentBase {
 
         Intent intent = new Intent(getActivity(), CategoryEditorActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("item", Category.create(mCategories));
+        bundle.putSerializable("item", Category.create(mSelectedCategories));
         bundle.putBoolean("hideHomeButton", true);
         intent.putExtras(bundle);
         startActivityForResult(intent, CATEGORY_EDITOR_ACTIVITY);
@@ -199,8 +200,8 @@ public class AccountEditorFragment extends FragmentBase {
         switch (requestCode) {
             case CATEGORY_EDITOR_ACTIVITY:
                 if (data != null) {
-                    mCategories = (List<String>) data.getSerializableExtra("item");
-                    mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mCategories);
+                    mSelectedCategories = (List<String>) data.getSerializableExtra("item");
+                    mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
                     mListViewCategory.setAdapter(mAdapter);
                 }
                 break;
@@ -264,7 +265,7 @@ public class AccountEditorFragment extends FragmentBase {
             case R.id.action_save:
                 mAccount.setName(mEditTextName.getText().toString());
 
-                mAccount.setCategories(mCategories);
+                mAccount.setCategories(mSelectedCategories);
 
                 String budget = mEditTextBudget.getText().toString();
                 if (budget.trim().length() > 0)

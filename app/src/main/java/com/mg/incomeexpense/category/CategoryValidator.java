@@ -9,6 +9,8 @@ import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +37,16 @@ public class CategoryValidator implements ObjectValidator {
 
     private boolean hasDuplicate(List<String> categories) {
         String stringToCompare = null;
+        List<String> listToValidate = new ArrayList<>(categories);
 
-        for (String category : categories) {
+        Collections.sort(listToValidate, new Comparator<String>() {
+            @Override
+            public int compare(String lhs, String rhs) {
+                return lhs.compareToIgnoreCase(rhs);
+            }
+        });
+
+        for (String category : listToValidate) {
             if (null == stringToCompare) {
                 stringToCompare = category;
             } else {
