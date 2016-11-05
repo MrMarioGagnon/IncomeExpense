@@ -16,6 +16,8 @@ import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.TransactionListActivity;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -96,7 +98,7 @@ public class DashboardFragment extends Fragment {
         @Override
         protected DashboardPeriodTotal doInBackground(String... params) {
 
-            DashboardPeriodTotal d = IncomeExpenseRequestWrapper.getDashboardData(getActivity(), getActivity().getContentResolver(), mAccount, new Date());
+            DashboardPeriodTotal d = IncomeExpenseRequestWrapper.getDashboardData(getActivity(), getActivity().getContentResolver(), mAccount, LocalDate.now());
 
             return d;
         }

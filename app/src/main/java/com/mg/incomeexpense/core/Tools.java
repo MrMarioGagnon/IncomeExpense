@@ -1,10 +1,7 @@
 package com.mg.incomeexpense.core;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -12,8 +9,9 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.contributor.Contributor;
-import com.mg.incomeexpense.data.IncomeExpenseContract;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,7 +21,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +34,7 @@ import java.util.Objects;
  */
 public class Tools {
 
-    public static List<String> split(String stringToSplit, String separator){
+    public static List<String> split(String stringToSplit, String separator) {
         List<String> items;
 
         String[] strings = stringToSplit.split(separator);
@@ -49,9 +46,9 @@ public class Tools {
         return items;
     }
 
-    public static String getDefaultCurrency(Context context){
+    public static String getDefaultCurrency(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String defaultCurrency =  preferences.getString(context.getString(R.string.pref_default_currency_key), context.getString(R.string.pref_CAD_currency));
+        String defaultCurrency = preferences.getString(context.getString(R.string.pref_default_currency_key), context.getString(R.string.pref_CAD_currency));
         return defaultCurrency;
     }
 
@@ -67,17 +64,11 @@ public class Tools {
 
     }
 
-    public static String formatDate(Date date, String stringFormat){
-
-        SimpleDateFormat format = new SimpleDateFormat(stringFormat);
-
-        String parsed = null;
-        parsed = format.format(date);
-        return parsed;
-
+    public static String formatDate(LocalDate date, String stringFormat) {
+        return date.format(DateTimeFormatter.ofPattern(stringFormat));
     }
 
-    public static String formatAmount(@NonNull Double amount){
+    public static String formatAmount(@NonNull Double amount) {
 
         Objects.requireNonNull(amount, "Parameter amount of type Double is mandatory");
 
@@ -186,7 +177,7 @@ public class Tools {
         T o;
         while (iter.hasNext()) {
             o = iter.next();
-            if(o != null)
+            if (o != null)
                 buffer.append(delimiter).append(o.toString());
         }
         return buffer.toString();
@@ -209,21 +200,21 @@ public class Tools {
         return Double.valueOf(twoDForm.format(d));
     }
 
-    public static <T> void setSpinner(final T o, final Spinner s){
+    public static <T> void setSpinner(final T o, final Spinner s) {
         SpinnerAdapter adapter = s.getAdapter();
 
-        if(o == null && adapter.getCount() == 0)
+        if (o == null && adapter.getCount() == 0)
             return;
 
-        if(o==null) {
+        if (o == null) {
             s.setSelection(0);
             return;
         }
 
         T item;
-        for(int i = 0; i < adapter.getCount() ; i++){
-            item = (T)adapter.getItem(i);
-            if(o.equals(item)){
+        for (int i = 0; i < adapter.getCount(); i++) {
+            item = (T) adapter.getItem(i);
+            if (o.equals(item)) {
                 s.setSelection(i);
                 break;
             }
