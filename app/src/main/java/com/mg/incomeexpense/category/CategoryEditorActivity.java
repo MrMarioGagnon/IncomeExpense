@@ -2,6 +2,7 @@ package com.mg.incomeexpense.category;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 
 import com.mg.incomeexpense.R;
@@ -9,13 +10,12 @@ import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-19.
  */
 public class CategoryEditorActivity extends AppCompatActivityBase {
-
-    private static final String LOG_TAG = CategoryEditorActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +26,10 @@ public class CategoryEditorActivity extends AppCompatActivityBase {
         if (null == savedInstanceState) {
 
             Bundle bundle = getIntent().getExtras();
-            if (null == bundle)
-                throw new NullPointerException("A bundle with and Category item is mandatory");
+            Objects.requireNonNull(bundle, "A bundle with and Category item is mandatory");
 
-            Category categories = (Category) bundle.getSerializable("item");
-            if (null == categories)
-                throw new NullPointerException("An Category object is mandatory");
+            ArrayList<String> categories = (ArrayList) bundle.getSerializable("item");
+            Objects.requireNonNull(categories, "An Category object is mandatory");
 
             ActionBar actionBar = getSupportActionBar();
 
@@ -51,19 +49,16 @@ public class CategoryEditorActivity extends AppCompatActivityBase {
     }
 
     @Override
-    public void onItemStateChange(ItemStateChangeEvent event) {
+    public void onItemStateChange(@NonNull ItemStateChangeEvent event) {
 
-        if (event.isCancelled()) {
+        Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
+
+        if (event.isCancelled() || !(event.getItem() instanceof ArrayList)) {
             setResult(RESULT_CANCELED);
         } else {
-            Category category = (Category) event.getItem();
-            if (null != category) {
-                ArrayList<String> categories = new ArrayList<>(category.getCategories());
-                Intent intent = new Intent();
-                intent.putExtra("item", categories);
-                setResult(RESULT_OK, intent);
-            }
-
+            Intent intent = new Intent();
+            intent.putExtra("item", (ArrayList<String>) event.getItem());
+            setResult(RESULT_OK, intent);
         }
 
         finish();

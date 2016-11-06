@@ -251,7 +251,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         switch (id) {
             case R.id.action_delete:
                 mTransaction.setDead(true);
-                notifyListener(new ItemStateChangeEvent(mTransaction));
+                notifyListener(new ItemStateChangeEvent(mTransaction, false));
                 break;
             case R.id.action_save:
 
@@ -283,14 +283,14 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 ValidationStatus validationStatus = mObjectValidator.Validate(mTransaction);
 
                 if (validationStatus.isValid()) {
-                    notifyListener(new ItemStateChangeEvent(mTransaction));
+                    notifyListener(new ItemStateChangeEvent(mTransaction, false));
                 } else {
                     mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
                 }
                 break;
             case android.R.id.home:
-                notifyListener(new ItemStateChangeEvent());
+                notifyListener(new ItemStateChangeEvent(mTransaction, true));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

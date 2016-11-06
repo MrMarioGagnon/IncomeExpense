@@ -57,9 +57,9 @@ public class ContributorValidator implements ObjectValidator {
 
     }
 
-    public ValidationStatus Validate(@NonNull ObjectBase objectToValidate) {
+    public ValidationStatus Validate(@NonNull Object objectToValidate) {
 
-        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type Object is mandatory");
 
         if (!(objectToValidate instanceof Contributor)) {
             return ValidationStatus.create("Wrong object type.");

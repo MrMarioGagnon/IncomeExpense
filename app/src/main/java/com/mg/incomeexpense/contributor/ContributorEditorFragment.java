@@ -104,7 +104,7 @@ public class ContributorEditorFragment extends FragmentBase {
 
                         if (validationStatus.isValid()) {
                             mContributor.setDead(true);
-                            notifyListener(new ItemStateChangeEvent(mContributor));
+                            notifyListener(new ItemStateChangeEvent(mContributor, false));
                         } else {
                             mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                             mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
@@ -124,14 +124,14 @@ public class ContributorEditorFragment extends FragmentBase {
                 validationStatus = mObjectValidator.Validate(mContributor);
 
                 if (validationStatus.isValid()) {
-                    notifyListener(new ItemStateChangeEvent(mContributor));
+                    notifyListener(new ItemStateChangeEvent(mContributor, false));
                 } else {
                     mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
                 }
                 break;
             case android.R.id.home:
-                notifyListener(new ItemStateChangeEvent());
+                notifyListener(new ItemStateChangeEvent(mContributor, true));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

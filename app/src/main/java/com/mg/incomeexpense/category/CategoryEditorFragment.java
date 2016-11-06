@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by mario on 2016-07-19.
  */
 public class CategoryEditorFragment extends FragmentBase {
 
-    private static final String LOG_TAG = CategoryEditorFragment.class.getSimpleName();
     private List<String> mCategories;
     private TextView mTextViewValidationErrorMessage;
     private ObjectValidator mObjectValidator = null;
@@ -78,12 +78,10 @@ public class CategoryEditorFragment extends FragmentBase {
         setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
-        if (null == bundle)
-            throw new NullPointerException("A bundle is mandatory");
+        Objects.requireNonNull(bundle, "A bundle is mandatory");
 
-        mCategories = ((Category) bundle.getSerializable("item")).getCategories();
-        if (null == mCategories)
-            throw new NullPointerException("A list of categories is mandatory");
+        mCategories = (ArrayList<String>) bundle.getSerializable("item");
+        Objects.requireNonNull(mCategories, "A list of categories is mandatory");
     }
 
     @Override
@@ -96,12 +94,10 @@ public class CategoryEditorFragment extends FragmentBase {
         Button buttonAddCategory = (Button) rootView.findViewById(R.id.button_add_category);
         buttonAddCategory.setOnClickListener(mAddCategoryClickListener);
 
-        if (null == savedInstanceState) {
-            if (mCategories.size() == 0) {
-                buttonAddCategory.performClick();
-            } else {
-                AddCategories(mCategories);
-            }
+        if (mCategories.size() == 0) {
+            buttonAddCategory.performClick();
+        } else {
+            AddCategories(mCategories);
         }
 
         return rootView;
@@ -160,14 +156,14 @@ public class CategoryEditorFragment extends FragmentBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        List<String> categories = null;
         switch (id) {
             case R.id.action_save:
                 // Get sub items from layout and update mCategory
                 ViewGroup categoryView = mLinearLayoutCategory;
                 EditText editTextCategory;
                 String categoryName;
-                List<String> categories = new ArrayList();
+                categories = new ArrayList();
                 for (int i = 0; i < categoryView.getChildCount(); i++) {
                     View view = categoryView.getChildAt(i);
                     editTextCategory = (EditText) view
@@ -185,12 +181,10 @@ public class CategoryEditorFragment extends FragmentBase {
                     }
                 });
 
-
-                Category category = Category.create(categories);
-                ValidationStatus validationStatus = getObjectValidator().Validate(category);
+                ValidationStatus validationStatus = getObjectValidator().Validate(categories);
 
                 if (validationStatus.isValid()) {
-                    notifyListener(new ItemStateChangeEvent(category));
+                    notifyListener(new ItemStateChangeEvent(categories, false));
                 } else {
                     mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
@@ -198,7 +192,7 @@ public class CategoryEditorFragment extends FragmentBase {
 
                 break;
             case android.R.id.home:
-                notifyListener(new ItemStateChangeEvent());
+                notifyListener(new ItemStateChangeEvent(categories, true));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

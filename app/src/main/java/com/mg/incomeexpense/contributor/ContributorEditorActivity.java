@@ -56,14 +56,14 @@ public class ContributorEditorActivity extends AppCompatActivityBase {
 
         Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
 
-        if (event.isCancelled()) {
+        if (event.isCancelled() || !(event.getItem() instanceof Contributor)) {
             setResult(RESULT_CANCELED);
         } else {
 
             ContributorRepositorySynchronizer synchronizer = new ContributorRepositorySynchronizer(getContentResolver(),
                     IncomeExpenseContract.ContributorEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, ContributorRepositorySynchronizer.class.getSimpleName()));
 
-            synchronizer.Save(event.getItem());
+            synchronizer.Save((Contributor) event.getItem());
             setResult(RESULT_OK);
         }
 

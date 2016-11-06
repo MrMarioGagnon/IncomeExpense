@@ -9,31 +9,30 @@ import java.util.Objects;
  */
 public class ItemStateChangeEvent {
 
-    private ObjectBase mItem;
+    private Object mItem;
     private Boolean mIsCancelled = false;
 
-    public ItemStateChangeEvent(@NonNull ObjectBase item) {
+    public ItemStateChangeEvent(@NonNull Object item, Boolean isCancelled) {
 
         Objects.requireNonNull(item, "Parameter item of type ObjectBase is mandatory.");
 
-        if (item.getId() == null && !item.isNew()) {
-            throw new NullPointerException("Item id is null but item is not new.");
+        if (item instanceof ObjectBase) {
+            ObjectBase ob = (ObjectBase) item;
+            if (ob.getId() == null && !ob.isNew()) {
+                throw new NullPointerException("Item id is null but item is not new.");
+            }
         }
 
         mItem = item;
-        mIsCancelled = false;
+        mIsCancelled = null == isCancelled ? false : isCancelled;
 
-    }
-
-    public ItemStateChangeEvent() {
-        mIsCancelled = true;
     }
 
     public Boolean isCancelled() {
         return mIsCancelled;
     }
 
-    public ObjectBase getItem() {
+    public Object getItem() {
         return mItem;
     }
 

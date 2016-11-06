@@ -3,7 +3,6 @@ package com.mg.incomeexpense.category;
 import android.content.Context;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
@@ -61,19 +60,19 @@ public class CategoryValidator implements ObjectValidator {
 
     }
 
-    public ValidationStatus Validate(ObjectBase objectToValidate) {
+    public ValidationStatus Validate(Object objectToValidate) {
 
         List<String> messages = new ArrayList<>();
 
-        if (!(objectToValidate instanceof Category)) {
-            return ValidationStatus.create("Wrong object type.");
+        if (!(objectToValidate instanceof ArrayList)) {
+            return ValidationStatus.create("Wrong object type, must be ArrayList.");
         }
 
-        Category category = (Category) objectToValidate;
+        List<String> categories = (ArrayList<String>) objectToValidate;
 
-        if (category.getCategories().size() == 0) {
+        if (categories.size() == 0) {
             messages.add(mValidationMessages.get(R.string.validation_category_mandatory));
-        } else if (hasDuplicate(category.getCategories())) {
+        } else if (hasDuplicate(categories)) {
             messages.add(mValidationMessages.get(R.string.validation_category_duplicate));
         }
 

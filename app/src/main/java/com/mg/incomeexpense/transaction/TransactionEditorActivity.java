@@ -63,14 +63,14 @@ public class TransactionEditorActivity extends AppCompatActivityBase {
 
         Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
 
-        if (event.isCancelled()) {
+        if (event.isCancelled() || !(event.getItem() instanceof Transaction)) {
             setResult(RESULT_CANCELED);
         } else {
 
             TransactionRepositorySynchronizer synchronizer = new TransactionRepositorySynchronizer(getContentResolver(),
                     IncomeExpenseContract.TransactionEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, TransactionRepositorySynchronizer.class.getSimpleName()));
 
-            synchronizer.Save(event.getItem());
+            synchronizer.Save((Transaction) event.getItem());
             setResult(RESULT_OK);
         }
 

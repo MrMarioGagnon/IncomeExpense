@@ -18,7 +18,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.category.CategoryEditorActivity;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.FragmentBase;
@@ -58,7 +57,7 @@ public class AccountEditorFragment extends FragmentBase {
 
     private ImageView mImageViewCategory;
     private ListView mListViewCategory;
-    private List<String> mSelectedCategories;
+    private ArrayList<String> mSelectedCategories;
     private ArrayAdapter<String> mAdapter;
 
     public AccountEditorFragment() {
@@ -188,7 +187,7 @@ public class AccountEditorFragment extends FragmentBase {
 
         Intent intent = new Intent(getActivity(), CategoryEditorActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("item", Category.create(mSelectedCategories));
+        bundle.putSerializable("item", mSelectedCategories);
         bundle.putBoolean("hideHomeButton", true);
         intent.putExtras(bundle);
         startActivityForResult(intent, CATEGORY_EDITOR_ACTIVITY);
@@ -200,7 +199,7 @@ public class AccountEditorFragment extends FragmentBase {
         switch (requestCode) {
             case CATEGORY_EDITOR_ACTIVITY:
                 if (data != null) {
-                    mSelectedCategories = (List<String>) data.getSerializableExtra("item");
+                    mSelectedCategories = (ArrayList<String>) data.getSerializableExtra("item");
                     mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
                     mListViewCategory.setAdapter(mAdapter);
                 }
@@ -247,7 +246,7 @@ public class AccountEditorFragment extends FragmentBase {
 
                         if (validationStatus.isValid()) {
                             mAccount.setDead(true);
-                            notifyListener(new ItemStateChangeEvent(mAccount));
+                            notifyListener(new ItemStateChangeEvent(mAccount, false));
                         } else {
                             mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                             mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
@@ -278,7 +277,7 @@ public class AccountEditorFragment extends FragmentBase {
                 validationStatus = mObjectValidator.Validate(mAccount);
 
                 if (validationStatus.isValid()) {
-                    notifyListener(new ItemStateChangeEvent(mAccount));
+                    notifyListener(new ItemStateChangeEvent(mAccount, false));
                 } else {
 
                     mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
@@ -286,7 +285,7 @@ public class AccountEditorFragment extends FragmentBase {
                 }
                 break;
             case android.R.id.home:
-                notifyListener(new ItemStateChangeEvent());
+                notifyListener(new ItemStateChangeEvent(mAccount, true));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

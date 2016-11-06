@@ -67,7 +67,7 @@ public class PaymentMethodEditorActivity extends AppCompatActivityBase {
 
         Objects.requireNonNull(event, "Parameter event of type ItemStateChangeEvent is mandatory");
 
-        if (event.isCancelled()) {
+        if (event.isCancelled() || !(event.getItem() instanceof PaymentMethod)) {
             setResult(RESULT_CANCELED);
             finish();
         } else {

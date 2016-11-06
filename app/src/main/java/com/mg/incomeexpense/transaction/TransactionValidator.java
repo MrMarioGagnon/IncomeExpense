@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
@@ -48,16 +47,17 @@ public class TransactionValidator implements ObjectValidator {
         return new TransactionValidator(messages);
     }
 
-    public ValidationStatus Validate(@NonNull ObjectBase objectToValidate) {
+    public ValidationStatus Validate(@NonNull Object objectToValidate) {
 
-        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
-
-        List<String> messages = new ArrayList<>();
-        String message;
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type Object is mandatory");
 
         if (!(objectToValidate instanceof Transaction)) {
             return ValidationStatus.create("Wrong object type.");
         }
+
+        List<String> messages = new ArrayList<>();
+        String message;
+
 
         Transaction transaction = (Transaction) objectToValidate;
 

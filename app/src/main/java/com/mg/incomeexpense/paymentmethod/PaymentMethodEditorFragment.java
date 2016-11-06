@@ -157,7 +157,7 @@ public class PaymentMethodEditorFragment extends FragmentBase {
 
                         if (mObjectValidator.canDelete(transactions)) {
                             mPaymentMethod.setDead(true);
-                            notifyListener(new ItemStateChangeEvent(mPaymentMethod));
+                            notifyListener(new ItemStateChangeEvent(mPaymentMethod, false));
                         } else {
                             String message = getString(R.string.error_foreign_key_constraint, getString(R.string.payment_method), mPaymentMethod.getName());
                             mTextViewValidationErrorMessage.setText(message);
@@ -186,14 +186,14 @@ public class PaymentMethodEditorFragment extends FragmentBase {
                 ValidationStatus validationStatus = mObjectValidator.Validate(mPaymentMethod);
 
                 if (validationStatus.isValid()) {
-                    notifyListener(new ItemStateChangeEvent(mPaymentMethod));
+                    notifyListener(new ItemStateChangeEvent(mPaymentMethod, false));
                 } else {
                     mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
                 }
                 break;
             case android.R.id.home:
-                notifyListener(new ItemStateChangeEvent());
+                notifyListener(new ItemStateChangeEvent(mPaymentMethod, true));
                 break;
             default:
                 return super.onOptionsItemSelected(item);
