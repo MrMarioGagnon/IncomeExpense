@@ -27,35 +27,96 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/text_view_account_name"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_view_account" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/text_view_account_name"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_contributors" />
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:id="@+id/linear_layout_currency"
+            style="@style/TransactionEditorSectionStyle">
 
             <TextView
-                android:id="@+id/textview_contributors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_view_currency" />
+
+            <TextView
+                android:id="@+id/text_view_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_view_exchange_rate" />
+
+            <TextView
+                android:id="@+id/text_view_exchange_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_date"
+            style="@style/TransactionEditorSectionStyle">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sample text" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_date" />
+
+                <TextView
+                    android:id="@+id/text_view_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10" />
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/image_view_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_insert_invitation_black_24dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_contributor"
+            style="@style/TransactionEditorSectionStyle">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_contributors" />
+
+                <TextView
+                    android:id="@+id/textview_contributors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sample text" />
+
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/imagebutton_contributors"
@@ -91,81 +152,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_layout_amount"
-            style="@style/TransactionEditorSectionStyle">
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_view_amount" />
-
-                <EditText
-                    android:id="@+id/edit_text_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_layout_currency"
-            style="@style/TransactionEditorSectionStyle">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_view_currency" />
-
-                <TextView
-                    android:id="@+id/text_view_currency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_layout_exchange_rate"
-            style="@style/TransactionEditorSectionStyle">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_view_exchange_rate" />
-
-                <TextView
-                    android:id="@+id/text_view_exchange_rate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/linear_layout_category"
             style="@style/TransactionEditorSectionStyle">
 
@@ -190,8 +176,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_layout_date"
+            android:id="@+id/linear_layout_amount"
             style="@style/TransactionEditorSectionStyle">
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -202,22 +189,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_view_date" />
+                    android:text="@string/text_view_amount" />
 
-                <TextView
-                    android:id="@+id/text_view_date"
+                <EditText
+                    android:id="@+id/edit_text_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10" />
+                    android:ems="10"
+                    android:inputType="numberDecimal" />
+
             </LinearLayout>
-
-
-            <ImageView
-                android:id="@+id/image_view_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_insert_invitation_black_24dp" />
 
         </LinearLayout>
 
