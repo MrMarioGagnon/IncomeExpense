@@ -3,7 +3,6 @@ package com.mg.incomeexpense.category;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
@@ -31,11 +30,6 @@ public class CategoryEditorActivity extends AppCompatActivityBase {
             ArrayList<String> categories = (ArrayList) bundle.getSerializable("item");
             Objects.requireNonNull(categories, "An Category object is mandatory");
 
-            ActionBar actionBar = getSupportActionBar();
-
-            if (actionBar != null) {
-                actionBar.setTitle(R.string.title_category_editor_update);
-            }
 
             CategoryEditorFragment fragment = new CategoryEditorFragment();
             fragment.addListener(this);

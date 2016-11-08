@@ -2,7 +2,6 @@ package com.mg.incomeexpense.contributor;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
@@ -31,12 +30,6 @@ public class ContributorEditorActivity extends AppCompatActivityBase {
 
             Contributor contributor = (Contributor) bundle.getSerializable("item");
             Objects.requireNonNull(contributor, "A contributor object is mandatory");
-
-            ActionBar actionBar = getSupportActionBar();
-
-            if (actionBar != null) {
-                actionBar.setTitle(getString(contributor.isNew() ? R.string.title_contributor_editor_add : R.string.title_contributor_editor_update));
-            }
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableContributorName(getContentResolver(), contributor));
 

@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.contributor;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ValidationStatus;
@@ -62,6 +64,11 @@ public class ContributorEditorFragment extends FragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ActionBar actionBar = ((AppCompatActivityBase) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(mContributor.isNew() ? R.string.title_contributor_editor_add : R.string.title_contributor_editor_update));
+        }
 
         View rootView = inflater.inflate(R.layout.contributor_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_contributor_name);

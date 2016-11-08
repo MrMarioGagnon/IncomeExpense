@@ -3,7 +3,6 @@ package com.mg.incomeexpense.paymentmethod;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import com.mg.incomeexpense.R;
@@ -38,11 +37,6 @@ public class PaymentMethodEditorActivity extends AppCompatActivityBase {
 
             PaymentMethod paymentMethod = (PaymentMethod) bundle.getSerializable("item");
             Objects.requireNonNull(paymentMethod, "A payment method object is mandatory");
-
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setTitle(getString(paymentMethod.isNew() ? R.string.title_payment_method_editor_add : R.string.title_payment_method_editor_update));
-            }
 
             if (paymentMethod.isNew()) {
                 paymentMethod.setCurrency(Tools.getDefaultCurrency(this));

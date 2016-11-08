@@ -35,7 +35,7 @@
     <string name="title_contributor_editor_add">Add Contributor</string>
     <string name="title_contributor_editor_update">Update Contributor</string>
     <string name="title_account_list">Accounts</string>
-    <string name="title_account_editor">Contributor</string>
+    <string name="title_account_editor">Account</string>
     <string name="title_account_editor_add">Add Account</string>
     <string name="title_account_editor_update">Update Account</string>
     <string name="title_save">Save</string>

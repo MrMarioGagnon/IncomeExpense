@@ -2,7 +2,6 @@ package com.mg.incomeexpense.transaction;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
@@ -31,19 +30,6 @@ public class TransactionEditorActivity extends AppCompatActivityBase {
 
             Transaction transaction = (Transaction) bundle.getSerializable("item");
             Objects.requireNonNull(transaction, "An transaction object is mandatory");
-
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-
-                if (transaction.getType().equals(Transaction.TransactionType.Expense)) {
-                    actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add_expense : R.string.title_transaction_editor_update_expense));
-                } else {
-                    actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add_income : R.string.title_transaction_editor_update_income));
-                }
-
-            } else {
-                actionBar.setTitle(getString(transaction.isNew() ? R.string.title_transaction_editor_add : R.string.title_transaction_editor_update));
-            }
 
             bundle.putSerializable("paymentMethods", IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getContentResolver()));
 

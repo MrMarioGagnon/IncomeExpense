@@ -3,7 +3,6 @@ package com.mg.incomeexpense.account;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import com.mg.incomeexpense.R;
@@ -36,11 +35,6 @@ public class AccountEditorActivity extends AppCompatActivityBase {
 
             Account account = (Account) bundle.getSerializable("item");
             Objects.requireNonNull(account, "An account object is mandatory");
-
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setTitle(getString(account.isNew() ? R.string.title_account_editor_add : R.string.title_account_editor_update));
-            }
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableAccountName(getContentResolver(), account));
             bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver()));

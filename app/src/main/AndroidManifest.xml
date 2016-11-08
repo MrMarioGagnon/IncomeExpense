@@ -51,7 +51,7 @@
         <activity
             android:name=".category.CategoryEditorActivity"
             android:label="@string/title_category_editor"
-            android:parentActivityName=".category.CategoryListActivity" >
+            android:parentActivityName=".account.AccountEditorActivity" >
         </activity>
         <activity
             android:name=".transaction.TransactionEditorActivity"

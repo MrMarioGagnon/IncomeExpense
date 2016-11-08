@@ -1,6 +1,7 @@
 package com.mg.incomeexpense.paymentmethod;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.contributor.ContributorSpinnerAdapter;
+import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.Tools;
@@ -97,6 +99,11 @@ public class PaymentMethodEditorFragment extends FragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ActionBar actionBar = ((AppCompatActivityBase) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(mPaymentMethod.isNew() ? R.string.title_payment_method_editor_add : R.string.title_payment_method_editor_update));
+        }
 
         View rootView = inflater.inflate(R.layout.payment_method_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_payment_method_name);

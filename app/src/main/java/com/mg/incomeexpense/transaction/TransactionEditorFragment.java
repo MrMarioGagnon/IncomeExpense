@@ -3,6 +3,7 @@ package com.mg.incomeexpense.transaction;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.CategorySpinnerAdapter;
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.DatePickerFragment;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
@@ -139,6 +141,19 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ActionBar actionBar = ((AppCompatActivityBase) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+
+            if (mTransaction.getType().equals(Transaction.TransactionType.Expense)) {
+                actionBar.setTitle(getString(mTransaction.isNew() ? R.string.title_transaction_editor_add_expense : R.string.title_transaction_editor_update_expense));
+            } else {
+                actionBar.setTitle(getString(mTransaction.isNew() ? R.string.title_transaction_editor_add_income : R.string.title_transaction_editor_update_income));
+            }
+
+        } else {
+            actionBar.setTitle(getString(mTransaction.isNew() ? R.string.title_transaction_editor_add : R.string.title_transaction_editor_update));
+        }
 
         View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
 

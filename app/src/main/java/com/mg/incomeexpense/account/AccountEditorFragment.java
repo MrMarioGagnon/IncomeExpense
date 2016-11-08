@@ -3,6 +3,7 @@ package com.mg.incomeexpense.account;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.CategoryEditorActivity;
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
 import com.mg.incomeexpense.core.ValidationStatus;
@@ -148,6 +150,11 @@ public class AccountEditorFragment extends FragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ActionBar actionBar = ((AppCompatActivityBase) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(mAccount.isNew() ? R.string.title_account_editor_add : R.string.title_account_editor_update));
+        }
 
         View rootView = inflater.inflate(R.layout.account_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_account_name);
