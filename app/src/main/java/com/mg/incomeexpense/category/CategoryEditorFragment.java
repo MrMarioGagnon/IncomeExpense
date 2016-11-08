@@ -79,6 +79,12 @@ public class CategoryEditorFragment extends FragmentBase {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mLinearLayoutCategory.removeAllViews();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -95,14 +101,13 @@ public class CategoryEditorFragment extends FragmentBase {
         Button buttonAddCategory = (Button) rootView.findViewById(R.id.button_add_category);
         buttonAddCategory.setOnClickListener(mAddCategoryClickListener);
 
-//        if(null == savedInstanceState) {
         mLayoutPosition = 0;
         if (mCategories.size() == 0) {
             buttonAddCategory.performClick();
         } else {
             AddCategories(mCategories);
         }
-        //      }
+
         return rootView;
     }
 
