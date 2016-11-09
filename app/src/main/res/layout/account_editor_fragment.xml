@@ -71,7 +71,7 @@
 
     <LinearLayout
         android:id="@+id/linear_layout_category"
-        style="@style/TransactionEditorSectionStyle">
+        style="@style/transaction_editor_section_style">
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -5,5 +5,5 @@
     android:layout_height="wrap_content"
 
     android:id="@+id/textView_contributor_name"
-    style="@style/ListItemStyle"
+    style="@style/list_item_style"
     />

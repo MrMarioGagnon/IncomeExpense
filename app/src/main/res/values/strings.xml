@@ -78,12 +78,18 @@
     <string name="message_payment_method_no_data">No Payment Method Available.</string>
     <string name="message_transaction_no_data">No Transaction Available.</string>
 
+    <string name="label_account">Account:</string>
     <string name="label_name">Name:</string>
     <string name="label_currency">Currency:</string>
-    <string name="label_contributors">Contributors:</string>
+    <string name="label_contributors">Contributors</string>
     <string name="label_exchange_rate">Exchange Rate:</string>
     <string name="label_budget">Budget:</string>
     <string name="label_owner">Owner:</string>
+    <string name="label_date">Date:</string>
+    <string name="label_amount">Amount:</string>
+    <string name="label_payment_method">Payment Method</string>
+    <string name="label_category">Category</string>
+    <string name="label_note">Note</string>
 
     <string name="hint_contributor_name">Contributor name</string>
     <string name="hint_account_name">Account name</string>

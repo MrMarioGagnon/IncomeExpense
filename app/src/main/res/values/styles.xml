@@ -28,18 +28,18 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="TransactionEditorSectionStyle">
+    <style name="transaction_editor_section_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_margin">5dp</item>
     </style>
 
-    <style name="DashboardSectionStyle">
+    <style name="dashboard_section_style">
         <item name="android:layout_margin">5dp</item>
     </style>
 
-    <style name="ListItemStyle">
+    <style name="list_item_style">
         <item name="android:minHeight">?android:attr/listPreferredItemHeight</item>
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">20dp</item>
@@ -49,6 +49,10 @@
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="editor_label_style">
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>
