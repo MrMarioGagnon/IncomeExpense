@@ -41,7 +41,6 @@ public class CategorySpinnerAdapter extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // I created a dynamic TextView here, but you can reference your own  custom layout for each spinner item
         TextView label = new TextView(mContext);
-        label.setTextColor(Color.BLACK);
         // Then you can get the current item using the values array (Users array) and the current position
         // You can NOW reference each method you has created in your bean object (User class)
         label.setText(mCategories.get(position));
@@ -56,7 +55,6 @@ public class CategorySpinnerAdapter extends ArrayAdapter<String> {
     public View getDropDownView(int position, View convertView,
                                 ViewGroup parent) {
         TextView label = new TextView(mContext);
-        label.setTextColor(Color.BLACK);
         label.setText(mCategories.get(position));
 
         return label;

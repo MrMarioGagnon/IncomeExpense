@@ -20,6 +20,7 @@ import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -225,7 +226,7 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static ArrayList<PaymentMethod> getAvailablePaymentMethods(@NonNull ContentResolver contentResolver) {
+    public static ArrayList<PaymentMethod> getAvailablePaymentMethods(@NonNull ContentResolver contentResolver, List<Contributor> contributors) {
 
         Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
 
@@ -234,8 +235,16 @@ public class IncomeExpenseRequestWrapper {
         Cursor cursor = null;
         try {
             cursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.CONTENT_URI, null, null, null, String.format("LOWER(%1$s)", IncomeExpenseContract.PaymentMethodEntry.COLUMN_NAME));
+            PaymentMethod paymentMethod = null;
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                assets.add(PaymentMethod.create(cursor, contentResolver));
+
+                paymentMethod = PaymentMethod.create(cursor, contentResolver);
+
+                if(null != contributors && !contributors.contains(paymentMethod.getOwner())){
+                    continue;
+                }
+                assets.add(paymentMethod);
+
             }
         } finally {
             if (null != cursor) {

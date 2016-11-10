@@ -85,8 +85,7 @@
 
         <LinearLayout
             android:id="@+id/linear_layout_amount"
-            style="@style/transaction_editor_section_style"
-            android:background="@drawable/custom_border">
+            style="@style/transaction_editor_section_style">
 
             <TextView
                 style="@style/editor_label_style"
@@ -103,10 +102,11 @@
 
         </LinearLayout>
 
+        <View style="@style/Divider"/>
+
         <LinearLayout
             android:id="@+id/linear_layout_date"
-            style="@style/transaction_editor_section_style"
-            android:background="@drawable/custom_border">
+            style="@style/transaction_editor_section_style">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -137,10 +137,11 @@
 
         </LinearLayout>
 
+        <View style="@style/Divider"/>
+
         <LinearLayout
             android:id="@+id/linear_layout_contributor"
-            style="@style/transaction_editor_section_style"
-            android:background="@drawable/custom_border">
+            style="@style/transaction_editor_section_style">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -172,10 +173,11 @@
 
         </LinearLayout>
 
+        <View style="@style/Divider"/>
+
         <LinearLayout
             android:id="@+id/linear_layout_payment_method"
-            style="@style/transaction_editor_section_style"
-            android:background="@drawable/custom_border">
+            style="@style/transaction_editor_section_style">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -198,10 +200,11 @@
 
         </LinearLayout>
 
+        <View style="@style/Divider"/>
+
         <LinearLayout
             android:id="@+id/linear_layout_category"
-            style="@style/transaction_editor_section_style"
-            android:background="@drawable/custom_border">
+            style="@style/transaction_editor_section_style">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -224,10 +227,11 @@
 
         </LinearLayout>
 
+        <View style="@style/Divider"/>
+
         <LinearLayout
             android:id="@+id/linear_layout_note"
-            style="@style/transaction_editor_section_style"
-            android:background="@drawable/custom_border">
+            style="@style/transaction_editor_section_style">
 
             <LinearLayout
                 android:layout_width="wrap_content"

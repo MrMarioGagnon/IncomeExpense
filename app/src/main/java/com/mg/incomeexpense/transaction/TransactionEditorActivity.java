@@ -31,7 +31,7 @@ public class TransactionEditorActivity extends AppCompatActivityBase {
             Transaction transaction = (Transaction) bundle.getSerializable("item");
             Objects.requireNonNull(transaction, "An transaction object is mandatory");
 
-            bundle.putSerializable("paymentMethods", IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getContentResolver()));
+            bundle.putSerializable("paymentMethods", IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getContentResolver(), transaction.getAccount().getContributors()));
 
             TransactionEditorFragment fragment = new TransactionEditorFragment();
             fragment.addListener(this);
