@@ -3,6 +3,8 @@ package com.mg.incomeexpense.transaction;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -74,7 +76,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private TextView mTextViewContributors;
     private List<Contributor> mAvailableContributors;
     private List<Contributor> mSelectedContributors;
-
 
     public TransactionEditorFragment() {
 
@@ -184,8 +185,38 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         });
 
         mSpinnerCategory = (Spinner) rootView.findViewById(R.id.spinner_category);
-        mSpinnerCategory.setAdapter(mCategorySpinnerAdapter); // Set the custom adapter to the spinner
-        // You can create an anonymous listener to handle the event when is selected an spinner item
+        mSpinnerCategory.setAdapter(mCategorySpinnerAdapter);
+        mSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                  String category = mCategorySpinnerAdapter.getItem(position);
+
+                Bundle bundle = new Bundle();
+                Fragment extensionFragment;
+                if(category.toUpperCase().equals("FUEL")){
+
+                    bundle.putString("data", "123;456");
+                    extensionFragment = new FuelExtensionFragment();
+
+                }else{
+                    extensionFragment = new NoteExtensionFragment();
+
+                }
+
+                extensionFragment.setArguments(bundle);
+
+                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+
+                transaction.replace(R.id.frame_layout_extension, extensionFragment).commit();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         mTextViewCurrency = (TextView) rootView.findViewById(R.id.text_view_currency);
 
@@ -195,7 +226,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
         mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
         mTextViewExchangeRate = (TextView) rootView.findViewById(R.id.text_view_exchange_rate);
-        mEditTextNote = (EditText) rootView.findViewById(R.id.edit_text_note);
+        //mEditTextNote = (EditText) rootView.findViewById(R.id.edit_text_note);
 
         mImageViewDate = (ImageView) rootView.findViewById(R.id.image_view_date);
         mImageViewDate.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +257,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         mEditTextAmount.setText(mTransaction.getAmount().toString());
         mTextViewExchangeRate.setText(mTransaction.getExchangeRate().toString());
         Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
-        mEditTextNote.setText(mTransaction.getNote());
+//        mEditTextNote.setText(mTransaction.getNote());
 
         if (mTransaction.getAccount().getContributors().size() == 1) {
             mSelectedContributors = mTransaction.getAccount().getContributors();
@@ -292,8 +323,8 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 if (exchangeRate.trim().length() > 0)
                     mTransaction.setExchangeRate(Double.parseDouble(exchangeRate));
 
-                String note = mEditTextNote.getText().toString();
-                mTransaction.setNote(note);
+//                String note = mEditTextNote.getText().toString();
+//                mTransaction.setNote(note);
 
                 mTransaction.setContributors(mSelectedContributors);
 

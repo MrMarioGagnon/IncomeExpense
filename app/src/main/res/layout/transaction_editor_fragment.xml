@@ -229,8 +229,14 @@
 
         <View style="@style/Divider"/>
 
-        <LinearLayout
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/frame_layout_extension">
+        </FrameLayout>
+        <!--LinearLayout
             android:id="@+id/linear_layout_note"
+            android:layout_height="wrap_content"
             style="@style/transaction_editor_section_style">
 
             <LinearLayout
@@ -254,7 +260,7 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+        </LinearLayout-->
 
     </LinearLayout>
 
