@@ -1,8 +1,10 @@
-package com.mg.incomeexpense.transaction;
+package com.mg.incomeexpense.extension;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,7 @@ import java.util.Objects;
  * Created by mario on 2016-11-12.
  */
 
-public class FuelExtensionFragment extends Fragment {
+public class ExtensionFragmentFuel extends Fragment {
 
     private String mData;
 
@@ -59,8 +61,11 @@ public class FuelExtensionFragment extends Fragment {
 
                     textViewQty = new TextView(getContext());
                     textViewQty.setText(getString(R.string.label_qty_liters));
+                    textViewQty.setTypeface(null, Typeface.BOLD);
 
                     editTextQty = new EditText(getContext());
+                    editTextQty.setEms(6);
+                    editTextQty.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     if (dataParts.length > 0) {
                         editTextQty.setText(dataParts[0]);
                     }
@@ -74,8 +79,11 @@ public class FuelExtensionFragment extends Fragment {
 
                     textViewCost = new TextView(getContext());
                     textViewCost.setText(getString(R.string.label_cost_liters));
+                    textViewCost.setTypeface(null, Typeface.BOLD);
 
                     editTextCost = new EditText(getContext());
+                    editTextCost.setEms(4);
+                    editTextCost.setInputType(InputType.TYPE_CLASS_NUMBER| InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     if (dataParts.length > 1) {
                         editTextCost.setText(dataParts[1]);
                     }

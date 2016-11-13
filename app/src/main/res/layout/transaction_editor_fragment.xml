@@ -102,7 +102,7 @@
 
         </LinearLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <LinearLayout
             android:id="@+id/linear_layout_date"
@@ -137,7 +137,7 @@
 
         </LinearLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <LinearLayout
             android:id="@+id/linear_layout_contributor"
@@ -173,7 +173,7 @@
 
         </LinearLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <LinearLayout
             android:id="@+id/linear_layout_payment_method"
@@ -200,7 +200,7 @@
 
         </LinearLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <LinearLayout
             android:id="@+id/linear_layout_category"
@@ -227,40 +227,11 @@
 
         </LinearLayout>
 
-        <View style="@style/Divider"/>
+        <View style="@style/Divider" />
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/frame_layout_extension">
-        </FrameLayout>
-        <!--LinearLayout
-            android:id="@+id/linear_layout_note"
-            android:layout_height="wrap_content"
-            style="@style/transaction_editor_section_style">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/editor_label_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_note" />
-
-                <EditText
-                    android:id="@+id/edit_text_note"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textMultiLine" />
-
-            </LinearLayout>
-
-        </LinearLayout-->
+            android:id="@+id/frame_layout_extension"
+            style="@style/transaction_editor_section_style"></FrameLayout>
 
     </LinearLayout>
 

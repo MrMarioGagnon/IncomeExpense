@@ -31,9 +31,14 @@ import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
+import com.mg.incomeexpense.extension.ExtensionDataExtractor;
+import com.mg.incomeexpense.extension.ExtensionFragmentFactory;
+import com.mg.incomeexpense.extension.ExtensionFragmentFuel;
+import com.mg.incomeexpense.extension.ExtensionFragmentNote;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodSpinnerAdapter;
 
+import java.lang.reflect.Constructor;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,6 +81,9 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private TextView mTextViewContributors;
     private List<Contributor> mAvailableContributors;
     private List<Contributor> mSelectedContributors;
+
+    private View mFrameExtension;
+    private String mExtensionData;
 
     public TransactionEditorFragment() {
 
@@ -195,19 +203,19 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 Fragment extensionFragment;
                 if(category.toUpperCase().equals("FUEL")){
 
-                    bundle.putString("data", "123;456");
-                    extensionFragment = new FuelExtensionFragment();
+                    extensionFragment = ExtensionFragmentFactory.create(ExtensionFragmentFactory.ExtensionType.Fuel);
 
                 }else{
-                    extensionFragment = new NoteExtensionFragment();
-
+                    extensionFragment = ExtensionFragmentFactory.create(null);
                 }
 
+                bundle.putString("data", mExtensionData);
                 extensionFragment.setArguments(bundle);
 
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 
                 transaction.replace(R.id.frame_layout_extension, extensionFragment).commit();
+                mExtensionData = "";
 
             }
 
@@ -226,7 +234,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
         mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
         mTextViewExchangeRate = (TextView) rootView.findViewById(R.id.text_view_exchange_rate);
-        //mEditTextNote = (EditText) rootView.findViewById(R.id.edit_text_note);
 
         mImageViewDate = (ImageView) rootView.findViewById(R.id.image_view_date);
         mImageViewDate.setOnClickListener(new View.OnClickListener() {
@@ -257,7 +264,10 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         mEditTextAmount.setText(mTransaction.getAmount().toString());
         mTextViewExchangeRate.setText(mTransaction.getExchangeRate().toString());
         Tools.setSpinner(mTransaction.getPaymentMethod(), mSpinnerPaymentMethod);
-//        mEditTextNote.setText(mTransaction.getNote());
+        Tools.setSpinner(mTransaction.getCategory(), mSpinnerCategory);
+        mExtensionData = mTransaction.getNote();
+
+        mFrameExtension = rootView.findViewById(R.id.frame_layout_extension);
 
         if (mTransaction.getAccount().getContributors().size() == 1) {
             mSelectedContributors = mTransaction.getAccount().getContributors();
@@ -323,10 +333,13 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 if (exchangeRate.trim().length() > 0)
                     mTransaction.setExchangeRate(Double.parseDouble(exchangeRate));
 
-//                String note = mEditTextNote.getText().toString();
-//                mTransaction.setNote(note);
-
                 mTransaction.setContributors(mSelectedContributors);
+
+                // Extension
+                if(mFrameExtension instanceof ViewGroup){
+                    String note = ExtensionDataExtractor.extract(mFrameExtension);
+                    mTransaction.setNote(note);
+                }
 
                 ValidationStatus validationStatus = mObjectValidator.Validate(mTransaction);
 

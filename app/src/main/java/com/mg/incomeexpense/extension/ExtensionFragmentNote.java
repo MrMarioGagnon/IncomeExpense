@@ -1,8 +1,10 @@
-package com.mg.incomeexpense.transaction;
+package com.mg.incomeexpense.extension;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,7 @@ import java.util.Objects;
  * Created by mario on 2016-11-12.
  */
 
-public class NoteExtensionFragment extends Fragment {
+public class ExtensionFragmentNote extends Fragment {
 
     private String mData;
 
@@ -44,22 +46,24 @@ public class NoteExtensionFragment extends Fragment {
 
         LinearLayout linearLayoutMain = new LinearLayout(getActivity());
         linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        linearLayoutMain.setLayoutParams(lp);
 
-        LinearLayout linearLayoutItem;
         TextView textViewNote;
         EditText editTextNote;
 
         textViewNote = new TextView(getActivity());
         textViewNote.setText(getString(R.string.label_note));
+        textViewNote.setTypeface(null, Typeface.BOLD);
 
         editTextNote = new EditText(getActivity());
-        if(dataParts.length > 0){
+        editTextNote.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+        if (dataParts.length > 0) {
             editTextNote.setText(dataParts[0]);
         }
-        linearLayoutItem = new LinearLayout(getActivity());
-        linearLayoutItem.addView(textViewNote);
-        linearLayoutItem.addView(editTextNote);
-        linearLayoutMain.addView(linearLayoutItem);
+        linearLayoutMain.addView(textViewNote);
+        linearLayoutMain.addView(editTextNote);
 
         return linearLayoutMain;
     }
