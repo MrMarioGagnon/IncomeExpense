@@ -9,6 +9,8 @@
     <string name="dialog_title_deleting_contributor">Deleting contributor</string>
     <string name="dialog_title_deleting_account">Deleting account</string>
     <string name="dialog_title_deleting_payment_method">Deleting payment method</string>
+    <string name="dialog_title_deleting_category">Deleting category</string>
+
 
     <string name="app_name">IncomeExpense</string>
     <string name="action_settings">Settings</string>
@@ -77,6 +79,7 @@
     <string name="message_account_no_data">No Account Available.</string>
     <string name="message_payment_method_no_data">No Payment Method Available.</string>
     <string name="message_transaction_no_data">No Transaction Available.</string>
+    <string name="message_category_no_data">No Category Available.</string>
 
     <string name="label_account">Account:</string>
     <string name="label_name">Name:</string>
@@ -99,6 +102,7 @@
     <string name="hint_enter_category">Enter Category</string>
     <string name="hint_enter_sub_category">Enter Sub Category</string>
     <string name="hint_account_budget">Enter Budget Amount</string>
+    <string name="hint_category_name">Category name</string>
 
     <string name="button_label_delete">Delete</string>
     <string name="button_label_save">Save</string>
@@ -173,5 +177,6 @@
     <string name="ask_delete_contributor">Do you really want to delete this contributor?</string>
     <string name="ask_delete_account">Do you really want to delete this account?</string>
     <string name="ask_delete_payment_method">Do you really want to delete this payment method?</string>
+    <string name="ask_delete_category">Do you really want to delete this category?</string>
 
 </resources>

@@ -8,21 +8,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
+import com.mg.incomeexpense.core.dialog.DialogUtils;
+import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
+import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
+import com.mg.incomeexpense.extension.ExtensionFragmentFactory;
+import com.mg.incomeexpense.extension.ExtensionSpinnerAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,35 +34,17 @@ import java.util.Objects;
  */
 public class CategoryEditorFragment extends FragmentBase {
 
-    private List<String> mCategories;
+    private Category mCategory = null;
+    private EditText mEditTextName;
+
+    private Spinner mSpinnerExtensionType;
+    private ExtensionSpinnerAdapter mExtensionTypeSpinnerAdapter;
+
     private TextView mTextViewValidationErrorMessage;
-    private CategoryValidator mObjectValidator = null;
-    private int mLayoutPosition = 0;
-    private LinearLayout mLinearLayoutCategory;
-    private View.OnClickListener mRemoveCategoryClickListener;
-    private View.OnClickListener mAddCategoryClickListener;
+    private CategoryValidator mObjectValidator;
+    private ArrayList<String> mNames;
 
     public CategoryEditorFragment() {
-
-        mRemoveCategoryClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLinearLayoutCategory.removeView((ViewGroup) v.getParent());
-                mLayoutPosition--;
-            }
-        };
-
-        mAddCategoryClickListener = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                View view = createCategoryView(null);
-                mLinearLayoutCategory.addView(view, mLayoutPosition);
-                mLayoutPosition++;
-
-            }
-        };
 
     }
 
@@ -72,129 +57,103 @@ public class CategoryEditorFragment extends FragmentBase {
         Bundle bundle = getArguments();
         Objects.requireNonNull(bundle, "A bundle is mandatory");
 
-        mCategories = (ArrayList<String>) bundle.getSerializable("item");
-        Objects.requireNonNull(mCategories, "A list of categories is mandatory");
+        mCategory = (Category) bundle.getSerializable("item");
+        Objects.requireNonNull(mCategory, "An category is mandatory");
 
-        mObjectValidator = CategoryValidator.create(getActivity());
-    }
+        mNames = (ArrayList<String>) bundle.getSerializable("names");
+        Objects.requireNonNull(mNames, "A list of category name is mandatory");
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mLinearLayoutCategory.removeAllViews();
+        mObjectValidator = CategoryValidator.create(getActivity(), mNames);
+
+        mExtensionTypeSpinnerAdapter = new ExtensionSpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                ExtensionFragmentFactory.ExtensionType.AsList());
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        super.onCreateView(inflater, container, savedInstanceState);
-
         ActionBar actionBar = ((AppCompatActivityBase) getActivity()).getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(R.string.title_category_editor_update);
+            actionBar.setTitle(getString(mCategory.isNew() ? R.string.title_category_editor_add : R.string.title_category_editor_update));
         }
 
         View rootView = inflater.inflate(R.layout.category_editor_fragment, container, false);
-        mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
-        mLinearLayoutCategory = (LinearLayout) rootView.findViewById(R.id.linear_layout_category);
-        Button buttonAddCategory = (Button) rootView.findViewById(R.id.button_add_category);
-        buttonAddCategory.setOnClickListener(mAddCategoryClickListener);
+        mEditTextName = (EditText) rootView.findViewById(R.id.edit_text_category_name);
+        mSpinnerExtensionType = (Spinner) rootView.findViewById(R.id.spinner_extension_type);
 
-        mLayoutPosition = 0;
-        if (mCategories.size() == 0) {
-            buttonAddCategory.performClick();
-        } else {
-            AddCategories(mCategories);
-        }
+        mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
+
+        mEditTextName.setText(mCategory.getName());
+        Tools.setSpinner(mCategory.getType(), mSpinnerExtensionType);
 
         return rootView;
-    }
-
-    private void AddCategories(final List<String> categories) {
-
-        if (null == categories)
-            return;
-
-        View view;
-        for (String category : categories) {
-
-            view = createCategoryView(category);
-
-            mLinearLayoutCategory.addView(view, mLayoutPosition);
-            mLayoutPosition++;
-
-        }
-
-    }
-
-    private View createCategoryView(final String name) {
-
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        EditText editText;
-        View view = inflater.inflate(R.layout.category_row_editor_fragment, null);
-
-        editText = (EditText) view.findViewById(R.id.editTextName);
-        editText.setText(name);
-        editText.requestFocus();
-
-        ImageButton imageButtonEdit = (ImageButton) view
-                .findViewById(R.id.imageButtonEdit);
-        imageButtonEdit.setOnClickListener(mRemoveCategoryClickListener);
-
-        return view;
-
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_editor, menu);
 
-        MenuItem mi = menu.findItem(R.id.action_delete);
-        if (null != mi) {
-            mi.setVisible(false);
+        if (mCategory.isNew()) {
+            MenuItem mi = menu.findItem(R.id.action_delete);
+            if (null != mi) {
+                mi.setVisible(false);
+            }
         }
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        List<String> categories = new ArrayList();
+        ValidationStatus validationStatus;
         switch (id) {
-            case R.id.action_save:
-                // Get sub items from layout and update mCategory
-                ViewGroup categoryView = mLinearLayoutCategory;
-                EditText editTextCategory;
-                String categoryName;
-                for (int i = 0; i < categoryView.getChildCount(); i++) {
-                    View view = categoryView.getChildAt(i);
-                    editTextCategory = (EditText) view
-                            .findViewById(R.id.editTextName);
-                    categoryName = editTextCategory.getText().toString();
+            case R.id.action_delete:
 
-                    if (categoryName.trim().length() != 0) {
-                        categories.add(categoryName);
-                    }
-                }
-                Collections.sort(categories, new Comparator<String>() {
+                DialogUtils.twoButtonMessageBox(getContext(), getString(R.string.ask_delete_category), getString(R.string.dialog_title_deleting_category), new SingleChoiceEventHandler() {
                     @Override
-                    public int compare(String lhs, String rhs) {
-                        return lhs.compareToIgnoreCase(rhs);
-                    }
-                });
+                    public void execute(int idSelected) {
 
-                ValidationStatus validationStatus = mObjectValidator.Validate(categories);
+                        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver());
+
+                        ValidationStatus validationStatus = mObjectValidator.canDelete(mCategory, accounts);
+
+                        if (validationStatus.isValid()) {
+                            mCategory.setDead(true);
+                            notifyListener(new ItemStateChangeEvent(mCategory, false));
+                        } else {
+                            mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
+                            mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }, new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
+                        // Do nothing
+                    }
+                }).show();
+
+                break;
+            case R.id.action_save:
+                mCategory.setName(mEditTextName.getText().toString());
+                ExtensionFragmentFactory.ExtensionType extensionType = (ExtensionFragmentFactory.ExtensionType) mSpinnerExtensionType.getSelectedItem();
+                mCategory.setType(extensionType);
+
+                validationStatus = mObjectValidator.Validate(mCategory);
 
                 if (validationStatus.isValid()) {
-                    notifyListener(new ItemStateChangeEvent(categories, false));
+                    notifyListener(new ItemStateChangeEvent(mCategory, false));
                 } else {
+
                     mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
                     mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
                 }
-
                 break;
             case android.R.id.home:
-                notifyListener(new ItemStateChangeEvent(categories, true));
+                notifyListener(new ItemStateChangeEvent(mCategory, true));
                 break;
             default:
                 return super.onOptionsItemSelected(item);

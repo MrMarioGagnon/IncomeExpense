@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.category.CategorySpinnerAdapter;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
@@ -33,12 +34,9 @@ import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
 import com.mg.incomeexpense.extension.ExtensionDataExtractor;
 import com.mg.incomeexpense.extension.ExtensionFragmentFactory;
-import com.mg.incomeexpense.extension.ExtensionFragmentFuel;
-import com.mg.incomeexpense.extension.ExtensionFragmentNote;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodSpinnerAdapter;
 
-import java.lang.reflect.Constructor;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,7 +71,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private ImageView mImageViewDate;
 
     private List<PaymentMethod> mPaymentMethods;
-    private List<String> mCategories;
+    private List<Category> mCategories;
 
     private ImageButton mImageButtonContributors;
     private View.OnClickListener mOnContributorImageButtonClickListener;
@@ -138,9 +136,10 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         mPaymentMethodSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         mCategories = mTransaction.getAccount().getCategories();
-        mCategorySpinnerAdapter = new CategorySpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item,
-                mCategories);
+        // TODO
+//        mCategorySpinnerAdapter = new CategorySpinnerAdapter(getActivity(),
+//                android.R.layout.simple_spinner_dropdown_item,
+//                mCategories);
         mCategorySpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         mAvailableContributors = mTransaction.getAccount().getContributors();
@@ -203,7 +202,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 Fragment extensionFragment;
                 if(category.toUpperCase().equals("FUEL")){
 
-                    extensionFragment = ExtensionFragmentFactory.create(ExtensionFragmentFactory.ExtensionType.Fuel);
+                    extensionFragment = ExtensionFragmentFactory.create(ExtensionFragmentFactory.ExtensionType.FUEL);
 
                 }else{
                     extensionFragment = ExtensionFragmentFactory.create(null);

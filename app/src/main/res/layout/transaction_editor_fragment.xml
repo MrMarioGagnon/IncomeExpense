@@ -176,29 +176,29 @@
         <View style="@style/Divider" />
 
         <LinearLayout
-            android:id="@+id/linear_layout_payment_method"
-            style="@style/transaction_editor_section_style">
+        android:id="@+id/linear_layout_payment_method"
+        style="@style/transaction_editor_section_style">
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/editor_label_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:text="@string/label_payment_method" />
 
-                <TextView
-                    style="@style/editor_label_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_payment_method" />
-
-                <Spinner
-                    android:id="@+id/spinner_payment_method"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+            <Spinner
+                android:id="@+id/spinner_payment_method"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
+
+    </LinearLayout>
 
         <View style="@style/Divider" />
 

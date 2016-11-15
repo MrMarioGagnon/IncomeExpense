@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.account.AccountListActivity;
+import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
@@ -149,6 +150,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_accounts:
                 intent = new Intent(this, AccountListActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_categories:
+                intent = new Intent(this, CategoryListActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_settings:

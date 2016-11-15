@@ -19,6 +19,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.category.CategoryEditorActivity;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
@@ -59,7 +60,7 @@ public class AccountEditorFragment extends FragmentBase {
 
     private ImageView mImageViewCategory;
     private ListView mListViewCategory;
-    private ArrayList<String> mSelectedCategories;
+    private ArrayList<Category> mSelectedCategories;
     private ArrayAdapter<String> mAdapter;
 
     public AccountEditorFragment() {
@@ -143,7 +144,8 @@ public class AccountEditorFragment extends FragmentBase {
         mSelectedContributors.addAll(mAccount.getContributors());
         mSelectedCategories.addAll(mAccount.getCategories());
 
-        mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
+        // TODO
+//        mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
 
     }
 
@@ -206,8 +208,9 @@ public class AccountEditorFragment extends FragmentBase {
         switch (requestCode) {
             case CATEGORY_EDITOR_ACTIVITY:
                 if (data != null) {
-                    mSelectedCategories = (ArrayList<String>) data.getSerializableExtra("item");
-                    mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
+                    // TODO
+//                    mSelectedCategories = (ArrayList<String>) data.getSerializableExtra("item");
+//                    mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
                     mListViewCategory.setAdapter(mAdapter);
                 }
                 break;

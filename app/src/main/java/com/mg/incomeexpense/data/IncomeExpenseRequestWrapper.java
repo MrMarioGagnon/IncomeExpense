@@ -8,18 +8,18 @@ import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.Tools;
-import com.mg.incomeexpense.paymentmethod.PaymentMethod;
-import com.mg.incomeexpense.dashboard.DashboardPeriodTotal;
-import com.mg.incomeexpense.transaction.Transaction;
 import com.mg.incomeexpense.dashboard.DashboardAmountAccumulator;
+import com.mg.incomeexpense.dashboard.DashboardPeriodTotal;
+import com.mg.incomeexpense.paymentmethod.PaymentMethod;
+import com.mg.incomeexpense.transaction.Transaction;
 
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,7 +35,7 @@ public class IncomeExpenseRequestWrapper {
 
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        if(!account.isNew()) {
+        if (!account.isNew()) {
 
             Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
 
@@ -68,7 +68,7 @@ public class IncomeExpenseRequestWrapper {
 
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        if(!paymentMethod.isNew()) {
+        if (!paymentMethod.isNew()) {
             Uri uri = IncomeExpenseContract.TransactionEntry.CONTENT_URI;
 
             Cursor cursor = null;
@@ -184,6 +184,36 @@ public class IncomeExpenseRequestWrapper {
         return names;
     }
 
+    public static ArrayList<String> getAvailableCategoryName(@NonNull ContentResolver contentResolver, @NonNull Category category) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(category, "Parameter category of type Account is mandatory");
+
+        ArrayList<String> names = new ArrayList<>();
+
+        Uri uri = IncomeExpenseContract.CategoryEntry.CONTENT_URI;
+
+        Cursor cursor = null;
+        try {
+
+            String selection = String.format("%1$s !=?", IncomeExpenseContract.CategoryEntry.COLUMN_ID);
+            // Si category est new le id va etre null, donc remplacer par -1
+            String[] selectionArgument = new String[]{category.isNew() ? "-1" : category.getId().toString()};
+
+            cursor = contentResolver.query(uri, new String[]{IncomeExpenseContract.CategoryEntry.COLUMN_NAME}, selection, selectionArgument, IncomeExpenseContract.CategoryEntry.COLUMN_NAME);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
+                names.add(name.toUpperCase());
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return names;
+    }
+
     public static ArrayList<Contributor> getAvailableContributors(@NonNull ContentResolver contentResolver) {
 
         Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
@@ -240,7 +270,7 @@ public class IncomeExpenseRequestWrapper {
 
                 paymentMethod = PaymentMethod.create(cursor, contentResolver);
 
-                if(null != contributors && !contributors.contains(paymentMethod.getOwner())){
+                if (null != contributors && !contributors.contains(paymentMethod.getOwner())) {
                     continue;
                 }
                 assets.add(paymentMethod);

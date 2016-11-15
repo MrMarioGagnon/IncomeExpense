@@ -17,6 +17,7 @@ public class IncomeExpenseContract {
     public static final String PATH_ACCOUNT = "account";
     public static final String PATH_PAYMENT_METHOD = "payment_method";
     public static final String PATH_TRANSACTION = "transaction";
+    public static final String PATH_CATEGORY = "category";
 
     public static final class AccountEntry implements BaseColumns {
 
@@ -36,6 +37,32 @@ public class IncomeExpenseContract {
         public static final String COLUMN_CATEGORIES = "categories";
         public static final String COLUMN_BUDGET = "budget";
         public static final String COLUMN_CLOSE = "close";
+
+        public static Uri buildInstanceUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getIdFromUri(Uri uri) {
+            return Integer.parseInt(uri.getPathSegments().get(1));
+        }
+
+    }
+
+    public static final class CategoryEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNT).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
+
+        public static final String TABLE_NAME = "category";
+
+        public static final String COLUMN_ID = _ID;
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_EXTENSION_TYPE = "extension_type";
 
         public static Uri buildInstanceUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

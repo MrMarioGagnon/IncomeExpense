@@ -1,14 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <ExpandableListView
-        android:id="@+id/expListView"
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="310dp"
-        android:layout_weight="0.14" >
-    </ExpandableListView>
+        android:layout_height="match_parent"
+        android:id="@+id/list_view_category"/>
 
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="center_vertical"
+        android:paddingLeft="6dip"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:text="@string/message_category_no_data"
+        android:visibility="gone"
+        android:id="@+id/text_view_no_category"
+        />
 </LinearLayout>

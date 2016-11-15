@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.ObjectBase;
@@ -23,7 +24,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     private String mName;
     private List<Contributor> mContributors;
-    private List<String> mCategories;
+    private List<Category> mCategories;
     private Double mBudget;
     private Boolean mIsClose;
 
@@ -51,13 +52,13 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mName = name;
         newInstance.mIsClose = close == 1 ? true : false;
         newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ApplicationConstant.storageSeparator);
-        newInstance.mCategories = Tools.split(categories, ApplicationConstant.storageSeparator);
+        newInstance.mCategories = IdToItemConvertor.ConvertIdsToCategories(contentResolver, IncomeExpenseContract.CategoryEntry.CONTENT_URI, categories, ApplicationConstant.storageSeparator);
         newInstance.mBudget = null == budget ? 0d : budget;
 
         return newInstance;
     }
 
-    public static Account create(@NonNull Long id, @NonNull String name, Boolean isClose, @NonNull List<Contributor> contributors, Double budget, @NonNull List<String> categories) {
+    public static Account create(@NonNull Long id, @NonNull String name, Boolean isClose, @NonNull List<Contributor> contributors, Double budget, @NonNull List<Category> categories) {
 
         Objects.requireNonNull(id, "Parameter id of type Long is mandatory");
         Objects.requireNonNull(name, "Parameter name of type String is mandatory");
@@ -114,11 +115,11 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
 
     }
 
-    public List<String> getCategories() {
+    public List<Category> getCategories() {
         return mCategories;
     }
 
-    public void setCategories(@NonNull List<String> categories) {
+    public void setCategories(@NonNull List<Category> categories) {
 
         Objects.requireNonNull(categories, "Parameter categories of type List<String> is mandatory");
 
@@ -233,8 +234,8 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     }
 
     public String getCategoriesAsString() {
-        List<String> a = new ArrayList<>();
-        for (String item : mCategories) {
+        List<Category> a = new ArrayList<>();
+        for (Category item : mCategories) {
             a.add(item);
         }
         return Tools.join(a, ApplicationConstant.storageSeparator);
