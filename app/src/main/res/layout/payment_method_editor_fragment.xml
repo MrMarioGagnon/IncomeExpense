@@ -16,6 +16,7 @@
             android:visibility="gone"/>
 
         <TextView
+            style="@style/editor_label_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_name"/>
@@ -30,6 +31,7 @@
             />
 
         <TextView
+            style="@style/editor_label_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_currency"/>
@@ -38,6 +40,7 @@
             android:layout_width="fill_parent" android:layout_height="wrap_content"/>
 
         <TextView
+            style="@style/editor_label_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_exchange_rate"/>
@@ -50,6 +53,7 @@
             android:inputType="numberDecimal"/>
 
         <TextView
+            style="@style/editor_label_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_owner"/>

@@ -12,6 +12,7 @@
         android:visibility="gone" />
 
     <TextView
+        style="@style/editor_label_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_name" />
@@ -25,6 +26,7 @@
         android:inputType="text|textNoSuggestions" />
 
     <TextView
+        style="@style/editor_label_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_contributors" />
@@ -51,6 +53,7 @@
     </LinearLayout>
 
     <TextView
+        style="@style/editor_label_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_budget" />
@@ -80,6 +83,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/editor_label_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_view_category" />

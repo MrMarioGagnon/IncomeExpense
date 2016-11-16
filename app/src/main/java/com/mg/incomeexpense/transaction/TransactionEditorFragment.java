@@ -136,10 +136,10 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         mPaymentMethodSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         mCategories = mTransaction.getAccount().getCategories();
-        // TODO
-//        mCategorySpinnerAdapter = new CategorySpinnerAdapter(getActivity(),
-//                android.R.layout.simple_spinner_dropdown_item,
-//                mCategories);
+
+        mCategorySpinnerAdapter = new CategorySpinnerAdapter(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                mCategories);
         mCategorySpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         mAvailableContributors = mTransaction.getAccount().getContributors();

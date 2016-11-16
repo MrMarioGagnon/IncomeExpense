@@ -59,7 +59,7 @@ public class AccountRepositorySynchronizer extends RepositorySynchronizerBase {
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_NAME, itemToBeSave.getName());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE, itemToBeSave.getIsClose());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS, itemToBeSave.getContributorsIds());
-                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES, itemToBeSave.getCategoriesAsString());
+                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES, itemToBeSave.getCategoriesAsIds());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_BUDGET, itemToBeSave.getBudget());
                 Uri newUri = mContentResolver.insert(mItemUri, itemValues);
                 id = IncomeExpenseContract.AccountEntry.getIdFromUri(newUri);
@@ -75,7 +75,7 @@ public class AccountRepositorySynchronizer extends RepositorySynchronizerBase {
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_NAME, itemToBeSave.getName());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CLOSE, itemToBeSave.getIsClose());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS, itemToBeSave.getContributorsIds());
-                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES, itemToBeSave.getCategoriesAsString());
+                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES, itemToBeSave.getCategoriesAsIds());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_BUDGET, itemToBeSave.getBudget());
                 rowsAffected = mContentResolver.update(mItemUri, itemValues, selection, selectionArgs);
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updated_item), itemType, rowsAffected, id));

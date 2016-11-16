@@ -14,6 +14,8 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -233,10 +235,10 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         return Tools.join(a, ApplicationConstant.storageSeparator);
     }
 
-    public String getCategoriesAsString() {
-        List<Category> a = new ArrayList<>();
+    public String getCategoriesAsIds() {
+        List<String> a = new ArrayList<>();
         for (Category item : mCategories) {
-            a.add(item);
+            a.add(item.getId().toString());
         }
         return Tools.join(a, ApplicationConstant.storageSeparator);
     }
