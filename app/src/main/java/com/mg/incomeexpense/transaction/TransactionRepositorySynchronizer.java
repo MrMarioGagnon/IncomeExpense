@@ -21,7 +21,8 @@ public class TransactionRepositorySynchronizer extends RepositorySynchronizerBas
     private static final String LOG_TAG = TransactionRepositorySynchronizer.class.getSimpleName();
 
     public TransactionRepositorySynchronizer(@NonNull ContentResolver contentResolver, @NonNull Uri itemUri, @NonNull Map<Integer, String> messages) {
-        super(contentResolver, itemUri, messages);    }
+        super(contentResolver, itemUri, messages);
+    }
 
     public ObjectBase Save(@NonNull ObjectBase item) {
         super.Save(item);
@@ -55,7 +56,7 @@ public class TransactionRepositorySynchronizer extends RepositorySynchronizerBas
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_adding_item), itemType));
                 ContentValues itemValues = new ContentValues();
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID, itemToBeSave.getAccount().getId());
-                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY, itemToBeSave.getCategory());
+                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY_ID, itemToBeSave.getCategory().getId());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE, itemToBeSave.getType().ordinal());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_DATE, itemToBeSave.getDate());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT, itemToBeSave.getAmount());
@@ -76,7 +77,7 @@ public class TransactionRepositorySynchronizer extends RepositorySynchronizerBas
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updating_item), itemType, id));
                 ContentValues itemValues = new ContentValues();
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID, itemToBeSave.getAccount().getId());
-                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY, itemToBeSave.getCategory());
+                itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY_ID, itemToBeSave.getCategory().getId());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE, itemToBeSave.getType().ordinal());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_DATE, itemToBeSave.getDate());
                 itemValues.put(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT, itemToBeSave.getAmount());

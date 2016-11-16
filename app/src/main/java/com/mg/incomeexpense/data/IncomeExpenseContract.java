@@ -51,7 +51,7 @@ public class IncomeExpenseContract {
     public static final class CategoryEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNT).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
 
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
@@ -143,7 +143,7 @@ public class IncomeExpenseContract {
 
         public static final String COLUMN_ID = _ID;
         public static final String COLUMN_ACCOUNT_ID = "accountId";
-        public static final String COLUMN_CATEGORY = "category";
+        public static final String COLUMN_CATEGORY_ID = "categoryId";
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_AMOUNT = "amount";

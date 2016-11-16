@@ -21,6 +21,7 @@
     <string name="action_utility">Utility</string>
 
     <string name="error_unable_to_fetch_all_contributor">Unable to fetch all contributor.</string>
+    <string name="error_unable_to_fetch_all_category">Unable to fetch all category.</string>
     <string name="error_foreign_key_constraint">Unable to delete %1$s : %2$s, it\'s in use.</string>
     <string name="error_foreign_key_constraint_contributor1">Unable to delete this contributor</string>
     <string name="error_foreign_key_constraint_contributor2">In use in Accounts</string>
@@ -126,6 +127,8 @@
     <string name="validation_contributors_mandatory">No contributor selected</string>
     <string name="validation_category_duplicate">Duplicate category name found</string>
     <string name="validation_remove_contributor_from_account">Unable to remove contributor %1$s from account, it\'s in use.</string>
+    <string name="validation_remove_category_in_use">Unable to remove category, it\'s in use.</string>
+    <string name="validation_remove_category_from_account">Unable to remove category %1$s from account, it\'s in use.</string>
 
     <string name="log_error_adding_item">Error adding item</string>
     <string name="log_error_deleting_item">Error deleting item</string>

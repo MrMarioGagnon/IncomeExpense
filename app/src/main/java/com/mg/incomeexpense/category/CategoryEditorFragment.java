@@ -83,6 +83,7 @@ public class CategoryEditorFragment extends FragmentBase {
         View rootView = inflater.inflate(R.layout.category_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edit_text_category_name);
         mSpinnerExtensionType = (Spinner) rootView.findViewById(R.id.spinner_extension_type);
+        mSpinnerExtensionType.setAdapter(mExtensionTypeSpinnerAdapter);
 
         mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
 
@@ -139,7 +140,7 @@ public class CategoryEditorFragment extends FragmentBase {
                 break;
             case R.id.action_save:
                 mCategory.setName(mEditTextName.getText().toString());
-                ExtensionFragmentFactory.ExtensionType extensionType = (ExtensionFragmentFactory.ExtensionType) mSpinnerExtensionType.getSelectedItem();
+                ExtensionFragmentFactory.ExtensionType extensionType = ExtensionFragmentFactory.ExtensionType.valueOf((String) mSpinnerExtensionType.getSelectedItem());
                 mCategory.setType(extensionType);
 
                 validationStatus = mObjectValidator.Validate(mCategory);

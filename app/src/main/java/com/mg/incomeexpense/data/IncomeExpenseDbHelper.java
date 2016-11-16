@@ -58,7 +58,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_TRANSACTION_TABLE = "CREATE TABLE " + IncomeExpenseContract.TransactionEntry.TABLE_NAME + " (" +
                 IncomeExpenseContract.TransactionEntry._ID + " INTEGER PRIMARY KEY," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID + " INTEGER NOT NULL," +
-                IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY + " TEXT NOT NULL," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY_ID + " INTEGER NOT NULL," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_TYPE + " INTEGER NOT NULL," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_DATE + " TEXT NOT NULL," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT + " NUMERIC NOT NULL," +
@@ -68,6 +68,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.TransactionEntry.COLUMN_CONTRIBUTORS + " TEXT NOT NULL," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_NOTE + " TEXT," +
                 "FOREIGN KEY(" + IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID + ") REFERENCES " + IncomeExpenseContract.AccountEntry.TABLE_NAME + "(" + IncomeExpenseContract.AccountEntry._ID + ")," +
+                "FOREIGN KEY(" + IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY_ID + ") REFERENCES " + IncomeExpenseContract.CategoryEntry.TABLE_NAME + "(" + IncomeExpenseContract.CategoryEntry._ID + ")," +
                 "FOREIGN KEY(" + IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID + ") REFERENCES " + IncomeExpenseContract.PaymentMethodEntry.TABLE_NAME + "(" + IncomeExpenseContract.PaymentMethodEntry._ID + ")" +
                 ");";
 

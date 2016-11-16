@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
@@ -141,5 +142,32 @@ public class AccountValidator implements ObjectValidator {
         }
         return ValidationStatus.create(message);
     }
+
+    public ValidationStatus canRemoveCategory(@NonNull ObjectBase objectToValidate, @NonNull List<Category> newCategories, @NonNull List<Transaction> transactions) {
+
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
+        Objects.requireNonNull(newCategories, "Parameter newCategories of type List<Category> is mandatory");
+        Objects.requireNonNull(transactions, "Parameter transactions of type List<Transaction> is mandatory");
+
+        if (!(objectToValidate instanceof Account)) {
+            return ValidationStatus.create("Wrong object type.");
+        }
+
+        Account account = (Account) objectToValidate;
+        String message = "";
+
+        for (Category category : account.getCategories()) {
+            if (!newCategories.contains(category)) {
+                for (Transaction transaction : transactions) {
+                    if (transaction.getCategory().equals(category)) {
+                        message = String.format(mValidationMessages.get(R.string.validation_remove_category_from_account), category.getName());
+                        break;
+                    }
+                }
+            }
+        }
+        return ValidationStatus.create(message);
+    }
+
 }
 

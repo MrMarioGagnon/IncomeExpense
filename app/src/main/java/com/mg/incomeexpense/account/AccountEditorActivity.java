@@ -38,6 +38,7 @@ public class AccountEditorActivity extends AppCompatActivityBase {
 
             bundle.putSerializable("names", IncomeExpenseRequestWrapper.getAvailableAccountName(getContentResolver(), account));
             bundle.putSerializable("contributors", IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver()));
+            bundle.putSerializable("categories", IncomeExpenseRequestWrapper.getAvailableCategories(getContentResolver()));
 
             AccountEditorFragment fragment = new AccountEditorFragment();
             fragment.addListener(this);

@@ -235,6 +235,28 @@ public class IncomeExpenseRequestWrapper {
         return contributors;
     }
 
+    public static ArrayList<Category> getAvailableCategories(@NonNull ContentResolver contentResolver) {
+
+        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+
+        ArrayList<Category> categories = new ArrayList<>();
+
+        Cursor cursor = null;
+        try {
+            cursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.CONTENT_URI, null, null, null, String.format("LOWER(%1$s)", IncomeExpenseContract.CategoryEntry.COLUMN_NAME));
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                categories.add(Category.create(cursor));
+            }
+        } finally {
+            if (null != cursor) {
+                cursor.close();
+            }
+        }
+
+        return categories;
+    }
+
+
     public static ArrayList<Account> getAvailableAccounts(@NonNull ContentResolver contentResolver) {
 
         Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");

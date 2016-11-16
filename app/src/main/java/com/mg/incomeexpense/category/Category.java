@@ -20,10 +20,9 @@ public final class Category extends ObjectBase implements Serializable, Comparab
     private String mName;
     private ExtensionFragmentFactory.ExtensionType mExtensionType;
 
-    public static Category create(@NonNull Cursor cursor, @NonNull ContentResolver contentResolver) {
+    public static Category create(@NonNull Cursor cursor){
 
         Objects.requireNonNull(cursor, "Parameter cursor of type Cursor is mandatory.");
-        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory.");
 
         Category newInstance = new Category();
         newInstance.mNew = false;
@@ -76,16 +75,30 @@ public final class Category extends ObjectBase implements Serializable, Comparab
         return mName;
     }
 
-    public void setName(String name) {
-        mName = name;
+    public void setName(@NonNull String name) {
+
+        Objects.requireNonNull(name, "Parameter name of type String is mandatory");
+
+        if (!mName.equals(name)) {
+            mDirty = true;
+            mName = name;
+        }
+
     }
+
 
     public ExtensionFragmentFactory.ExtensionType getType() {
         return mExtensionType;
     }
 
-    public void setType(ExtensionFragmentFactory.ExtensionType type) {
-        this.mExtensionType = type;
+    public void setType(@NonNull ExtensionFragmentFactory.ExtensionType type) {
+        Objects.requireNonNull(type, "Parameter type of type ExtensionType is mandatory");
+
+        if (!mExtensionType.equals(type)) {
+            mDirty = true;
+            this.mExtensionType = type;
+        }
+
     }
 
     @Override

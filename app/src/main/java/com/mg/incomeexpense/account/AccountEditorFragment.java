@@ -1,7 +1,6 @@
 package com.mg.incomeexpense.account;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,7 +18,7 @@ import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.Category;
-import com.mg.incomeexpense.category.CategoryEditorActivity;
+import com.mg.incomeexpense.category.CategorySpinnerAdapter;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.FragmentBase;
@@ -60,8 +58,13 @@ public class AccountEditorFragment extends FragmentBase {
 
     private ImageView mImageViewCategory;
     private ListView mListViewCategory;
-    private ArrayList<Category> mSelectedCategories;
-    private ArrayAdapter<String> mAdapter;
+
+    private List<Category> mAvailableCategories;
+    private List<Category> mSelectedCategories;
+    private View.OnClickListener mOnCategoryImageViewClickListener;
+    private MultipleChoiceEventHandler mCategoryMultipleChoiceEventHandler;
+
+    private CategorySpinnerAdapter mCategoryAdapter;
 
     public AccountEditorFragment() {
 
@@ -83,6 +86,13 @@ public class AccountEditorFragment extends FragmentBase {
             @Override
             public void onClick(View v) {
                 showContributorSetterDialog();
+            }
+        };
+
+        mOnCategoryImageViewClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCategorySetterDialog();
             }
         };
 
@@ -120,6 +130,43 @@ public class AccountEditorFragment extends FragmentBase {
 
             }
         };
+
+        mCategoryMultipleChoiceEventHandler = new MultipleChoiceEventHandler() { // Creating an anonymous Class Object
+            @Override
+            public void execute(boolean[] idSelected) {
+
+                // Ajouter validation si un category est enleve
+                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
+                List<Category> selectedCategories = new ArrayList<>();
+                for (int i = 0; i < idSelected.length; i++) {
+                    if (idSelected[i]) {
+                        Category category = mAvailableCategories.get(i);
+                        selectedCategories.add(category);
+                    }
+                }
+
+                ValidationStatus vs = mObjectValidator.canRemoveCategory(mAccount, selectedCategories, transactions);
+                if (vs.isValid()) {
+                    mSelectedCategories.clear();
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < idSelected.length; i++) {
+                        if (idSelected[i]) {
+                            Category category = mAvailableCategories.get(i);
+                            mSelectedCategories.add(category);
+                            sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), category.getName()));
+                        }
+                    }
+                    mTextViewContributors.setText(sb.toString());
+
+                } else {
+                    mTextViewValidationErrorMessage.setText(vs.getMessage());
+                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                }
+
+            }
+        };
+
+
     }
 
     @Override
@@ -138,14 +185,16 @@ public class AccountEditorFragment extends FragmentBase {
         Objects.requireNonNull(mNames, "A list of accounts name is mandatory");
 
         mAvailableContributors = (List<Contributor>) bundle.getSerializable("contributors");
-        Objects.requireNonNull(mAvailableContributors, "A list of contributors is mandatory");
+        Objects.requireNonNull(mAvailableContributors, "A list of contributor is mandatory");
+
+        mAvailableCategories = (List<Category>) bundle.getSerializable("categories");
+        Objects.requireNonNull(mAvailableCategories, "A list of category is mandatory");
 
         mObjectValidator = AccountValidator.create(getActivity(), mNames);
         mSelectedContributors.addAll(mAccount.getContributors());
         mSelectedCategories.addAll(mAccount.getCategories());
 
-        // TODO
-//        mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
+        mCategoryAdapter = new CategorySpinnerAdapter(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
 
     }
 
@@ -172,12 +221,8 @@ public class AccountEditorFragment extends FragmentBase {
         mTextViewContributors = (TextView) rootView.findViewById(R.id.textview_contributors);
 
         mImageViewCategory = (ImageView) rootView.findViewById(R.id.image_view_category);
-        mImageViewCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowCategoryEditor();
-            }
-        });
+        mImageViewCategory.setOnClickListener(mOnCategoryImageViewClickListener);
+
         mListViewCategory = (ListView) rootView.findViewById(R.id.list_view_category);
 
         mEditTextName.setText(mAccount.getName());
@@ -187,36 +232,11 @@ public class AccountEditorFragment extends FragmentBase {
         mSwitchClose.setChecked(mAccount.getIsClose());
         mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
         mTextViewContributors.setText(mAccount.getContributorsForDisplay());
-        mListViewCategory.setAdapter(mAdapter);
+
+        mListViewCategory.setAdapter(mCategoryAdapter);
 
         return rootView;
     }
-
-    private void ShowCategoryEditor() {
-
-        Intent intent = new Intent(getActivity(), CategoryEditorActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("item", mSelectedCategories);
-        bundle.putBoolean("hideHomeButton", true);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, CATEGORY_EDITOR_ACTIVITY);
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case CATEGORY_EDITOR_ACTIVITY:
-                if (data != null) {
-                    // TODO
-//                    mSelectedCategories = (ArrayList<String>) data.getSerializableExtra("item");
-//                    mAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, mSelectedCategories);
-                    mListViewCategory.setAdapter(mAdapter);
-                }
-                break;
-        }
-    }
-
 
     @Override
     public void onResume() {
@@ -333,6 +353,35 @@ public class AccountEditorFragment extends FragmentBase {
 
     }
 
+    private void showCategorySetterDialog() {
+
+        try {
+
+            CharSequence[] categoryArray = new CharSequence[mAvailableCategories.size()];
+            int i = 0;
+            for (Category category : mAvailableCategories) {
+                categoryArray[i++] = category.getName();
+            }
+
+            Dialog dialog = DialogUtils.childSetterDialog(
+                    this.getContext(),
+                    categoryArray,
+                    mCategoryMultipleChoiceEventHandler,
+                    buildCategoriesCheckedArray(mAvailableCategories, mSelectedCategories),
+                    getString(R.string.dialog_title_category_setter));
+
+            dialog.setOwnerActivity(this.getActivity());
+            dialog.show();
+        } catch (Exception exception) {
+            DialogUtils.messageBox(this.getContext(),
+                    getString(R.string.error_unable_to_fetch_all_category),
+                    getString(R.string.dialog_title_category_setter)).show();
+
+        }
+
+    }
+
+
     private boolean[] buildContributorsCheckedArray(List<Contributor> availableContributors,
                                                     List<Contributor> selectedContributors) {
 
@@ -348,4 +397,21 @@ public class AccountEditorFragment extends FragmentBase {
         return checked;
 
     }
+
+    private boolean[] buildCategoriesCheckedArray(List<Category> availableCategories,
+                                                  List<Category> selectedCategories) {
+
+        boolean[] checked = new boolean[availableCategories.size()];
+
+        for (Category category : selectedCategories) {
+            int index = availableCategories.indexOf(category);
+            if (index >= 0) {
+                checked[index] = true;
+            }
+        }
+
+        return checked;
+
+    }
+
 }

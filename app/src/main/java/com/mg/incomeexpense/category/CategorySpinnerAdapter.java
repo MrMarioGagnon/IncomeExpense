@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Created by mario on 2016-08-14.
  */
-public class CategorySpinnerAdapter extends ArrayAdapter<String> {
+public class CategorySpinnerAdapter extends ArrayAdapter<Category> {
 
-    private List<String> mCategories;
+    private List<Category> mCategories;
 
-    public CategorySpinnerAdapter(Context context, int resource, List<String> objects) {
+    public CategorySpinnerAdapter(Context context, int resource, List<Category> objects) {
         super(context, resource, objects);
 
         mCategories = objects;
@@ -25,7 +25,7 @@ public class CategorySpinnerAdapter extends ArrayAdapter<String> {
         return mCategories.size();
     }
 
-    public String getItem(int position) {
+    public Category getItem(int position) {
         return mCategories.get(position);
     }
 
@@ -40,7 +40,7 @@ public class CategorySpinnerAdapter extends ArrayAdapter<String> {
         TextView label = new TextView(getContext());
         // Then you can get the current item using the values array (Users array) and the current position
         // You can NOW reference each method you has created in your bean object (User class)
-        label.setText(mCategories.get(position));
+        label.setText(mCategories.get(position).toString());
 
         // And finally return your dynamic (or custom) view for each spinner item
         return label;
@@ -52,7 +52,7 @@ public class CategorySpinnerAdapter extends ArrayAdapter<String> {
     public View getDropDownView(int position, View convertView,
                                 ViewGroup parent) {
         TextView label = new TextView(getContext());
-        label.setText(mCategories.get(position));
+        label.setText(mCategories.get(position).toString());
 
         return label;
     }

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.ObjectBase;
@@ -24,7 +25,7 @@ import java.util.Objects;
 public class Transaction extends ObjectBase implements Serializable, Comparable<Transaction> {
 
     private Account mAccount;
-    private String mCategory;
+    private Category mCategory;
     private TransactionType mType;
     private String mDate;
     private Double mAmount;
@@ -49,7 +50,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
         Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ID));
         Long accountId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID));
-        String category = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY));
+        Long categoryId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY_ID));
         int type = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_TYPE));
         String date = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_DATE));
         Double amount = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_AMOUNT));
@@ -75,6 +76,14 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
             }
         }
 
+        subItemCursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(categoryId), null, null, null, null);
+        Category category = null;
+        if (subItemCursor != null) {
+            if (subItemCursor.moveToFirst()) {
+                category = Category.create(subItemCursor);
+            }
+        }
+
         newInstance.mId = id;
         newInstance.mAccount = account;
         newInstance.mCategory = category;
@@ -96,7 +105,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mNew = true;
         newInstance.mDirty = true;
         newInstance.mAccount = null;
-        newInstance.mCategory = "";
+        newInstance.mCategory = null;
         newInstance.mType = TransactionType.Expense;
         newInstance.mDate = Tools.now();
         newInstance.mAmount = 0.0;
@@ -143,10 +152,6 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mAmount;
     }
 
-    public String getAmountAsString(){
-        return Tools.formatAmount(getAmount());
-    }
-
     public void setAmount(@NonNull Double amount) {
 
         Objects.requireNonNull(amount, "Parameter amount of type Double is mandatory");
@@ -157,15 +162,19 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         }
     }
 
-    public String getCategory() {
+    public String getAmountAsString() {
+        return Tools.formatAmount(getAmount());
+    }
+
+    public Category getCategory() {
         return mCategory;
     }
 
-    public void setCategory(@NonNull String category) {
+    public void setCategory(@NonNull Category category) {
 
-        Objects.requireNonNull(category, "Parameter category of type String is mandatory");
+        Objects.requireNonNull(category, "Parameter category of type Category is mandatory");
 
-        if (!mCategory.equals(category)) {
+        if (mCategory == null || !mCategory.equals(category)) {
             mDirty = true;
             mCategory = category;
         }
@@ -207,10 +216,6 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         return mExchangeRate;
     }
 
-    public String getExchangeRateAsString(){
-        return Tools.formatAmount(getExchangeRate());
-    }
-
     public void setExchangeRate(@NonNull Double exchangeRate) {
 
         Objects.requireNonNull(exchangeRate, "Parameter exchangeRate of type Double is mandatory");
@@ -219,6 +224,10 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
             mDirty = true;
             mExchangeRate = exchangeRate;
         }
+    }
+
+    public String getExchangeRateAsString() {
+        return Tools.formatAmount(getExchangeRate());
     }
 
     public String getNote() {

@@ -38,7 +38,7 @@ public class TransactionListAdapter extends CursorAdapter {
         Transaction transaction = Transaction.create(cursor, context.getContentResolver());
 
         viewHolder.textViewDate.setText(transaction.getDate());
-        viewHolder.textViewCategory.setText(transaction.getCategory());
+        viewHolder.textViewCategory.setText(transaction.getCategory().toString());
         viewHolder.textViewAmount.setText(transaction.getAmountAsString());
 
         int color = context.getResources().getColor(transaction.getType() == Transaction.TransactionType.Expense ? R.color.colorExpense : R.color.colorIncome, null);

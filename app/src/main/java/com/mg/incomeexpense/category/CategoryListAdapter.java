@@ -33,7 +33,7 @@ public class CategoryListAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        Category category = Category.create(cursor, context.getContentResolver());
+        Category category = Category.create(cursor);
 
         viewHolder.textViewName.setText(category.getName());
         viewHolder.textViewType.setText(category.getType().toString());

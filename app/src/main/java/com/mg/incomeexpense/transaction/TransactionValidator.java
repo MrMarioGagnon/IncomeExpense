@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.R;
+import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
@@ -66,7 +67,7 @@ public class TransactionValidator implements ObjectValidator {
             messages.add(message);
         }
 
-        String category = transaction.getCategory();
+        Category category = transaction.getCategory();
         if (category == null) {
             message = mValidationMessages.get(R.string.validation_category_mandatory);
             messages.add(message);

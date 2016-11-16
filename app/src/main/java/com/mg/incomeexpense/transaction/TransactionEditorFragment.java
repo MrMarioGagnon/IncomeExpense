@@ -196,17 +196,11 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         mSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                  String category = mCategorySpinnerAdapter.getItem(position);
+                Category category = mCategorySpinnerAdapter.getItem(position);
 
                 Bundle bundle = new Bundle();
                 Fragment extensionFragment;
-                if(category.toUpperCase().equals("FUEL")){
-
-                    extensionFragment = ExtensionFragmentFactory.create(ExtensionFragmentFactory.ExtensionType.FUEL);
-
-                }else{
-                    extensionFragment = ExtensionFragmentFactory.create(null);
-                }
+                extensionFragment = ExtensionFragmentFactory.create(category.getType());
 
                 bundle.putString("data", mExtensionData);
                 extensionFragment.setArguments(bundle);
@@ -312,7 +306,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 break;
             case R.id.action_save:
 
-                String category = (String) mSpinnerCategory.getSelectedItem();
+                Category category = (Category) mSpinnerCategory.getSelectedItem();
                 mTransaction.setCategory(category);
 
                 PaymentMethod paymentMethod = (PaymentMethod) mSpinnerPaymentMethod.getSelectedItem();
@@ -335,7 +329,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 mTransaction.setContributors(mSelectedContributors);
 
                 // Extension
-                if(mFrameExtension instanceof ViewGroup){
+                if (mFrameExtension instanceof ViewGroup) {
                     String note = ExtensionDataExtractor.extract(mFrameExtension);
                     mTransaction.setNote(note);
                 }

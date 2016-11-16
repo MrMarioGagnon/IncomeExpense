@@ -9,11 +9,8 @@ import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.ObjectValidator;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
-import com.mg.incomeexpense.transaction.Transaction;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,52 +40,40 @@ public class CategoryValidator implements ObjectValidator {
         Objects.requireNonNull(names, "Parameter names of type List<String> is mandatory");
 
         Map<Integer, String> messages = new HashMap<>();
-        messages.put(R.string.validation_category_mandatory, context.getString(R.string.validation_category_mandatory));
-        messages.put(R.string.validation_category_duplicate, context.getString(R.string.validation_category_duplicate));
+        messages.put(R.string.validation_name_mandatory, context.getString(R.string.validation_name_mandatory));
+        messages.put(R.string.validation_name_already_exists, context.getString(R.string.validation_name_already_exists));
+        messages.put(R.string.validation_remove_category_in_use, context.getString(R.string.validation_remove_category_in_use));
 
         return new CategoryValidator(names, messages);
     }
 
-    private boolean hasDuplicate(List<String> categories) {
-        String stringToCompare = null;
-        List<String> listToValidate = new ArrayList<>(categories);
+    private boolean isNameExists(String name) {
 
-        Collections.sort(listToValidate, new Comparator<String>() {
-            @Override
-            public int compare(String lhs, String rhs) {
-                return lhs.compareToIgnoreCase(rhs);
-            }
-        });
+        if (null == name)
+            return false;
 
-        for (String category : listToValidate) {
-            if (null == stringToCompare) {
-                stringToCompare = category;
-            } else {
-                if (stringToCompare.equals(category)) {
-                    return true;
-                }
-                stringToCompare = category;
-            }
-        }
-
-        return false;
+        return mNames.contains(name.toUpperCase());
 
     }
 
-    public ValidationStatus Validate(Object objectToValidate) {
+
+    public ValidationStatus Validate(@NonNull Object objectToValidate) {
+
+        Objects.requireNonNull(objectToValidate, "Parameter objectToValidate of type ObjectBase is mandatory");
+
+        if (!(objectToValidate instanceof Category)) {
+            return ValidationStatus.create("Wrong object type, must be Category.");
+        }
 
         List<String> messages = new ArrayList<>();
 
-        if (!(objectToValidate instanceof ArrayList)) {
-            return ValidationStatus.create("Wrong object type, must be ArrayList.");
-        }
+        Category category = (Category) objectToValidate;
+        String name = category.getName();
 
-        List<String> categories = (ArrayList<String>) objectToValidate;
-
-        if (categories.size() == 0) {
-            messages.add(mValidationMessages.get(R.string.validation_category_mandatory));
-        } else if (hasDuplicate(categories)) {
-            messages.add(mValidationMessages.get(R.string.validation_category_duplicate));
+        if (name.length() == 0) {
+            messages.add(mValidationMessages.get(R.string.validation_name_mandatory));
+        } else if (isNameExists(name)) {
+            messages.add(mValidationMessages.get(R.string.validation_name_already_exists));
         }
 
         return ValidationStatus.create(Tools.join(messages, "\n"));
@@ -109,8 +94,7 @@ public class CategoryValidator implements ObjectValidator {
 
         for (Account account : accounts) {
             if (account.getCategories().contains(objectToValidate)) {
-                // TODO Fix Messages
-                message = String.format(mValidationMessages.get(R.string.error_foreign_key_constraint), mValidationMessages.get(R.string.account), category.getName());
+                message = String.format(mValidationMessages.get(R.string.validation_remove_category_in_use));
                 break;
             }
         }

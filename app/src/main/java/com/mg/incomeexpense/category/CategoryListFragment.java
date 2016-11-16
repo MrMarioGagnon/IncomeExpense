@@ -95,7 +95,7 @@ public class CategoryListFragment extends FragmentListBase {
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (null != cursor) {
 
-                    Category category = Category.create(cursor, CategoryListFragment.this.getActivity().getContentResolver());
+                    Category category = Category.create(cursor);
 
                     CategoryListFragment.this.notifyListener(new ItemSelectedEvent(category));
 

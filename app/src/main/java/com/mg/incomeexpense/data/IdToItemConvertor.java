@@ -112,7 +112,7 @@ public class IdToItemConvertor {
                 Long id = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.CategoryEntry.COLUMN_ID));
 
                 if (ids.contains(id.toString())) {
-                    items.add(Category.create(cursor, contentResolver));
+                    items.add(Category.create(cursor));
                     itemFound++;
                     if (itemFound == itemsToFoundCount)
                         break;
