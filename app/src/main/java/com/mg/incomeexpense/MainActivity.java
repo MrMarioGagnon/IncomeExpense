@@ -15,6 +15,7 @@ import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.account.AccountListActivity;
 import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
+import com.mg.incomeexpense.dashboard.DashboardFragment;
 import com.mg.incomeexpense.dashboard.DashboardPagerAdapter;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
@@ -129,8 +130,11 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case EDITOR_ACTIVITY:
                 if (resultCode == RESULT_OK) {
-                    // TODO Trouver une facon de rafraichir l'onglet courant sans invalider le pager
-                    mViewPager.invalidate();
+
+                    DashboardPagerAdapter dashboardPagerAdapter = (DashboardPagerAdapter) mViewPager.getAdapter();
+                    DashboardFragment fragment = (DashboardFragment) dashboardPagerAdapter.getItem(mTabLayout.getSelectedTabPosition());
+                    fragment.refresh();
+
                 }
                 break;
         }

@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.dashboard.DashboardFragment;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +18,7 @@ import java.util.Objects;
 public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
 
     List<Account> mAccount;
+    HashMap<Integer, DashboardFragment> mDashboards;
 
     public DashboardPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Account> accounts) {
         super(fm);
@@ -25,16 +26,29 @@ public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
         Objects.requireNonNull(accounts, "Parameter accounts of type List<Account> is mandatory");
 
         mAccount = accounts;
+
+        mDashboards = new HashMap<>();
+
     }
 
     @Override
     public Fragment getItem(int position) {
+
+
+        if (mDashboards.containsKey(position)) {
+            return mDashboards.get(position);
+        }
+
+        DashboardFragment dashboardFragment = mDashboards.get(position);
+        if (null != dashboardFragment)
+            return dashboardFragment;
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("item", mAccount.get(position));
 
         DashboardFragment fragment = new DashboardFragment();
         fragment.setArguments(bundle);
+        mDashboards.put(position, fragment);
 
         return fragment;
     }
