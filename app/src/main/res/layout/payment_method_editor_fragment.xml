@@ -1,71 +1,65 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_editor_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="left"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        style="@style/editor_label_style"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:text="@string/label_name" />
 
-        <TextView android:layout_width="fill_parent" android:id="@+id/textViewValidationErrorMessage"
-            style="@style/ErrorBoxStyle"
-            android:visibility="gone"/>
+    <EditText
+        android:id="@+id/edittext_payment_method_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_payment_method_name"
+        android:imeOptions="actionGo"
+        android:inputType="text|textNoSuggestions" />
 
-        <TextView
-            style="@style/editor_label_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_name"/>
+    <TextView
+        style="@style/editor_label_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_currency" />
 
-        <EditText
-            android:id="@+id/edittext_payment_method_name"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_payment_method_name"
-            android:inputType="text|textNoSuggestions"
-            android:imeOptions="actionGo"
-            />
+    <Spinner
+        android:id="@+id/spinner_currency"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/editor_label_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_currency"/>
+    <TextView
+        style="@style/editor_label_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_exchange_rate" />
 
-        <Spinner android:id="@+id/spinner_currency"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+    <EditText
+        android:id="@+id/edittext_exchange_rate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="exchange rate"
+        android:inputType="numberDecimal" />
 
-        <TextView
-            style="@style/editor_label_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_exchange_rate"/>
+    <TextView
+        style="@style/editor_label_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_owner" />
 
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/edittext_exchange_rate"
-            android:hint="exchange rate"
-            android:inputType="numberDecimal"/>
+    <Spinner
+        android:id="@+id/spinner_owner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/editor_label_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_owner"/>
+    <Switch
+        android:id="@+id/switch_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Switch" />
 
-        <Spinner android:id="@+id/spinner_owner"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"/>
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Switch"
-            android:id="@+id/switch_close"/>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

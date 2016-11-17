@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
@@ -40,9 +39,9 @@ public class CategoryEditorFragment extends FragmentBase {
     private Spinner mSpinnerExtensionType;
     private ExtensionSpinnerAdapter mExtensionTypeSpinnerAdapter;
 
-    private TextView mTextViewValidationErrorMessage;
     private CategoryValidator mObjectValidator;
     private ArrayList<String> mNames;
+    private View mRootEditorView;
 
     public CategoryEditorFragment() {
 
@@ -85,10 +84,10 @@ public class CategoryEditorFragment extends FragmentBase {
         mSpinnerExtensionType = (Spinner) rootView.findViewById(R.id.spinner_extension_type);
         mSpinnerExtensionType.setAdapter(mExtensionTypeSpinnerAdapter);
 
-        mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
-
         mEditTextName.setText(mCategory.getName());
         Tools.setSpinner(mCategory.getType(), mSpinnerExtensionType);
+
+        mRootEditorView = rootView.findViewById(R.id.root_editor_view);
 
         return rootView;
     }
@@ -125,8 +124,7 @@ public class CategoryEditorFragment extends FragmentBase {
                             mCategory.setDead(true);
                             notifyListener(new ItemStateChangeEvent(mCategory, false));
                         } else {
-                            mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                            mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                            displayMessage(mRootEditorView, validationStatus.getMessage());
                         }
 
                     }
@@ -148,9 +146,7 @@ public class CategoryEditorFragment extends FragmentBase {
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mCategory, false));
                 } else {
-
-                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                    displayMessage(mRootEditorView, validationStatus.getMessage());
                 }
                 break;
             case android.R.id.home:

@@ -66,6 +66,8 @@ public class AccountEditorFragment extends FragmentBase {
 
     private CategorySpinnerAdapter mCategoryAdapter;
 
+    private View mRootEditorView;
+
     public AccountEditorFragment() {
 
         mSelectedContributors = new ArrayList<>();
@@ -213,8 +215,6 @@ public class AccountEditorFragment extends FragmentBase {
 
         mSwitchClose = (Switch) rootView.findViewById(R.id.switch_close);
 
-        mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
-
         mImageButtonContributors = (ImageButton) rootView.findViewById(R.id.imagebutton_contributors);
         mImageButtonContributors.setOnClickListener(mOnContributorImageButtonClickListener);
 
@@ -234,6 +234,8 @@ public class AccountEditorFragment extends FragmentBase {
         mTextViewContributors.setText(mAccount.getContributorsForDisplay());
 
         mListViewCategory.setAdapter(mCategoryAdapter);
+
+        mRootEditorView = rootView.findViewById(R.id.root_editor_view);
 
         return rootView;
     }
@@ -278,8 +280,7 @@ public class AccountEditorFragment extends FragmentBase {
                             mAccount.setDead(true);
                             notifyListener(new ItemStateChangeEvent(mAccount, false));
                         } else {
-                            mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                            mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                            displayMessage(mRootEditorView, validationStatus.getMessage());
                         }
 
                     }
@@ -309,9 +310,7 @@ public class AccountEditorFragment extends FragmentBase {
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mAccount, false));
                 } else {
-
-                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                    displayMessage(mRootEditorView, validationStatus.getMessage());
                 }
                 break;
             case android.R.id.home:

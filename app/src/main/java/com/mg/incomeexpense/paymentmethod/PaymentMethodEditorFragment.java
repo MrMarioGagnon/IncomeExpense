@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.contributor.Contributor;
@@ -39,7 +38,6 @@ public class PaymentMethodEditorFragment extends FragmentBase {
     private PaymentMethod mPaymentMethod = null;
     private EditText mEditTextName;
     private EditText mEditTextExchangeRate;
-    private TextView mTextViewValidationErrorMessage;
     private PaymentMethodValidator mObjectValidator;
     private ArrayList<String> mNames;
     private Spinner mSpinnerCurrency;
@@ -50,6 +48,8 @@ public class PaymentMethodEditorFragment extends FragmentBase {
     private List<Contributor> mOwners;
     private Spinner mSpinnerOwner;
     private ContributorSpinnerAdapter mOwnerSpinnerAdapter;
+
+    private View mRootEditorView;
 
     public PaymentMethodEditorFragment() {
 
@@ -113,8 +113,6 @@ public class PaymentMethodEditorFragment extends FragmentBase {
 
         mSwitchClose = (Switch) rootView.findViewById(R.id.switch_close);
 
-        mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
-
         mSpinnerOwner = (Spinner) rootView.findViewById(R.id.spinner_owner);
         mSpinnerOwner.setAdapter(mOwnerSpinnerAdapter); // Set the custom adapter to the spinner
 
@@ -124,6 +122,8 @@ public class PaymentMethodEditorFragment extends FragmentBase {
         mSwitchClose.setText(mPaymentMethod.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
         Tools.setSpinner(mPaymentMethod.getOwner(), mSpinnerOwner);
         mSpinnerCurrency.setSelection(((ArrayAdapter<String>) mSpinnerCurrency.getAdapter()).getPosition(mPaymentMethod.getCurrency()), false);
+
+        mRootEditorView = rootView.findViewById(R.id.root_editor_view);
 
         return rootView;
     }
@@ -167,8 +167,7 @@ public class PaymentMethodEditorFragment extends FragmentBase {
                             notifyListener(new ItemStateChangeEvent(mPaymentMethod, false));
                         } else {
                             String message = getString(R.string.error_foreign_key_constraint, getString(R.string.payment_method), mPaymentMethod.getName());
-                            mTextViewValidationErrorMessage.setText(message);
-                            mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                            displayMessage(mRootEditorView, message);
                         }
 
                     }
@@ -195,8 +194,9 @@ public class PaymentMethodEditorFragment extends FragmentBase {
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mPaymentMethod, false));
                 } else {
-                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+
+                    displayMessage(mRootEditorView, validationStatus.getMessage());
+
                 }
                 break;
             case android.R.id.home:

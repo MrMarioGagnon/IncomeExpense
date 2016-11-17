@@ -49,7 +49,6 @@ import java.util.Objects;
 public class TransactionEditorFragment extends FragmentBase implements DatePickerDialog.OnDateSetListener {
 
     private Transaction mTransaction = null;
-    private TextView mTextViewValidationErrorMessage;
     private TransactionValidator mObjectValidator;
 
     private TextView mTextViewAccountName;
@@ -82,6 +81,8 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
     private View mFrameExtension;
     private String mExtensionData;
+
+    private View mRootEditorView;
 
     public TransactionEditorFragment() {
 
@@ -221,8 +222,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
         mTextViewCurrency = (TextView) rootView.findViewById(R.id.text_view_currency);
 
-        mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
-
         mTextViewDate = (TextView) rootView.findViewById(R.id.text_view_date);
 
         mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
@@ -269,6 +268,8 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         } else {
             mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
         }
+
+        mRootEditorView = rootView.findViewById(R.id.root_editor_view);
 
         return rootView;
     }
@@ -339,8 +340,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mTransaction, false));
                 } else {
-                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                    displayMessage(mRootEditorView, validationStatus.getMessage());
                 }
                 break;
             case android.R.id.home:

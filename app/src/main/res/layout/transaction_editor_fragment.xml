@@ -3,18 +3,13 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/root_editor_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:padding="16dp">
-
-        <TextView
-            android:id="@+id/textViewValidationErrorMessage"
-            style="@style/ErrorBoxStyle"
-            android:layout_width="fill_parent"
-            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"

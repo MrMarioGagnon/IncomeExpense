@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
@@ -32,9 +31,9 @@ public class ContributorEditorFragment extends FragmentBase {
 
     private Contributor mContributor = null;
     private EditText mEditTextName;
-    private TextView mTextViewValidationErrorMessage;
     private ContributorValidator mObjectValidator = null;
     private ArrayList<String> mNames;
+    private View mRootEditorView;
 
     public ContributorEditorFragment() {
         // Required empty public constructor
@@ -72,9 +71,10 @@ public class ContributorEditorFragment extends FragmentBase {
 
         View rootView = inflater.inflate(R.layout.contributor_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edittext_contributor_name);
-        mTextViewValidationErrorMessage = (TextView) rootView.findViewById(R.id.textViewValidationErrorMessage);
 
         mEditTextName.setText(mContributor.getName());
+
+        mRootEditorView = rootView.findViewById(R.id.root_editor_view);
 
         return rootView;
     }
@@ -97,6 +97,7 @@ public class ContributorEditorFragment extends FragmentBase {
         int id = item.getItemId();
         ValidationStatus validationStatus;
 
+
         switch (id) {
             case R.id.action_delete:
 
@@ -113,8 +114,7 @@ public class ContributorEditorFragment extends FragmentBase {
                             mContributor.setDead(true);
                             notifyListener(new ItemStateChangeEvent(mContributor, false));
                         } else {
-                            mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                            mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                            displayMessage(mRootEditorView, validationStatus.getMessage());
                         }
 
                     }
@@ -133,8 +133,7 @@ public class ContributorEditorFragment extends FragmentBase {
                 if (validationStatus.isValid()) {
                     notifyListener(new ItemStateChangeEvent(mContributor, false));
                 } else {
-                    mTextViewValidationErrorMessage.setText(validationStatus.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                    displayMessage(mRootEditorView, validationStatus.getMessage());
                 }
                 break;
             case android.R.id.home:

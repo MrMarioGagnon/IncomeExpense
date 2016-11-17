@@ -1,7 +1,10 @@
 package com.mg.incomeexpense.core;
 
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,16 @@ public class FragmentBase extends Fragment implements ItemStateChangeHandler {
         for (Object item : mListeners) {
             ((ItemStateChangeListener) item).onItemStateChange(event);
         }
+
+    }
+
+    public void displayMessage(@NonNull View view, @NonNull String message){
+
+        if(null == view || null == message || message.length() == 0)
+            return;
+
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT );
+        snackbar.show();
 
     }
 

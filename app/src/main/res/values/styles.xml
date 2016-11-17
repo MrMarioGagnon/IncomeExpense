@@ -20,14 +20,6 @@
     <style name="SettingsTheme" parent="AppTheme">
     </style>
 
-    <style name="ErrorBoxStyle">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@android:color/holo_red_dark</item>
-        <item name="android:padding">@dimen/error_message_padding</item>
-        <item name="android:elevation">@dimen/error_message_elevation</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
     <style name="transaction_editor_section_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

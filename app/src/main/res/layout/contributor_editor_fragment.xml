@@ -1,34 +1,24 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_editor_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="left"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        style="@style/editor_label_style"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:text="@string/label_name" />
 
-        <TextView android:layout_width="fill_parent" android:id="@+id/textViewValidationErrorMessage"
-            style="@style/ErrorBoxStyle"
-            android:visibility="gone"/>
+    <EditText
+        android:id="@+id/edittext_contributor_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_contributor_name"
+        android:imeOptions="actionGo"
+        android:inputType="text|textNoSuggestions" />
 
-        <TextView
-            style="@style/editor_label_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_name"/>
-
-        <EditText
-            android:id="@+id/edittext_contributor_name"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_contributor_name"
-            android:inputType="text|textNoSuggestions"
-            android:imeOptions="actionGo"
-            />
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>
