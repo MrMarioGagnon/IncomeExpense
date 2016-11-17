@@ -65,8 +65,9 @@ public class CategoryEditorFragment extends FragmentBase {
         mObjectValidator = CategoryValidator.create(getActivity(), mNames);
 
         mExtensionTypeSpinnerAdapter = new ExtensionSpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item,
+                R.layout.spinner_item,
                 ExtensionFragmentFactory.ExtensionType.AsList());
+        mExtensionTypeSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
     }
 
