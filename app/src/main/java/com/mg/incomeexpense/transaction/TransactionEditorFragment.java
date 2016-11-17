@@ -32,6 +32,7 @@ import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.core.ValidationStatus;
 import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.MultipleChoiceEventHandler;
+import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
 import com.mg.incomeexpense.extension.ExtensionDataExtractor;
 import com.mg.incomeexpense.extension.ExtensionFragmentFactory;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
@@ -302,8 +303,20 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
         switch (id) {
             case R.id.action_delete:
-                mTransaction.setDead(true);
-                notifyListener(new ItemStateChangeEvent(mTransaction, false));
+                DialogUtils.twoButtonMessageBox(getContext(), getString(R.string.ask_delete_payment_method), getString(R.string.dialog_title_deleting_payment_method), new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
+
+                        mTransaction.setDead(true);
+                        notifyListener(new ItemStateChangeEvent(mTransaction, false));
+
+                    }
+                }, new SingleChoiceEventHandler() {
+                    @Override
+                    public void execute(int idSelected) {
+                        // Do nothing
+                    }
+                }).show();
                 break;
             case R.id.action_save:
 

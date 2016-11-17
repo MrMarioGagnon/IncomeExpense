@@ -129,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case EDITOR_ACTIVITY:
                 if (resultCode == RESULT_OK) {
-                    this.recreate();
+                    // TODO Trouver une facon de rafraichir l'onglet courant sans invalider le pager
+                    mViewPager.invalidate();
                 }
                 break;
         }
