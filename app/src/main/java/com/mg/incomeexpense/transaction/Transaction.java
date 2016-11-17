@@ -76,7 +76,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
             }
         }
 
-        subItemCursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(categoryId), null, null, null, null);
+        subItemCursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.buildInstanceUri(categoryId), null, null, null, null);
         Category category = null;
         if (subItemCursor != null) {
             if (subItemCursor.moveToFirst()) {

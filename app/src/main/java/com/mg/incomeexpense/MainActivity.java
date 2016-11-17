@@ -15,10 +15,10 @@ import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.account.AccountListActivity;
 import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
+import com.mg.incomeexpense.dashboard.DashboardPagerAdapter;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
 import com.mg.incomeexpense.transaction.Transaction;
-import com.mg.incomeexpense.dashboard.DashboardPagerAdapter;
 import com.mg.incomeexpense.transaction.TransactionEditorActivity;
 import com.mg.incomeexpense.utility.UtilityActivity;
 

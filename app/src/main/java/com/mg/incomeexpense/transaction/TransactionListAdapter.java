@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 
-import java.text.DecimalFormat;
-
 /**
  * Created by mario on 2016-07-19.
  */
@@ -38,7 +36,7 @@ public class TransactionListAdapter extends CursorAdapter {
         Transaction transaction = Transaction.create(cursor, context.getContentResolver());
 
         viewHolder.textViewDate.setText(transaction.getDate());
-        viewHolder.textViewCategory.setText(transaction.getCategory().toString());
+        viewHolder.textViewCategory.setText(transaction.getCategory().getName());
         viewHolder.textViewAmount.setText(transaction.getAmountAsString());
 
         int color = context.getResources().getColor(transaction.getType() == Transaction.TransactionType.Expense ? R.color.colorExpense : R.color.colorIncome, null);
@@ -56,7 +54,7 @@ public class TransactionListAdapter extends CursorAdapter {
             textViewDate = (TextView) view.findViewById(R.id.text_view_date);
             textViewCategory = (TextView) view.findViewById(R.id.text_view_category);
             textViewAmount = (TextView) view.findViewById(R.id.text_view_amount);
-            textViewContributors = (TextView) view.findViewById(R.id.textView_contributors);
+            textViewContributors = (TextView) view.findViewById(R.id.text_view_contributors);
         }
     }
 }

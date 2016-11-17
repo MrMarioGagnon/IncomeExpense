@@ -64,7 +64,7 @@ public class AccountListAdapter extends CursorAdapter {
 
         public ViewHolder(View view) {
             textViewName = (TextView) view.findViewById(R.id.textView_account_name);
-            textViewContributors = (TextView) view.findViewById(R.id.textView_contributors);
+            textViewContributors = (TextView) view.findViewById(R.id.text_view_contributors);
         }
     }
 }
