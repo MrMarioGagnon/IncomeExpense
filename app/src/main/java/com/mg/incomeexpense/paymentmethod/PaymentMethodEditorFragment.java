@@ -106,8 +106,8 @@ public class PaymentMethodEditorFragment extends FragmentBase {
         }
 
         View rootView = inflater.inflate(R.layout.payment_method_editor_fragment, container, false);
-        mEditTextName = (EditText) rootView.findViewById(R.id.edittext_payment_method_name);
-        mEditTextExchangeRate = (EditText) rootView.findViewById(R.id.edittext_exchange_rate);
+        mEditTextName = (EditText) rootView.findViewById(R.id.edit_text_payment_method_name);
+        mEditTextExchangeRate = (EditText) rootView.findViewById(R.id.edit_text_exchange_rate);
         mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
         mSpinnerCurrency.setAdapter(mSpinnerCurrencyAdapter);
 

@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -44,13 +43,12 @@ public class AccountEditorFragment extends FragmentBase {
     private Account mAccount = null;
     private EditText mEditTextName;
     private EditText mEditTextBudget;
-    private TextView mTextViewValidationErrorMessage;
     private AccountValidator mObjectValidator;
     private ArrayList<String> mNames;
     private Switch mSwitchClose;
     private View.OnClickListener mOnSwitchClickListener;
-    private ImageButton mImageButtonContributors;
-    private View.OnClickListener mOnContributorImageButtonClickListener;
+    private ImageView mImageViewContributors;
+    private View.OnClickListener mOnContributorImageViewClickListener;
     private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
     private TextView mTextViewContributors;
     private List<Contributor> mAvailableContributors;
@@ -84,7 +82,7 @@ public class AccountEditorFragment extends FragmentBase {
             }
         };
 
-        mOnContributorImageButtonClickListener = new View.OnClickListener() {
+        mOnContributorImageViewClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showContributorSetterDialog();
@@ -126,8 +124,7 @@ public class AccountEditorFragment extends FragmentBase {
                     mTextViewContributors.setText(sb.toString());
 
                 } else {
-                    mTextViewValidationErrorMessage.setText(vs.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                    displayMessage(mRootEditorView, vs.getMessage());
                 }
 
             }
@@ -161,8 +158,7 @@ public class AccountEditorFragment extends FragmentBase {
                     mTextViewContributors.setText(sb.toString());
 
                 } else {
-                    mTextViewValidationErrorMessage.setText(vs.getMessage());
-                    mTextViewValidationErrorMessage.setVisibility(View.VISIBLE);
+                    displayMessage(mRootEditorView, vs.getMessage());
                 }
 
             }
@@ -210,15 +206,15 @@ public class AccountEditorFragment extends FragmentBase {
         }
 
         View rootView = inflater.inflate(R.layout.account_editor_fragment, container, false);
-        mEditTextName = (EditText) rootView.findViewById(R.id.edittext_account_name);
+        mEditTextName = (EditText) rootView.findViewById(R.id.edit_text_account_name);
         mEditTextBudget = (EditText) rootView.findViewById(R.id.edit_text_budget);
 
         mSwitchClose = (Switch) rootView.findViewById(R.id.switch_close);
 
-        mImageButtonContributors = (ImageButton) rootView.findViewById(R.id.imagebutton_contributors);
-        mImageButtonContributors.setOnClickListener(mOnContributorImageButtonClickListener);
+        mImageViewContributors = (ImageView) rootView.findViewById(R.id.image_view_contributors);
+        mImageViewContributors.setOnClickListener(mOnContributorImageViewClickListener);
 
-        mTextViewContributors = (TextView) rootView.findViewById(R.id.textview_contributors);
+        mTextViewContributors = (TextView) rootView.findViewById(R.id.text_view_contributors);
 
         mImageViewCategory = (ImageView) rootView.findViewById(R.id.image_view_category);
         mImageViewCategory.setOnClickListener(mOnCategoryImageViewClickListener);

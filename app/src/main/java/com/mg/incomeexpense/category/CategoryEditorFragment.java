@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -22,7 +23,6 @@ import com.mg.incomeexpense.core.dialog.DialogUtils;
 import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.extension.ExtensionFragmentFactory;
-import com.mg.incomeexpense.extension.ExtensionSpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,6 @@ public class CategoryEditorFragment extends FragmentBase {
     private EditText mEditTextName;
 
     private Spinner mSpinnerExtensionType;
-    private ExtensionSpinnerAdapter mExtensionTypeSpinnerAdapter;
 
     private CategoryValidator mObjectValidator;
     private ArrayList<String> mNames;
@@ -63,12 +62,6 @@ public class CategoryEditorFragment extends FragmentBase {
         Objects.requireNonNull(mNames, "A list of category name is mandatory");
 
         mObjectValidator = CategoryValidator.create(getActivity(), mNames);
-
-        mExtensionTypeSpinnerAdapter = new ExtensionSpinnerAdapter(getActivity(),
-                R.layout.spinner_item,
-                ExtensionFragmentFactory.ExtensionType.AsList());
-        mExtensionTypeSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-
     }
 
     @Override
@@ -83,7 +76,9 @@ public class CategoryEditorFragment extends FragmentBase {
         View rootView = inflater.inflate(R.layout.category_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edit_text_category_name);
         mSpinnerExtensionType = (Spinner) rootView.findViewById(R.id.spinner_extension_type);
-        mSpinnerExtensionType.setAdapter(mExtensionTypeSpinnerAdapter);
+        ArrayAdapter<ExtensionFragmentFactory.ExtensionType> arrayAdapter = new ArrayAdapter<ExtensionFragmentFactory.ExtensionType>(getActivity(), R.layout.spinner_item, ExtensionFragmentFactory.ExtensionType.values());
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        mSpinnerExtensionType.setAdapter(arrayAdapter);
 
         mEditTextName.setText(mCategory.getName());
         Tools.setSpinner(mCategory.getType(), mSpinnerExtensionType);
@@ -139,7 +134,7 @@ public class CategoryEditorFragment extends FragmentBase {
                 break;
             case R.id.action_save:
                 mCategory.setName(mEditTextName.getText().toString());
-                ExtensionFragmentFactory.ExtensionType extensionType = ExtensionFragmentFactory.ExtensionType.valueOf((String) mSpinnerExtensionType.getSelectedItem());
+                ExtensionFragmentFactory.ExtensionType extensionType = (ExtensionFragmentFactory.ExtensionType) mSpinnerExtensionType.getSelectedItem();
                 mCategory.setType(extensionType);
 
                 validationStatus = mObjectValidator.Validate(mCategory);

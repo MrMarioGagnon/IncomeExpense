@@ -2,9 +2,6 @@ package com.mg.incomeexpense.extension;
 
 import android.support.v4.app.Fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by mario on 2016-11-13.
  */
@@ -13,7 +10,7 @@ public final class ExtensionFragmentFactory {
 
     public static Fragment create(ExtensionType type) {
 
-        if(null == type)
+        if (null == type)
             type = ExtensionType.NOTE;
 
         Fragment fragment;
@@ -31,18 +28,6 @@ public final class ExtensionFragmentFactory {
 
     public enum ExtensionType {
         NOTE, FUEL;
-
-        public static List<String> AsList(){
-
-            List<String> extensionTypes = new ArrayList();
-
-            for(ExtensionType extensionType : ExtensionType.values()){
-
-                extensionTypes.add(extensionType.toString());
-            }
-
-            return extensionTypes;
-        }
     }
 
 }

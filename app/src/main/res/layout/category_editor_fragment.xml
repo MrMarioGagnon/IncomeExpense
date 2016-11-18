@@ -34,7 +34,7 @@
                 style="@style/editor_label_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_category" />
+                android:text="@string/label_extension_type" />
 
             <Spinner
                 android:id="@+id/spinner_extension_type"

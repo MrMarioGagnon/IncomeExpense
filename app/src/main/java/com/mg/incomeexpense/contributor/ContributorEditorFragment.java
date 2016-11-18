@@ -70,7 +70,7 @@ public class ContributorEditorFragment extends FragmentBase {
         }
 
         View rootView = inflater.inflate(R.layout.contributor_editor_fragment, container, false);
-        mEditTextName = (EditText) rootView.findViewById(R.id.edittext_contributor_name);
+        mEditTextName = (EditText) rootView.findViewById(R.id.edit_text_contributor_name);
 
         mEditTextName.setText(mContributor.getName());
 

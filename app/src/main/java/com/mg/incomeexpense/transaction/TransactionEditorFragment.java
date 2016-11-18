@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,7 +23,6 @@ import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.Category;
-import com.mg.incomeexpense.category.CategorySpinnerAdapter;
 import com.mg.incomeexpense.contributor.Contributor;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.DatePickerFragment;
@@ -58,7 +58,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private PaymentMethodSpinnerAdapter mPaymentMethodSpinnerAdapter;
 
     private Spinner mSpinnerCategory;
-    private CategorySpinnerAdapter mCategorySpinnerAdapter;
 
     private TextView mTextViewCurrency;
     private TextView mTextViewExchangeRate;
@@ -66,7 +65,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private TextView mTextViewDate;
 
     private EditText mEditTextAmount;
-    private EditText mEditTextNote;
 
     private ImageView mImageViewDate;
 
@@ -139,11 +137,6 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
 
         mCategories = mTransaction.getAccount().getCategories();
 
-        mCategorySpinnerAdapter = new CategorySpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item,
-                mCategories);
-        mCategorySpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-
         mAvailableContributors = mTransaction.getAccount().getContributors();
         mSelectedContributors.addAll(mTransaction.getContributors());
 
@@ -194,11 +187,13 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         });
 
         mSpinnerCategory = (Spinner) rootView.findViewById(R.id.spinner_category);
-        mSpinnerCategory.setAdapter(mCategorySpinnerAdapter);
+        ArrayAdapter<Category> arrayAdapter = new ArrayAdapter<Category>(getActivity(), R.layout.spinner_item, mCategories);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        mSpinnerCategory.setAdapter(arrayAdapter);
         mSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Category category = mCategorySpinnerAdapter.getItem(position);
+                Category category = mCategories.get(position);
 
                 Bundle bundle = new Bundle();
                 Fragment extensionFragment;
@@ -239,7 +234,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         mImageButtonContributors = (ImageButton) rootView.findViewById(R.id.imagebutton_contributors);
         mImageButtonContributors.setOnClickListener(mOnContributorImageButtonClickListener);
 
-        mTextViewContributors = (TextView) rootView.findViewById(R.id.textview_contributors);
+        mTextViewContributors = (TextView) rootView.findViewById(R.id.text_view_contributors);
 
         if (mTransaction.isNew()) {
             // get the current date
