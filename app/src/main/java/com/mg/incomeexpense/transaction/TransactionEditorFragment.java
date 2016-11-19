@@ -71,7 +71,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private List<PaymentMethod> mPaymentMethods;
     private List<Category> mCategories;
 
-    private ImageButton mImageButtonContributors;
+    private ImageView mImageViewContributors;
     private View.OnClickListener mOnContributorImageButtonClickListener;
     private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
     private TextView mTextViewContributors;
@@ -231,8 +231,8 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
             }
         });
 
-        mImageButtonContributors = (ImageButton) rootView.findViewById(R.id.imagebutton_contributors);
-        mImageButtonContributors.setOnClickListener(mOnContributorImageButtonClickListener);
+        mImageViewContributors = (ImageView) rootView.findViewById(R.id.image_view_contributors);
+        mImageViewContributors.setOnClickListener(mOnContributorImageButtonClickListener);
 
         mTextViewContributors = (TextView) rootView.findViewById(R.id.text_view_contributors);
 
@@ -260,7 +260,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         if (mTransaction.getAccount().getContributors().size() == 1) {
             mSelectedContributors = mTransaction.getAccount().getContributors();
             mTextViewContributors.setText(mTransaction.getAccount().getContributorsForDisplay());
-            mImageButtonContributors.setVisibility(View.GONE);
+            mImageViewContributors.setVisibility(View.GONE);
         } else {
             mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
         }

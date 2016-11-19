@@ -136,13 +136,13 @@
 
         <LinearLayout
             android:id="@+id/linear_layout_contributor"
-            style="@style/transaction_editor_section_style">
+            style="@style/transaction_editor_section_vertical_style">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/editor_label_style"
@@ -160,39 +160,37 @@
 
             <TextView
                 android:id="@+id/text_view_contributors"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Sample text" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
         <View style="@style/Divider" />
 
         <LinearLayout
-        android:id="@+id/linear_layout_payment_method"
-        style="@style/transaction_editor_section_style">
+            android:id="@+id/linear_layout_payment_method"
+            style="@style/transaction_editor_section_style">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/editor_label_style"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_payment_method" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/spinner_payment_method"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/editor_label_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_payment_method" />
+
+                <Spinner
+                    android:id="@+id/spinner_payment_method"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
 
         <View style="@style/Divider" />
 

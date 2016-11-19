@@ -9,7 +9,7 @@
         style="@style/editor_label_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_name" />
+        android:text="@string/label_name2" />
 
     <EditText
         android:id="@+id/edit_text_account_name"
@@ -48,7 +48,7 @@
         style="@style/editor_label_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_budget" />
+        android:text="@string/label_budget2" />
 
     <EditText
         android:id="@+id/edit_text_budget"

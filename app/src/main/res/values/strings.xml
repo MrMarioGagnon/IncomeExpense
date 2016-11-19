@@ -84,11 +84,16 @@
 
     <string name="label_account">Account:</string>
     <string name="label_name">Name:</string>
+    <string name="label_name2">Name</string>
     <string name="label_currency">Currency:</string>
+    <string name="label_currency2">Currency</string>
     <string name="label_contributors">Contributors</string>
     <string name="label_exchange_rate">Exchange Rate:</string>
+    <string name="label_exchange_rate2">Exchange Rate</string>
     <string name="label_budget">Budget:</string>
+    <string name="label_budget2">Budget</string>
     <string name="label_owner">Owner:</string>
+    <string name="label_owner2">Owner</string>
     <string name="label_date">Date:</string>
     <string name="label_amount">Amount:</string>
     <string name="label_payment_method">Payment Method</string>
