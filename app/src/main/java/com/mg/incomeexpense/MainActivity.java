@@ -42,60 +42,41 @@ public class MainActivity extends AppCompatActivity {
 
         List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver());
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        TabLayout.Tab tab;
-        for (Account account : accounts) {
-            tab = mTabLayout.newTab();
-            tab.setText(account.getName());
-            tab.setTag(account);
-            mTabLayout.addTab(tab);
-        }
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         final DashboardPagerAdapter adapter = new DashboardPagerAdapter
                 (getSupportFragmentManager(), accounts);
         mViewPager.setAdapter(adapter);
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        View.OnClickListener fabOnclickListener = new View.OnClickListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
+            public void onClick(View view) {
+
+                Transaction.TransactionType transactionType;
+
+                switch(view.getId()){
+                    case R.id.fabAddIncome:
+                        transactionType = Transaction.TransactionType.Income;
+                        break;
+                    default:
+                        transactionType = Transaction.TransactionType.Expense;
+                        break;
+                }
+
+                mFabMenu.collapseImmediately();
+                Account account = ((DashboardPagerAdapter)mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
+                ShowTransactionEditor(account, transactionType);
+
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        };
 
         com.mg.floatingactionbutton.FloatingActionButton fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddExpense);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mFabMenu.collapseImmediately();
-
-                Account account = (Account) mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).getTag();
-                ShowTransactionEditor(account, Transaction.TransactionType.Expense);
-
-            }
-        });
+        fab.setOnClickListener(fabOnclickListener);
 
         fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddIncome);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mFabMenu.collapseImmediately();
-                Account account = (Account) mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()).getTag();
-                ShowTransactionEditor(account, Transaction.TransactionType.Income);
-
-            }
-        });
+        fab.setOnClickListener(fabOnclickListener);
 
         mFabMenu = (com.mg.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.floating_action_menu_Type);
     }

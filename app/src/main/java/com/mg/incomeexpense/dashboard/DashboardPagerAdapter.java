@@ -32,6 +32,11 @@ public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
+    public CharSequence getPageTitle(int position) {
+        return mAccount.get(position).getName();
+    }
+
+    @Override
     public Fragment getItem(int position) {
 
 
@@ -58,4 +63,7 @@ public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
         return mAccount.size();
     }
 
+    public Account getAccount(int position){
+        return mAccount.get(position);
+    }
 }

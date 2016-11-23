@@ -21,39 +21,39 @@
         <activity
             android:name=".contributor.ContributorListActivity"
             android:label="@string/title_contributor_list"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".contributor.ContributorEditorActivity"
             android:label="@string/title_contributor_editor"
-            android:parentActivityName=".contributor.ContributorListActivity"></activity>
+            android:parentActivityName=".contributor.ContributorListActivity" />
         <activity
             android:name=".account.AccountListActivity"
             android:label="@string/title_account_list"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".account.AccountEditorActivity"
             android:label="@string/title_account_editor"
-            android:parentActivityName=".account.AccountListActivity"></activity>
+            android:parentActivityName=".account.AccountListActivity" />
         <activity
             android:name=".category.CategoryListActivity"
             android:label="@string/title_category_list"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".category.CategoryEditorActivity"
             android:label="@string/title_category_editor"
-            android:parentActivityName=".category.CategoryListActivity"></activity>
+            android:parentActivityName=".category.CategoryListActivity" />
         <activity
             android:name=".paymentmethod.PaymentMethodListActivity"
             android:label="@string/title_payment_method_list"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".paymentmethod.PaymentMethodEditorActivity"
             android:label="@string/title_payment_method_editor"
-            android:parentActivityName=".paymentmethod.PaymentMethodListActivity"></activity>
+            android:parentActivityName=".paymentmethod.PaymentMethodListActivity"/>
         <activity
             android:name=".transaction.TransactionEditorActivity"
             android:label="@string/title_transaction_editor"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_settings"
@@ -66,11 +66,11 @@
         <activity
             android:name=".transaction.TransactionListActivity"
             android:label="@string/title_transaction_list"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".utility.UtilityActivity"
             android:label="@string/title_utility"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
 
         <provider
             android:name=".data.IncomeExpenseProvider"
