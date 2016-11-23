@@ -32,6 +32,7 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:tabGravity="fill"
             app:tabMaxWidth="0dp"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
             app:tabMode="fixed" />
 
 
