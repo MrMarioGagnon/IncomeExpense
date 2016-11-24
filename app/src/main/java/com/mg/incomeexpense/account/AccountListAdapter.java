@@ -40,6 +40,7 @@ public class AccountListAdapter extends CursorAdapter {
 
         viewHolder.textViewName.setText(account.getName());
         viewHolder.textViewContributors.setText(account.getContributorsForDisplay());
+        viewHolder.textViewPosition.setText(account.getPosition().toString());
         if (account.getIsClose()) {
             view.setBackgroundColor(Color.RED);
         } else {
@@ -61,10 +62,12 @@ public class AccountListAdapter extends CursorAdapter {
     public static class ViewHolder {
         public final TextView textViewName;
         public final TextView textViewContributors;
+        public final TextView textViewPosition;
 
         public ViewHolder(View view) {
-            textViewName = (TextView) view.findViewById(R.id.textView_account_name);
+            textViewName = (TextView) view.findViewById(R.id.text_view_account_name);
             textViewContributors = (TextView) view.findViewById(R.id.text_view_contributors);
+            textViewPosition = (TextView) view.findViewById(R.id.text_view_position);
         }
     }
 }

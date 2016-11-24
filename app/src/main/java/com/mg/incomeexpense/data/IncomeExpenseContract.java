@@ -37,6 +37,7 @@ public class IncomeExpenseContract {
         public static final String COLUMN_CATEGORIES = "categories";
         public static final String COLUMN_BUDGET = "budget";
         public static final String COLUMN_CLOSE = "close";
+        public static final String COLUMN_POSITION = "position";
 
         public static Uri buildInstanceUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

@@ -29,6 +29,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     private List<Category> mCategories;
     private Double mBudget;
     private Boolean mIsClose;
+    private Integer mPosition;
 
     private Account() {
 
@@ -49,6 +50,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
         String categories = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES));
         Double budget = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_BUDGET));
+        Integer position = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_POSITION));
 
         newInstance.mId = id;
         newInstance.mName = name;
@@ -56,33 +58,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ApplicationConstant.storageSeparator);
         newInstance.mCategories = IdToItemConvertor.ConvertIdsToCategories(contentResolver, IncomeExpenseContract.CategoryEntry.CONTENT_URI, categories, ApplicationConstant.storageSeparator);
         newInstance.mBudget = null == budget ? 0d : budget;
-
-        return newInstance;
-    }
-
-    public static Account create(@NonNull Long id, @NonNull String name, Boolean isClose, @NonNull List<Contributor> contributors, Double budget, @NonNull List<Category> categories) {
-
-        Objects.requireNonNull(id, "Parameter id of type Long is mandatory");
-        Objects.requireNonNull(name, "Parameter name of type String is mandatory");
-        Objects.requireNonNull(contributors, "Parameter contributors of type List<Contributor> is mandatory");
-
-        if (contributors.size() == 0)
-            throw new IllegalArgumentException("The size of the list of contributor must be greater than zero");
-
-        Objects.requireNonNull(categories, "Parameter categories of type List<String> is mandatory");
-
-        if (categories.size() == 0)
-            throw new IllegalArgumentException("The size of the list of category must be greater than zero");
-
-        Account newInstance = new Account();
-        newInstance.mNew = false;
-        newInstance.mDirty = false;
-        newInstance.mId = id;
-        newInstance.mName = name;
-        newInstance.mIsClose = null == isClose ? false : isClose;
-        newInstance.mContributors = contributors;
-        newInstance.mCategories = categories;
-        newInstance.mBudget = null == budget ? 0d : budget;
+        newInstance.mPosition = null == position ? 9999 : position;
 
         return newInstance;
     }
@@ -97,6 +73,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mContributors = new ArrayList<>();
         newInstance.mCategories = new ArrayList<>();
         newInstance.mBudget = 0d;
+        newInstance.mPosition = 9999;
 
         return newInstance;
 
@@ -182,10 +159,22 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         }
     }
 
+    public Integer getPosition() {
+        return mPosition;
+    }
+
+    public void setPosition(@NonNull Integer position) {
+
+        Objects.requireNonNull(position, "Parameter name of type Integer is mandatory");
+
+        if (!mPosition.equals(position)) {
+            mDirty = true;
+            mPosition = position;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
-
-        if (null == o) return false;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -194,9 +183,9 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         if (!mName.equals(account.mName)) return false;
         if (!mContributors.equals(account.mContributors)) return false;
         if (!mCategories.equals(account.mCategories)) return false;
-        if (mBudget != null ? !mBudget.equals(account.mBudget) : account.mBudget != null)
-            return false;
-        return mIsClose.equals(account.mIsClose);
+        if (!mBudget.equals(account.mBudget)) return false;
+        if (!mIsClose.equals(account.mIsClose)) return false;
+        return mPosition.equals(account.mPosition);
 
     }
 
@@ -205,8 +194,9 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         int result = mName.hashCode();
         result = 31 * result + mContributors.hashCode();
         result = 31 * result + mCategories.hashCode();
-        result = 31 * result + (mBudget != null ? mBudget.hashCode() : 0);
+        result = 31 * result + mBudget.hashCode();
         result = 31 * result + mIsClose.hashCode();
+        result = 31 * result + mPosition.hashCode();
         return result;
     }
 
