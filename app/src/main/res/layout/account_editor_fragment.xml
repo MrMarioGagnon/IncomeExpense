@@ -64,6 +64,20 @@
         android:layout_height="wrap_content"
         android:text="New Switch" />
 
+    <TextView
+        style="@style/editor_label_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_position"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:maxLength="4"
+        android:id="@+id/edit_text_position" />
+
     <LinearLayout
         android:id="@+id/linear_layout_category"
         style="@style/transaction_editor_section_style">

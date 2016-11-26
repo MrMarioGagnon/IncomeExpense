@@ -105,7 +105,7 @@ public class ContributorEditorFragment extends FragmentBase {
                     @Override
                     public void execute(int idSelected) {
 
-                        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver());
+                        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver(), null);
                         List<PaymentMethod> paymentMethods = IncomeExpenseRequestWrapper.getAvailablePaymentMethods(getActivity().getContentResolver(), null);
 
                         ValidationStatus validationStatus = mObjectValidator.canDelete(mContributor, accounts, paymentMethods);

@@ -257,7 +257,7 @@ public class IncomeExpenseRequestWrapper {
     }
 
 
-    public static ArrayList<Account> getAvailableAccounts(@NonNull ContentResolver contentResolver) {
+    public static ArrayList<Account> getAvailableAccounts(@NonNull ContentResolver contentResolver, String order) {
 
         Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
 
@@ -265,7 +265,7 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null, String.format("LOWER(%1$s)", IncomeExpenseContract.AccountEntry.COLUMN_NAME));
+            cursor = contentResolver.query(IncomeExpenseContract.AccountEntry.CONTENT_URI, null, null, null, order);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 assets.add(Account.create(cursor, contentResolver));
             }

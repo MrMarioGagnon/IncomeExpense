@@ -112,7 +112,7 @@ public class CategoryEditorFragment extends FragmentBase {
                     @Override
                     public void execute(int idSelected) {
 
-                        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver());
+                        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getActivity().getContentResolver(), null);
 
                         ValidationStatus validationStatus = mObjectValidator.canDelete(mCategory, accounts);
 

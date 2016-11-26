@@ -38,8 +38,6 @@ import java.util.Objects;
  */
 public class AccountEditorFragment extends FragmentBase {
 
-    private static final int CATEGORY_EDITOR_ACTIVITY = 1;
-
     private Account mAccount = null;
     private EditText mEditTextName;
     private EditText mEditTextBudget;
@@ -65,6 +63,7 @@ public class AccountEditorFragment extends FragmentBase {
     private CategorySpinnerAdapter mCategoryAdapter;
 
     private View mRootEditorView;
+    private EditText mEditTextPosition;
 
     public AccountEditorFragment() {
 
@@ -221,6 +220,8 @@ public class AccountEditorFragment extends FragmentBase {
 
         mListViewCategory = (ListView) rootView.findViewById(R.id.list_view_category);
 
+        mEditTextPosition = (EditText) rootView.findViewById(R.id.edit_text_position);
+
         mEditTextName.setText(mAccount.getName());
         if (null != mAccount.getBudget()) {
             mEditTextBudget.setText(mAccount.getBudgetAsString());
@@ -228,6 +229,7 @@ public class AccountEditorFragment extends FragmentBase {
         mSwitchClose.setChecked(mAccount.getIsClose());
         mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
         mTextViewContributors.setText(mAccount.getContributorsForDisplay());
+        mEditTextPosition.setText(mAccount.getPosition().toString());
 
         mListViewCategory.setAdapter(mCategoryAdapter);
 
@@ -300,6 +302,8 @@ public class AccountEditorFragment extends FragmentBase {
                 mAccount.setIsClose(mSwitchClose.isChecked());
 
                 mAccount.setContributors(mSelectedContributors);
+
+                mAccount.setPosition(Integer.parseInt(mEditTextPosition.getText().toString()));
 
                 validationStatus = mObjectValidator.Validate(mAccount);
 

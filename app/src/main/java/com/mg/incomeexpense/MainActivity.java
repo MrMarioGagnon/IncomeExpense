@@ -17,6 +17,7 @@ import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
 import com.mg.incomeexpense.dashboard.DashboardFragment;
 import com.mg.incomeexpense.dashboard.DashboardPagerAdapter;
+import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.paymentmethod.PaymentMethodListActivity;
 import com.mg.incomeexpense.transaction.Transaction;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         // Permet d'afficher la barre au haut de l'ecran
         setSupportActionBar(toolbar);
 
-        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver());
+        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver(), String.format("SUBSTR('000' || CAST(%2$S AS TEXT), -4) || LOWER(%1$s)", IncomeExpenseContract.AccountEntry.COLUMN_NAME, IncomeExpenseContract.AccountEntry.COLUMN_POSITION));
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Transaction.TransactionType transactionType;
 
-                switch(view.getId()){
+                switch (view.getId()) {
                     case R.id.fabAddIncome:
                         transactionType = Transaction.TransactionType.Income;
                         break;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 mFabMenu.collapseImmediately();
-                Account account = ((DashboardPagerAdapter)mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
+                Account account = ((DashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
                 ShowTransactionEditor(account, transactionType);
 
             }
