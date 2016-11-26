@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,7 +35,6 @@ import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
 import com.mg.incomeexpense.extension.ExtensionDataExtractor;
 import com.mg.incomeexpense.extension.ExtensionFragmentFactory;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
-import com.mg.incomeexpense.paymentmethod.PaymentMethodSpinnerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +53,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private TextView mTextViewAccountName;
 
     private Spinner mSpinnerPaymentMethod;
-    private PaymentMethodSpinnerAdapter mPaymentMethodSpinnerAdapter;
+    private ArrayAdapter<PaymentMethod> mPaymentMethodSpinnerAdapter;
 
     private Spinner mSpinnerCategory;
 
@@ -130,9 +128,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
         mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
         Objects.requireNonNull(mPaymentMethods, "A payment method is mandatory");
 
-        mPaymentMethodSpinnerAdapter = new PaymentMethodSpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item,
-                mPaymentMethods);
+        mPaymentMethodSpinnerAdapter = new ArrayAdapter<PaymentMethod>(getActivity(), R.layout.spinner_item, mPaymentMethods);
         mPaymentMethodSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         mCategories = mTransaction.getAccount().getCategories();

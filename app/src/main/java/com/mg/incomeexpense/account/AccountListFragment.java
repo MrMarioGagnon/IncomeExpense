@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,8 +39,13 @@ public class AccountListFragment extends FragmentListBase {
         super.onCreate(savedInstanceState);
 
         // Add this line in order for this fragment to handle menu events.
-        //setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_account_list, menu);
     }
 
     @Override

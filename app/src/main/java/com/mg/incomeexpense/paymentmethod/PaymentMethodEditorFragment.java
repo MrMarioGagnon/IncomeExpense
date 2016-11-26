@@ -15,7 +15,6 @@ import android.widget.Switch;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.contributor.Contributor;
-import com.mg.incomeexpense.contributor.ContributorSpinnerAdapter;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
@@ -47,7 +46,7 @@ public class PaymentMethodEditorFragment extends FragmentBase {
 
     private List<Contributor> mOwners;
     private Spinner mSpinnerOwner;
-    private ContributorSpinnerAdapter mOwnerSpinnerAdapter;
+    private ArrayAdapter<Contributor> mOwnerSpinnerAdapter;
 
     private View mRootEditorView;
 
@@ -86,9 +85,8 @@ public class PaymentMethodEditorFragment extends FragmentBase {
 
         mObjectValidator = PaymentMethodValidator.create(getActivity(), mNames);
 
-        mOwnerSpinnerAdapter = new ContributorSpinnerAdapter(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item,
-                mOwners);
+        mOwnerSpinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, mOwners);
+        mOwnerSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         mSpinnerCurrencyAdapter = ArrayAdapter.createFromResource(
                 getActivity(), R.array.pref_currency_values,
