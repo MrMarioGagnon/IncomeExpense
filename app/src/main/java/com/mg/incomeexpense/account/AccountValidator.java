@@ -48,6 +48,7 @@ public class AccountValidator implements ObjectValidator {
         messages.put(R.string.validation_category_mandatory, context.getString(R.string.validation_category_mandatory));
         messages.put(R.string.validation_budget_must_be_positive, context.getString(R.string.validation_budget_must_be_positive));
         messages.put(R.string.validation_remove_contributor_from_account, context.getString(R.string.validation_remove_contributor_from_account));
+        messages.put(R.string.validation_remove_category_from_account, context.getString(R.string.validation_remove_contributor_from_account));
         messages.put(R.string.error_foreign_key_constraint, context.getString(R.string.error_foreign_key_constraint));
         messages.put(R.string.account, context.getString(R.string.account));
 

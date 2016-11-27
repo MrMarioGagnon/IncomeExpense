@@ -146,16 +146,8 @@ public class AccountEditorFragment extends FragmentBase {
                 ValidationStatus vs = mObjectValidator.canRemoveCategory(mAccount, selectedCategories, transactions);
                 if (vs.isValid()) {
                     mSelectedCategories.clear();
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < idSelected.length; i++) {
-                        if (idSelected[i]) {
-                            Category category = mAvailableCategories.get(i);
-                            mSelectedCategories.add(category);
-                            sb.append(String.format("%1$s%2$s", (sb.length() == 0 ? "" : ","), category.getName()));
-                        }
-                    }
-                    mTextViewContributors.setText(sb.toString());
-
+                    mSelectedCategories.addAll(selectedCategories);
+                    mCategoryAdapter.notifyDataSetChanged();
                 } else {
                     displayMessage(mRootEditorView, vs.getMessage());
                 }

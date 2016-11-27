@@ -4,6 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.os.Build;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
@@ -92,6 +96,32 @@ public class DialogUtils {
         for (int i = 0; i < checked.length; i++) {
             lv.setItemChecked(i, checked[i]);
         }
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+                private void theFix(AbsListView view){
+
+                    int size = view.getChildCount();
+
+                    for (int i=0; i<size; i++) {
+                        View v = view.getChildAt(i);
+                        if (v instanceof CheckedTextView)
+                            v.refreshDrawableState();
+                    }
+                }
+
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                    theFix(view);
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    theFix(view);                }
+            });
+        }
+
 
         return ad;
 
