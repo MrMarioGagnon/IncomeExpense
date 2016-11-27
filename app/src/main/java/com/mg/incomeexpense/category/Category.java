@@ -107,7 +107,10 @@ public final class Category extends ObjectBase implements Serializable, Comparab
     }
 
     @Override
-    public int compareTo(Category another) {
-        return 0;
+    public int compareTo(@NonNull Category instanceToCompare) {
+
+        Objects.requireNonNull(instanceToCompare, "Parameter instanceToCompare of type Category is mandatory");
+
+        return getName().compareToIgnoreCase(instanceToCompare.getName());
     }
 }
