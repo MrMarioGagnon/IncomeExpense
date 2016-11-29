@@ -71,6 +71,7 @@
     <string name="title_transaction_list">Transactions</string>
     <string name="title_utility">Utility</string>
     <string name="title_reorder">Reorder</string>
+    <string name="title_global_tab">All</string>
 
     <string name="text_add_expense">Add Expense</string>
     <string name="text_add_income">Add Income</string>

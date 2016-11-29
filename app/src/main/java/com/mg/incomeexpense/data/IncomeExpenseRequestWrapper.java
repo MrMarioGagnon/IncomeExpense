@@ -314,8 +314,16 @@ public class IncomeExpenseRequestWrapper {
         Objects.requireNonNull(account, "Parameter account of type Account is mandatory");
         Objects.requireNonNull(date, "Parameter date of type Date is mandatory");
 
-        String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
-        String[] selectionArgs = new String[]{account.getId().toString()};
+        Boolean t;
+
+        String selection = null;
+        String[] selectionArgs = null;
+        if(account.getId() != 0){
+            selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
+            selectionArgs = new String[]{account.getId().toString()};
+        }else{
+            t = true;
+        }
 
         LocalDate dFirstDateYear = DateUtil.getFirstDateOfYear(date);
         LocalDate dLastDateYear = DateUtil.getLastDateOfYear(date);

@@ -24,6 +24,7 @@ import com.mg.incomeexpense.transaction.Transaction;
 import com.mg.incomeexpense.transaction.TransactionEditorActivity;
 import com.mg.incomeexpense.utility.UtilityActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +35,17 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private com.mg.floatingactionbutton.FloatingActionsMenu mFabMenu;
 
+    private List<Account> getAccountsForPager() {
+        Account globalAccount = Account.createNew();
+        globalAccount.setId(0l);
+        globalAccount.setName(getString(R.string.title_global_tab));
+        globalAccount.setContributors(IncomeExpenseRequestWrapper.getAvailableContributors(getContentResolver()));
+        List<Account> accounts = new ArrayList();
+        accounts.add(globalAccount);
+        accounts.addAll(IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver(), String.format("SUBSTR('000' || CAST(%2$S AS TEXT), -4) || LOWER(%1$s)", IncomeExpenseContract.AccountEntry.COLUMN_NAME, IncomeExpenseContract.AccountEntry.COLUMN_POSITION)));
+        return accounts;
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
@@ -41,13 +53,12 @@ public class MainActivity extends AppCompatActivity {
         // Permet d'afficher la barre au haut de l'ecran
         setSupportActionBar(toolbar);
 
-        List<Account> accounts = IncomeExpenseRequestWrapper.getAvailableAccounts(getContentResolver(), String.format("SUBSTR('000' || CAST(%2$S AS TEXT), -4) || LOWER(%1$s)", IncomeExpenseContract.AccountEntry.COLUMN_NAME, IncomeExpenseContract.AccountEntry.COLUMN_POSITION));
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         final DashboardPagerAdapter adapter = new DashboardPagerAdapter
-                (getSupportFragmentManager(), accounts);
+                (getSupportFragmentManager(), getAccountsForPager());
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
