@@ -1,5 +1,6 @@
 package com.mg.incomeexpense;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,8 @@ import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.account.AccountListActivity;
 import com.mg.incomeexpense.category.CategoryListActivity;
 import com.mg.incomeexpense.contributor.ContributorListActivity;
+import com.mg.incomeexpense.core.dialog.DialogUtils;
+import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
 import com.mg.incomeexpense.dashboard.DashboardFragment;
 import com.mg.incomeexpense.dashboard.DashboardPagerAdapter;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private com.mg.floatingactionbutton.FloatingActionsMenu mFabMenu;
+    private SingleChoiceEventHandler mAccountChoiceEventHandler;
+    private Transaction.TransactionType mSelectedType;
+
 
     private List<Account> getAccountsForPager() {
         Account globalAccount = Account.createNew();
@@ -79,7 +85,13 @@ public class MainActivity extends AppCompatActivity {
 
                 mFabMenu.collapseImmediately();
                 Account account = ((DashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
-                ShowTransactionEditor(account, transactionType);
+
+                if(account.getId() == 0){
+                    mSelectedType = transactionType;
+                    showAccountSetterDialog();
+                }else {
+                    ShowTransactionEditor(account, transactionType);
+                }
 
             }
         };
@@ -91,6 +103,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(fabOnclickListener);
 
         mFabMenu = (com.mg.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.floating_action_menu_Type);
+
+        mAccountChoiceEventHandler = new SingleChoiceEventHandler() {
+            @Override
+            public void execute(int idSelected) {
+                Account account = ((DashboardPagerAdapter) mViewPager.getAdapter()).getAccount(idSelected + 1);
+                ShowTransactionEditor(account, mSelectedType);
+            }
+        };
+
     }
 
     private void ShowTransactionEditor(@NonNull Account account, @NonNull Transaction.TransactionType type) {
@@ -172,4 +193,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void showAccountSetterDialog() {
+
+        try {
+
+            List<Account> accounts = ((DashboardPagerAdapter) mViewPager.getAdapter()).getAccounts();
+            String[] accountNames = new String[accounts.size() - 1];
+            for(int i = 1; i < accounts.size(); i++){
+                accountNames[i-1] = accounts.get(i).getName();
+            }
+
+            Dialog dialog = DialogUtils.singleChoicePickerDialog(this,getString(R.string.dialog_title_pick_an_account),accountNames, mAccountChoiceEventHandler, 0);
+            dialog.setOwnerActivity(this);
+            dialog.show();
+
+        } catch (Exception exception) {
+            DialogUtils.messageBox(this,
+                    getString(R.string.error_unable_to_fetch_all_account),
+                    getString(R.string.dialog_title_category_setter)).show();
+
+        }
+
+    }
+
 }

@@ -321,8 +321,6 @@ public class IncomeExpenseRequestWrapper {
         if(account.getId() != 0){
             selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
             selectionArgs = new String[]{account.getId().toString()};
-        }else{
-            t = true;
         }
 
         LocalDate dFirstDateYear = DateUtil.getFirstDateOfYear(date);

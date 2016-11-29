@@ -17,8 +17,8 @@ import java.util.Objects;
  */
 public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
 
-    List<Account> mAccount;
-    HashMap<Integer, DashboardFragment> mDashboards;
+    private List<Account> mAccount;
+    private HashMap<Integer, DashboardFragment> mDashboards;
 
     public DashboardPagerAdapter(@NonNull FragmentManager fm, @NonNull List<Account> accounts) {
         super(fm);
@@ -65,5 +65,9 @@ public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
 
     public Account getAccount(int position){
         return mAccount.get(position);
+    }
+
+    public List<Account> getAccounts(){
+        return mAccount;
     }
 }

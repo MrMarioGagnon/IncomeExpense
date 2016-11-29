@@ -22,6 +22,7 @@
 
     <string name="error_unable_to_fetch_all_contributor">Unable to fetch all contributor.</string>
     <string name="error_unable_to_fetch_all_category">Unable to fetch all category.</string>
+    <string name="error_unable_to_fetch_all_account">Unable to fetch all account.</string>
     <string name="error_foreign_key_constraint">Unable to delete %1$s : %2$s, it\'s in use.</string>
     <string name="error_foreign_key_constraint_contributor1">Unable to delete this contributor</string>
     <string name="error_foreign_key_constraint_contributor2">In use in Accounts</string>
@@ -29,6 +30,7 @@
 
     <string name="dialog_title_contributor_setter">Contributor Setter</string>
     <string name="dialog_title_category_setter">Category Setter</string>
+    <string name="dialog_title_pick_an_account">Select An Account</string>
 
     <string name="button_label_ok">Ok</string>
     <string name="button_label_cancel">Cancel</string>

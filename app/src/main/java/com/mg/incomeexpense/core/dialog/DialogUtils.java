@@ -53,20 +53,20 @@ public class DialogUtils {
         return twoButtonMessageBox(context, message, title, clickCommand, null);
 
     }
-//
-//	public static AlertDialog singleChoicePickerDialog(final Context context,
-//			final String title, final CharSequence[] adapter,
-//			final SingleChoiceEventHandler positiveCommand,
-//			final int itemSelectedId) {
-//
-//		AlertDialog.Builder builder = new AlertDialog.Builder(context)
-//				.setCancelable(true)
-//				.setSingleChoiceItems(adapter, itemSelectedId,
-//						new SingleChoiceEventListener(positiveCommand))
-//				.setTitle(title).setInverseBackgroundForced(true);
-//
-//		return builder.create();
-//	}
+
+	public static AlertDialog singleChoicePickerDialog(final Context context,
+			final String title, final CharSequence[] adapter,
+			final SingleChoiceEventHandler positiveCommand,
+			final int itemSelectedId) {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context)
+				.setCancelable(true)
+				.setSingleChoiceItems(adapter, itemSelectedId,
+						new SingleChoiceEventListener(positiveCommand))
+				.setTitle(title).setInverseBackgroundForced(true);
+
+		return builder.create();
+	}
 
     public static AlertDialog childSetterDialog(final Context context,
                                                 final CharSequence[] adapter,
