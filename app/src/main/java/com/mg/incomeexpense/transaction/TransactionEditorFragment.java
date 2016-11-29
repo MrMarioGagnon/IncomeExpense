@@ -2,10 +2,12 @@ package com.mg.incomeexpense.transaction;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -80,6 +83,8 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
     private String mExtensionData;
 
     private View mRootEditorView;
+
+    private boolean[] mCheckedContributor;
 
     public TransactionEditorFragment() {
 
@@ -384,8 +389,18 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                     this.getContext(),
                     contributorArray,
                     mContributorMultipleChoiceEventHandler,
-                    buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors),
                     getString(R.string.dialog_title_contributor_setter));
+
+            mCheckedContributor = buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors);
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    ListView lv = ((AlertDialog) dialog).getListView();
+                    for (int i = 0; i < mCheckedContributor.length; i++) {
+                        lv.setItemChecked(i, mCheckedContributor[i]);
+                    }
+                }
+            });
 
             dialog.setOwnerActivity(this.getActivity());
             dialog.show();

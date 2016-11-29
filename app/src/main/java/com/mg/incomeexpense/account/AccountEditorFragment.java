@@ -1,8 +1,10 @@
 package com.mg.incomeexpense.account;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +34,8 @@ import com.mg.incomeexpense.transaction.Transaction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+//import android.app.AlertDialog;
 
 /**
  * Created by mario on 2016-07-19.
@@ -64,6 +68,9 @@ public class AccountEditorFragment extends FragmentBase {
 
     private View mRootEditorView;
     private EditText mEditTextPosition;
+
+    private boolean[] mCheckedCategory;
+    private boolean[] mCheckedContributor;
 
     public AccountEditorFragment() {
 
@@ -330,8 +337,18 @@ public class AccountEditorFragment extends FragmentBase {
                     this.getContext(),
                     contributorArray,
                     mContributorMultipleChoiceEventHandler,
-                    buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors),
                     getString(R.string.dialog_title_contributor_setter));
+
+            mCheckedContributor = buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors);
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    ListView lv = ((AlertDialog) dialog).getListView();
+                    for (int i = 0; i < mCheckedContributor.length; i++) {
+                        lv.setItemChecked(i, mCheckedContributor[i]);
+                    }
+                }
+            });
 
             dialog.setOwnerActivity(this.getActivity());
             dialog.show();
@@ -358,11 +375,22 @@ public class AccountEditorFragment extends FragmentBase {
                     this.getContext(),
                     categoryArray,
                     mCategoryMultipleChoiceEventHandler,
-                    buildCategoriesCheckedArray(mAvailableCategories, mSelectedCategories),
                     getString(R.string.dialog_title_category_setter));
+
+            mCheckedCategory = buildCategoriesCheckedArray(mAvailableCategories, mSelectedCategories);
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    ListView lv = ((AlertDialog) dialog).getListView();
+                    for (int i = 0; i < mCheckedCategory.length; i++) {
+                        lv.setItemChecked(i, mCheckedCategory[i]);
+                    }
+                }
+            });
 
             dialog.setOwnerActivity(this.getActivity());
             dialog.show();
+
         } catch (Exception exception) {
             DialogUtils.messageBox(this.getContext(),
                     getString(R.string.error_unable_to_fetch_all_category),

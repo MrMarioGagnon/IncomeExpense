@@ -1,7 +1,8 @@
 package com.mg.incomeexpense.core.dialog;
 
-import android.app.AlertDialog;
+
 import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.widget.ListView;
 
 public class MultipleChoiceEventListener implements DialogInterface.OnClickListener {

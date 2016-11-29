@@ -1,14 +1,11 @@
 package com.mg.incomeexpense.core.dialog;
 
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
-import android.os.Build;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.CheckedTextView;
-import android.widget.ListView;
+import android.support.v7.app.AlertDialog;
 
 import com.mg.incomeexpense.R;
 
@@ -74,12 +71,24 @@ public class DialogUtils {
     public static AlertDialog childSetterDialog(final Context context,
                                                 final CharSequence[] adapter,
                                                 final MultipleChoiceEventHandler positiveHandler,
-                                                final boolean[] checked,
                                                 final String dialogTitle) {
+
+        /* Set the checked item outside, like that
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    ListView lv = ((AlertDialog)dialog).getListView();
+                    for (int i = 0; i < a.length; i++) {
+                        lv.setItemChecked(i, a[i]);
+                    }
+                }
+            });
+
+         */
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setCancelable(true)
-                .setMultiChoiceItems(adapter, checked,
+                .setMultiChoiceItems(adapter, null,
                         DialogUtils.multiChoiceClickListener)
                 .setTitle(dialogTitle)
                 .setPositiveButton(R.string.button_label_ok,
@@ -90,38 +99,6 @@ public class DialogUtils {
                                 SingleChoiceEventHandler.NO_OP));
 
         AlertDialog ad = builder.create();
-
-        ListView lv = ad.getListView();
-
-        for (int i = 0; i < checked.length; i++) {
-            lv.setItemChecked(i, checked[i]);
-        }
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            lv.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-                private void theFix(AbsListView view){
-
-                    int size = view.getChildCount();
-
-                    for (int i=0; i<size; i++) {
-                        View v = view.getChildAt(i);
-                        if (v instanceof CheckedTextView)
-                            v.refreshDrawableState();
-                    }
-                }
-
-                @Override
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    theFix(view);
-                }
-
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                    theFix(view);                }
-            });
-        }
-
 
         return ad;
 
