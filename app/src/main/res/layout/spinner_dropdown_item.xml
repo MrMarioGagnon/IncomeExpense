@@ -5,5 +5,4 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:ellipsize="marquee"
-    android:maxLines="1"
-    android:textColor="#aa66cc" />
+    android:maxLines="1"/>
