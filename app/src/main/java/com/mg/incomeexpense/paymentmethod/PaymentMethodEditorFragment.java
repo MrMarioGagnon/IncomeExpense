@@ -158,7 +158,7 @@ public class PaymentMethodEditorFragment extends FragmentBase {
                     @Override
                     public void execute(int idSelected) {
 
-                        List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForPaymentMethod(getActivity().getContentResolver(), mPaymentMethod);
+                        List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForPaymentMethod(getActivity(), mPaymentMethod);
 
                         if (mObjectValidator.canDelete(transactions)) {
                             mPaymentMethod.setDead(true);

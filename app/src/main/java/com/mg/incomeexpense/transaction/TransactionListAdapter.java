@@ -33,7 +33,7 @@ public class TransactionListAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        Transaction transaction = Transaction.create(cursor, context.getContentResolver());
+        Transaction transaction = Transaction.create(cursor, context);
 
         viewHolder.textViewDate.setText(transaction.getDate());
         viewHolder.textViewCategory.setText(transaction.getCategory().getName());

@@ -2,9 +2,11 @@ package com.mg.incomeexpense.core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
@@ -16,11 +18,11 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,6 +37,13 @@ import java.util.Objects;
 public class Tools {
 
     public static List<String> split(String stringToSplit, String separator) {
+
+        if (stringToSplit == null)
+            return new ArrayList<>();
+
+        if (separator == null)
+            separator = ApplicationConstant.storageSeparator;
+
         List<String> items;
 
         String[] strings = stringToSplit.split(separator);
@@ -50,18 +59,6 @@ public class Tools {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String defaultCurrency = preferences.getString(context.getString(R.string.pref_default_currency_key), context.getString(R.string.pref_CAD_currency));
         return defaultCurrency;
-    }
-
-    private static String _now(String stringFormat) {
-
-        Date now = new Date();
-
-        SimpleDateFormat format = new SimpleDateFormat(stringFormat);
-
-        String parsed = null;
-        parsed = format.format(now);
-        return parsed;
-
     }
 
     public static String formatDate(LocalDate date, String stringFormat) {
@@ -98,7 +95,7 @@ public class Tools {
 
             String sourceFilePath = "/data/com.mg.incomeexpense/databases/incexp.db";
 
-            String now = now("yyyyMMddkkmmss");
+            String now = Tools.formatDate(LocalDate.now(), "yyyyMMddkkmmss");
 
             String destinationFilePath = "incexp" + now + ".db";
 
@@ -126,23 +123,6 @@ public class Tools {
 
         File wallpaperDirectory = new File("/sdcard/" + directory + "/");
         wallpaperDirectory.mkdirs();
-    }
-
-    public static DatePart DatePartExtractor(String date) throws ParseException {
-        return Tools.DatePartExtractor(date, "-");
-    }
-
-    public static DatePart DatePartExtractor(String dateString, String separator)
-            throws ParseException {
-
-        String dateFormat = String.format("yyyy%sMM%sdd", separator, separator);
-        DateFormat df = new SimpleDateFormat(dateFormat);
-
-        Date date = df.parse(dateString);
-
-        return new DatePart(date.getYear() + 1900, date.getMonth(),
-                date.getDate());
-
     }
 
     public static boolean isExternalStorageAvailable() {
@@ -183,18 +163,6 @@ public class Tools {
         return buffer.toString();
     }
 
-    public static String now() {
-
-        return Tools._now("yyyy-MM-dd kk:mm:ss");
-
-    }
-
-    public static String now(String stringFormat) {
-
-        return Tools._now(stringFormat);
-
-    }
-
     public static double roundTwoDecimals(double d) {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
         return Double.valueOf(twoDForm.format(d));
@@ -220,4 +188,14 @@ public class Tools {
             }
         }
     }
+
+    public static File createFile(final File storageDir, final String suffix) throws IOException {
+
+        final String prefix = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File file = File.createTempFile(prefix,suffix,storageDir);
+
+        return file;
+
+    }
+
 }

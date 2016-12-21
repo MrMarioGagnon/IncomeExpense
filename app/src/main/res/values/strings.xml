@@ -55,6 +55,7 @@
     <string name="title_category_editor_add">Add Category</string>
     <string name="title_category_editor_update">Update Category</string>
     <string name="title_transaction_editor">Transactions</string>
+    <string name="title_take_photo">Take A Photo</string>
 
     <string name="title_transaction_editor_add">Add Transaction</string>
     <string name="title_transaction_editor_update">Update Transaction</string>
@@ -107,6 +108,7 @@
     <string name="label_cost_liters">Cost liters:</string>
     <string name="label_extension_type">Extension Type</string>
     <string name="label_position">Position</string>
+    <string name="label_account_type">Type:</string>
 
     <string name="hint_contributor_name">Contributor name</string>
     <string name="hint_account_name">Account name</string>

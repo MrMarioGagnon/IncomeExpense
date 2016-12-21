@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private SingleChoiceEventHandler mAccountChoiceEventHandler;
     private Transaction.TransactionType mSelectedType;
 
-
     private List<Account> getAccountsForPager() {
         Account globalAccount = Account.createNew();
         globalAccount.setId(0l);
@@ -86,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
                 mFabMenu.collapseImmediately();
                 Account account = ((DashboardPagerAdapter) mViewPager.getAdapter()).getAccount(mTabLayout.getSelectedTabPosition());
 
-                if(account.getId() == 0){
+                if (account.getId() == 0) {
                     mSelectedType = transactionType;
                     showAccountSetterDialog();
-                }else {
+                } else {
                     ShowTransactionEditor(account, transactionType);
                 }
 
@@ -191,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
-
     }
 
     private void showAccountSetterDialog() {
@@ -200,11 +198,11 @@ public class MainActivity extends AppCompatActivity {
 
             List<Account> accounts = ((DashboardPagerAdapter) mViewPager.getAdapter()).getAccounts();
             String[] accountNames = new String[accounts.size() - 1];
-            for(int i = 1; i < accounts.size(); i++){
-                accountNames[i-1] = accounts.get(i).getName();
+            for (int i = 1; i < accounts.size(); i++) {
+                accountNames[i - 1] = accounts.get(i).getName();
             }
 
-            Dialog dialog = DialogUtils.singleChoicePickerDialog(this,getString(R.string.dialog_title_pick_an_account),accountNames, mAccountChoiceEventHandler, 0);
+            Dialog dialog = DialogUtils.singleChoicePickerDialog(this, getString(R.string.dialog_title_pick_an_account), accountNames, mAccountChoiceEventHandler, 0);
             dialog.setOwnerActivity(this);
             dialog.show();
 

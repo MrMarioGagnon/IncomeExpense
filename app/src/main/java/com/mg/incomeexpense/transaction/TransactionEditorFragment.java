@@ -3,7 +3,10 @@ package com.mg.incomeexpense.transaction;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -23,6 +26,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.mg.incomeexpense.Photo.Photo;
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
@@ -45,46 +49,41 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by mario on 2016-07-19.
  */
 public class TransactionEditorFragment extends FragmentBase implements DatePickerDialog.OnDateSetListener {
 
+    private final int REQUEST_TAKE_PHOTO = 1;
+    private final AdapterView.OnItemSelectedListener mSpinnerCategoryItemSelectedListener;
+    private final AdapterView.OnItemSelectedListener mSpinnerPaymentMethodItemSelectedListener;
+    private final View.OnClickListener mImageViewDateClickListener;
+
     private Transaction mTransaction = null;
     private TransactionValidator mObjectValidator;
-
-    private TextView mTextViewAccountName;
-
     private Spinner mSpinnerPaymentMethod;
     private ArrayAdapter<PaymentMethod> mPaymentMethodSpinnerAdapter;
-
     private Spinner mSpinnerCategory;
-
     private TextView mTextViewCurrency;
     private TextView mTextViewExchangeRate;
-
     private TextView mTextViewDate;
-
     private EditText mEditTextAmount;
-
     private ImageView mImageViewDate;
-
     private List<PaymentMethod> mPaymentMethods;
     private List<Category> mCategories;
-
     private ImageView mImageViewContributors;
     private View.OnClickListener mOnContributorImageButtonClickListener;
     private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
     private TextView mTextViewContributors;
     private List<Contributor> mAvailableContributors;
     private List<Contributor> mSelectedContributors;
-
     private View mFrameExtension;
     private String mExtensionData;
-
     private View mRootEditorView;
-
     private boolean[] mCheckedContributor;
+    private ImageView mImageViewPhoto;
 
     public TransactionEditorFragment() {
 
@@ -112,86 +111,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
             }
         };
 
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setHasOptionsMenu(true);
-
-        Bundle bundle = getArguments();
-        Objects.requireNonNull(bundle, "A bundle is mandatory");
-
-        mTransaction = (Transaction) bundle.getSerializable("item");
-        Objects.requireNonNull(mTransaction, "An transaction is mandatory");
-        Objects.requireNonNull(mTransaction.getAccount(), "An account is mandatory");
-        Objects.requireNonNull(mTransaction.getAccount().getCategories(), "A list of categories is mandatory");
-        Objects.requireNonNull(mTransaction.getAccount().getContributors(), "A list of contributors is mandatory");
-        Objects.requireNonNull(mTransaction.getAccount().getCategories(), "A list of category is mandatory");
-
-        mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
-        Objects.requireNonNull(mPaymentMethods, "A payment method is mandatory");
-
-        mPaymentMethodSpinnerAdapter = new ArrayAdapter<PaymentMethod>(getActivity(), R.layout.spinner_item, mPaymentMethods);
-        mPaymentMethodSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-
-        mCategories = mTransaction.getAccount().getCategories();
-
-        mAvailableContributors = mTransaction.getAccount().getContributors();
-        mSelectedContributors.addAll(mTransaction.getContributors());
-
-        mObjectValidator = TransactionValidator.create(getActivity());
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        ActionBar actionBar = ((AppCompatActivityBase) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-
-            if (mTransaction.getType().equals(Transaction.TransactionType.Expense)) {
-                actionBar.setTitle(getString(mTransaction.isNew() ? R.string.title_transaction_editor_add_expense : R.string.title_transaction_editor_update_expense));
-            } else {
-                actionBar.setTitle(getString(mTransaction.isNew() ? R.string.title_transaction_editor_add_income : R.string.title_transaction_editor_update_income));
-            }
-
-        } else {
-            actionBar.setTitle(getString(mTransaction.isNew() ? R.string.title_transaction_editor_add : R.string.title_transaction_editor_update));
-        }
-
-        View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
-
-        mTextViewAccountName = (TextView) rootView.findViewById(R.id.text_view_account_name);
-
-        mSpinnerPaymentMethod = (Spinner) rootView.findViewById(R.id.spinner_payment_method);
-        mSpinnerPaymentMethod.setAdapter(mPaymentMethodSpinnerAdapter); // Set the custom adapter to the spinner
-        // You can create an anonymous listener to handle the event when is selected an spinner item
-        mSpinnerPaymentMethod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view,
-                                       int position, long id) {
-
-                PaymentMethod paymentMethod = mPaymentMethodSpinnerAdapter.getItem(position);
-                Double exchangeRate = paymentMethod.getExchangeRate();
-                mTextViewExchangeRate.setText(exchangeRate.toString());
-
-                mTextViewCurrency.setText(paymentMethod.getCurrency());
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapter) {
-            }
-        });
-
-        mSpinnerCategory = (Spinner) rootView.findViewById(R.id.spinner_category);
-        ArrayAdapter<Category> arrayAdapter = new ArrayAdapter<Category>(getActivity(), R.layout.spinner_item, mCategories);
-        arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        mSpinnerCategory.setAdapter(arrayAdapter);
-        mSpinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinnerCategoryItemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Category category = mCategories.get(position);
@@ -214,41 +134,101 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        };
 
+        mSpinnerPaymentMethodItemSelectedListener = new AdapterView.OnItemSelectedListener() {
 
-        mTextViewCurrency = (TextView) rootView.findViewById(R.id.text_view_currency);
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
 
-        mTextViewDate = (TextView) rootView.findViewById(R.id.text_view_date);
+                PaymentMethod paymentMethod = mPaymentMethodSpinnerAdapter.getItem(position);
+                Double exchangeRate = paymentMethod.getExchangeRate();
+                mTextViewExchangeRate.setText(exchangeRate.toString());
 
-        mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
-        mTextViewExchangeRate = (TextView) rootView.findViewById(R.id.text_view_exchange_rate);
+                mTextViewCurrency.setText(paymentMethod.getCurrency());
 
-        mImageViewDate = (ImageView) rootView.findViewById(R.id.image_view_date);
-        mImageViewDate.setOnClickListener(new View.OnClickListener() {
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
+        };
+
+        mImageViewDateClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShowCalendar();
             }
-        });
+        };
+    }
 
-        mImageViewContributors = (ImageView) rootView.findViewById(R.id.image_view_contributors);
-        mImageViewContributors.setOnClickListener(mOnContributorImageButtonClickListener);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        mTextViewContributors = (TextView) rootView.findViewById(R.id.text_view_contributors);
+        setHasOptionsMenu(true);
 
-        if (mTransaction.isNew()) {
-            // get the current date
-            Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-            mTransaction.setDate(String.format("%d-%02d-%02d", year, month + 1,
-                    day));
-            mTransaction.setCurrency(Tools.getDefaultCurrency(getActivity()));
+        Bundle bundle = getArguments();
+        Objects.requireNonNull(bundle, "A bundle is mandatory");
+
+        mTransaction = (Transaction) bundle.getSerializable("item");
+        Objects.requireNonNull(mTransaction, "An transaction is mandatory");
+        Objects.requireNonNull(mTransaction.getAccount(), "An account is mandatory");
+        Objects.requireNonNull(mTransaction.getAccount().getCategories(), "A list of categories is mandatory");
+        Objects.requireNonNull(mTransaction.getAccount().getContributors(), "A list of contributors is mandatory");
+        Objects.requireNonNull(mTransaction.getAccount().getCategories(), "A list of category is mandatory");
+
+        mPaymentMethods = (ArrayList<PaymentMethod>) bundle.getSerializable("paymentMethods");
+        Objects.requireNonNull(mPaymentMethods, "A payment method is mandatory");
+
+        mPaymentMethodSpinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, mPaymentMethods);
+        mPaymentMethodSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+
+        mCategories = mTransaction.getAccount().getCategories();
+
+        mAvailableContributors = mTransaction.getAccount().getContributors();
+        mSelectedContributors.addAll(mTransaction.getContributors());
+
+        mObjectValidator = TransactionValidator.create(getActivity());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        ActionBar actionBar = ((AppCompatActivityBase) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(mTransaction.isNew() ? R.string.title_transaction_editor_add : R.string.title_transaction_editor_update));
         }
 
-        mTextViewAccountName.setText(mTransaction.getAccount().getName());
+        View rootView = inflater.inflate(R.layout.transaction_editor_fragment, container, false);
+
+        TextView textViewAccountType = (TextView) rootView.findViewById(R.id.text_view_account_type);
+        TextView textViewAccountName = (TextView) rootView.findViewById(R.id.text_view_account_name);
+        mSpinnerPaymentMethod = (Spinner) rootView.findViewById(R.id.spinner_payment_method);
+        mSpinnerPaymentMethod.setAdapter(mPaymentMethodSpinnerAdapter);
+        mSpinnerPaymentMethod.setOnItemSelectedListener(mSpinnerPaymentMethodItemSelectedListener);
+
+        mSpinnerCategory = (Spinner) rootView.findViewById(R.id.spinner_category);
+        ArrayAdapter<Category> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, mCategories);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        mSpinnerCategory.setAdapter(arrayAdapter);
+        mSpinnerCategory.setOnItemSelectedListener(mSpinnerCategoryItemSelectedListener);
+
+        mTextViewCurrency = (TextView) rootView.findViewById(R.id.text_view_currency);
+        mTextViewDate = (TextView) rootView.findViewById(R.id.text_view_date);
+        mEditTextAmount = (EditText) rootView.findViewById(R.id.edit_text_amount);
+        mTextViewExchangeRate = (TextView) rootView.findViewById(R.id.text_view_exchange_rate);
+        mImageViewDate = (ImageView) rootView.findViewById(R.id.image_view_date);
+        mImageViewDate.setOnClickListener(mImageViewDateClickListener);
+        mImageViewContributors = (ImageView) rootView.findViewById(R.id.image_view_contributors);
+        mImageViewContributors.setOnClickListener(mOnContributorImageButtonClickListener);
+        mTextViewContributors = (TextView) rootView.findViewById(R.id.text_view_contributors);
+        mImageViewPhoto = (ImageView) rootView.findViewById(R.id.image_view_photo);
+        textViewAccountName.setText(mTransaction.getAccount().getName());
+        textViewAccountType.setText(mTransaction.getType().toString());
+
         mTextViewDate.setText(mTransaction.getDate());
         mEditTextAmount.setText(mTransaction.getAmount().toString());
         mTextViewExchangeRate.setText(mTransaction.getExchangeRate().toString());
@@ -266,16 +246,46 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
             mTextViewContributors.setText(mTransaction.getContributorsForDisplay());
         }
 
+        if (mTransaction.getPhoto() != null) {
+            mImageViewPhoto.setImageBitmap(mTransaction.getPhoto().getBitmap());
+            mImageViewPhoto.setTag(mTransaction.getPhoto());
+        }
+
         mRootEditorView = rootView.findViewById(R.id.root_editor_view);
 
         return rootView;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case REQUEST_TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+
+                    if (null != data) {
+                        Bundle extras = data.getExtras();
+                        if (null != extras) {
+                            Bitmap imageBitmap = (Bitmap) extras.get("data");
+                            if (null != imageBitmap) {
+                                mImageViewPhoto.setImageBitmap(imageBitmap);
+                                mImageViewPhoto.setTag(Photo.create(imageBitmap));
+                            }
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+
     }
 
     private void ShowCalendar() {
 
         DatePickerFragment picker = new DatePickerFragment();
         picker.setListener(this);
-
 
         picker.show(getFragmentManager(), "datePicker");
     }
@@ -344,6 +354,10 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                     mTransaction.setNote(note);
                 }
 
+                if (mImageViewPhoto.getTag() != null) {
+                    mTransaction.setPhoto((Photo) mImageViewPhoto.getTag());
+                }
+
                 ValidationStatus validationStatus = mObjectValidator.Validate(mTransaction);
 
                 if (validationStatus.isValid()) {
@@ -354,6 +368,14 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                 break;
             case android.R.id.home:
                 notifyListener(new ItemStateChangeEvent(mTransaction, true));
+                break;
+            case R.id.action_take_photo:
+
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                }
+
                 break;
             default:
                 return super.onOptionsItemSelected(item);

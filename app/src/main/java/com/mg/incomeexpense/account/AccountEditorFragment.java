@@ -107,7 +107,7 @@ public class AccountEditorFragment extends FragmentBase {
             public void execute(boolean[] idSelected) {
 
                 // Ajouter validation si un contributeur est enleve
-                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
+                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity(), mAccount);
                 List<Contributor> selectedContributors = new ArrayList<>();
                 for (int i = 0; i < idSelected.length; i++) {
                     if (idSelected[i]) {
@@ -141,7 +141,7 @@ public class AccountEditorFragment extends FragmentBase {
             public void execute(boolean[] idSelected) {
 
                 // Ajouter validation si un category est enleve
-                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
+                List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity(), mAccount);
                 List<Category> selectedCategories = new ArrayList<>();
                 for (int i = 0; i < idSelected.length; i++) {
                     if (idSelected[i]) {
@@ -269,7 +269,7 @@ public class AccountEditorFragment extends FragmentBase {
                     @Override
                     public void execute(int idSelected) {
 
-                        List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity().getContentResolver(), mAccount);
+                        List<Transaction> transactions = IncomeExpenseRequestWrapper.getAllTransactionForAccount(getActivity(), mAccount);
 
                         ValidationStatus validationStatus = mObjectValidator.canDelete(mAccount, transactions);
 

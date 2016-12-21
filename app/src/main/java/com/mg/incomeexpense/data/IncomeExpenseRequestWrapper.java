@@ -10,6 +10,7 @@ import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.dashboard.DashboardAmountAccumulator;
@@ -28,10 +29,12 @@ import java.util.Objects;
  */
 public class IncomeExpenseRequestWrapper {
 
-    public static ArrayList<Transaction> getAllTransactionForAccount(@NonNull ContentResolver contentResolver, @NonNull Account account) {
+    public static ArrayList<Transaction> getAllTransactionForAccount(@NonNull Context context, @NonNull Account account) {
 
-        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
         Objects.requireNonNull(account, "Parameter account of type Account is mandatory");
+
+        ContentResolver contentResolver = context.getContentResolver();
 
         ArrayList<Transaction> transactions = new ArrayList<>();
 
@@ -48,7 +51,7 @@ public class IncomeExpenseRequestWrapper {
                 cursor = contentResolver.query(uri, null, selection, selectionArgument, null);
                 Transaction transaction;
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    transaction = Transaction.create(cursor, contentResolver);
+                    transaction = Transaction.create(cursor, context);
                     transactions.add(transaction);
                 }
             } finally {
@@ -61,9 +64,9 @@ public class IncomeExpenseRequestWrapper {
         return transactions;
     }
 
-    public static ArrayList<Transaction> getAllTransactionForPaymentMethod(@NonNull ContentResolver contentResolver, @NonNull PaymentMethod paymentMethod) {
+    public static ArrayList<Transaction> getAllTransactionForPaymentMethod(@NonNull Context context, @NonNull PaymentMethod paymentMethod) {
 
-        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
         Objects.requireNonNull(paymentMethod, "Parameter paymentMethod of type PaymentMethod is mandatory");
 
         ArrayList<Transaction> transactions = new ArrayList<>();
@@ -77,10 +80,10 @@ public class IncomeExpenseRequestWrapper {
                 String selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID);
                 String[] selectionArgument = new String[]{paymentMethod.getId().toString()};
 
-                cursor = contentResolver.query(uri, null, selection, selectionArgument, null);
+                cursor = context.getContentResolver().query(uri, null, selection, selectionArgument, null);
                 Transaction transaction;
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    transaction = Transaction.create(cursor, contentResolver);
+                    transaction = Transaction.create(cursor, context);
                     transactions.add(transaction);
                 }
             } finally {
@@ -307,10 +310,9 @@ public class IncomeExpenseRequestWrapper {
         return assets;
     }
 
-    public static DashboardPeriodTotal getDashboardData(@NonNull Context context, @NonNull ContentResolver contentResolver, @NonNull Account account, @NonNull LocalDate date) {
+    public static DashboardPeriodTotal getDashboardData(@NonNull Context context, @NonNull Account account, @NonNull LocalDate date) {
 
         Objects.requireNonNull(context, "Parameter context of type Context is mandatory");
-        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory");
         Objects.requireNonNull(account, "Parameter account of type Account is mandatory");
         Objects.requireNonNull(date, "Parameter date of type Date is mandatory");
 
@@ -318,7 +320,7 @@ public class IncomeExpenseRequestWrapper {
 
         String selection = null;
         String[] selectionArgs = null;
-        if(account.getId() != 0){
+        if (account.getId() != 0) {
             selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
             selectionArgs = new String[]{account.getId().toString()};
         }
@@ -330,18 +332,18 @@ public class IncomeExpenseRequestWrapper {
         LocalDate dFirstDateWeek = DateUtil.getFirstDateOfWeek(date);
         LocalDate dLastDateWeek = DateUtil.getLastDateOfWeek(date);
 
-        Integer firstDateYear = Integer.parseInt(Tools.formatDate(dFirstDateYear, "yyyyMMdd"));
-        Integer lastDateYear = Integer.parseInt(Tools.formatDate(dLastDateYear, "yyyyMMdd"));
-        Integer firstDateMonth = Integer.parseInt(Tools.formatDate(dFirstDateMonth, "yyyyMMdd"));
-        Integer lastDateMonth = Integer.parseInt(Tools.formatDate(dLastDateMonth, "yyyyMMdd"));
-        Integer firstDateWeek = Integer.parseInt(Tools.formatDate(dFirstDateWeek, "yyyyMMdd"));
-        Integer lastDateWeek = Integer.parseInt(Tools.formatDate(dLastDateWeek, "yyyyMMdd"));
-        Integer today = Integer.parseInt(Tools.formatDate(date, "yyyyMMdd"));
+        Integer firstDateYear = Integer.parseInt(Tools.formatDate(dFirstDateYear, ApplicationConstant.dateFormat2));
+        Integer lastDateYear = Integer.parseInt(Tools.formatDate(dLastDateYear, ApplicationConstant.dateFormat2));
+        Integer firstDateMonth = Integer.parseInt(Tools.formatDate(dFirstDateMonth, ApplicationConstant.dateFormat2));
+        Integer lastDateMonth = Integer.parseInt(Tools.formatDate(dLastDateMonth, ApplicationConstant.dateFormat2));
+        Integer firstDateWeek = Integer.parseInt(Tools.formatDate(dFirstDateWeek, ApplicationConstant.dateFormat2));
+        Integer lastDateWeek = Integer.parseInt(Tools.formatDate(dLastDateWeek, ApplicationConstant.dateFormat2));
+        Integer today = Integer.parseInt(Tools.formatDate(date, ApplicationConstant.dateFormat2));
 
-        String sToday = Tools.formatDate(date, "yyyy-MM-dd");
-        String sThisWeek = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateWeek, "yyyy-MM-dd"), Tools.formatDate(dLastDateWeek, "yyyy-MM-dd"));
-        String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, "yyyy-MM-dd"), Tools.formatDate(dLastDateMonth, "yyyy-MM-dd"));
-        String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, "yyyy-MM-dd"), Tools.formatDate(dLastDateYear, "yyyy-MM-dd"));
+        String sToday = Tools.formatDate(date, ApplicationConstant.dateFormat1);
+        String sThisWeek = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateWeek, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateWeek, ApplicationConstant.dateFormat1));
+        String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateMonth, ApplicationConstant.dateFormat1));
+        String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateYear, ApplicationConstant.dateFormat1));
 
         DashboardAmountAccumulator todayTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_today), sToday));
         DashboardAmountAccumulator thisWeekTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_week), sThisWeek));
@@ -350,14 +352,14 @@ public class IncomeExpenseRequestWrapper {
 
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(IncomeExpenseContract.TransactionEntry.CONTENT_URI, null, selection, selectionArgs, null);
+            cursor = context.getContentResolver().query(IncomeExpenseContract.TransactionEntry.CONTENT_URI, null, selection, selectionArgs, null);
 
             int transactionDate;
             Transaction transaction;
             Double amount;
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                transaction = Transaction.create(cursor, contentResolver);
+                transaction = Transaction.create(cursor, context);
                 transactionDate = transaction.getDateAsInt();
                 amount = transaction.getAmount() * transaction.getExchangeRate();
 

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
@@ -28,32 +27,48 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
 
         setContentView(R.layout.transaction_list_activity);
 
+        View.OnClickListener fabOnclickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Transaction.TransactionType transactionType;
+
+                switch (view.getId()) {
+                    case R.id.fabAddIncome:
+                        transactionType = Transaction.TransactionType.Income;
+                        break;
+                    default:
+                        transactionType = Transaction.TransactionType.Expense;
+                        break;
+                }
+
+                mFabMenu.collapseImmediately();
+                Transaction transaction = Transaction.createNew();
+                transaction.setType(transactionType);
+                transaction.setAccount(mAccount);
+
+                Intent intent = new Intent(TransactionListActivity.this, TransactionEditorActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("item", transaction);
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            }
+        };
+
         Bundle bundle = getIntent().getExtras();
         Objects.requireNonNull(bundle, "A bundle is mandatory");
 
         mAccount = (Account) bundle.getSerializable("account");
         Objects.requireNonNull(mAccount, "An Account object is mandatory");
 
+
         com.mg.floatingactionbutton.FloatingActionButton fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddExpense);
-        if (fab != null) {
-            fab.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        fab.setOnClickListener(fabOnclickListener);
 
-                    mFabMenu.collapseImmediately();
-                    Transaction transaction = Transaction.createNew();
-                    transaction.setType(view.getId() == R.id.fabAddExpense ? Transaction.TransactionType.Expense : Transaction.TransactionType.Income);
-                    transaction.setAccount(mAccount);
+        fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddIncome);
+        fab.setOnClickListener(fabOnclickListener);
 
-                    Intent intent = new Intent(TransactionListActivity.this, TransactionEditorActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("item", transaction);
-                    intent.putExtras(bundle);
-
-                    startActivity(intent);
-                }
-            });
-        }
 
         mFabMenu = (com.mg.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.floating_action_menu_Type);
 

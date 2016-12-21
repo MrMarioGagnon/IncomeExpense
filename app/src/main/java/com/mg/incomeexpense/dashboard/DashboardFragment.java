@@ -70,7 +70,8 @@ public class DashboardFragment extends Fragment {
         linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ShowTransactionList();
+                if(mAccount.getId() != 0)
+                    ShowTransactionList();
                 return false;
             }
         });
@@ -98,7 +99,7 @@ public class DashboardFragment extends Fragment {
         @Override
         protected DashboardPeriodTotal doInBackground(String... params) {
 
-            DashboardPeriodTotal d = IncomeExpenseRequestWrapper.getDashboardData(getActivity(), getActivity().getContentResolver(), mAccount, LocalDate.now());
+            DashboardPeriodTotal d = IncomeExpenseRequestWrapper.getDashboardData(getActivity(), mAccount, LocalDate.now());
 
             return d;
         }

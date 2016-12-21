@@ -12,7 +12,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = IncomeExpenseDbHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "incexp.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public IncomeExpenseDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -83,8 +83,12 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(LOG_TAG, String.format("Upgrading database from version %1$d to %2$d.", oldVersion, newVersion));
 
-        if(oldVersion == 1){
-            DatabaseMigration.moveTo2(db);
+        switch(oldVersion){
+            case 1:
+                DatabaseMigration.moveTo2(db);
+                break;
+            case 2:
+                DatabaseMigration.moveTo3(db);
         }
 
     }

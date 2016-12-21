@@ -102,7 +102,7 @@ public class TransactionListFragment extends FragmentListBase {
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (null != cursor) {
 
-                    Transaction transaction = Transaction.create(cursor, TransactionListFragment.this.getActivity().getContentResolver());
+                    Transaction transaction = Transaction.create(cursor, TransactionListFragment.this.getActivity());
 
                     TransactionListFragment.this.notifyListener(new ItemSelectedEvent(transaction));
 

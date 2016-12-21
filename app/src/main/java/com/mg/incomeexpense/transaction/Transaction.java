@@ -1,9 +1,11 @@
 package com.mg.incomeexpense.transaction;
 
-import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import com.mg.incomeexpense.Photo.Photo;
+import com.mg.incomeexpense.Photo.PhotoManager;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;
@@ -13,6 +15,8 @@ import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IdToItemConvertor;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
+
+import org.threeten.bp.LocalDate;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,15 +38,16 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
     private PaymentMethod mPaymentMethod;
     private List<Contributor> mContributors;
     private String mNote;
+    private Photo mPhoto;
 
     private Transaction() {
 
     }
 
-    public static Transaction create(@NonNull Cursor cursor, @NonNull ContentResolver contentResolver) {
+    public static Transaction create(@NonNull Cursor cursor, @NonNull Context context) {
 
         Objects.requireNonNull(cursor, "Parameter cursor of type Cursor is mandatory.");
-        Objects.requireNonNull(contentResolver, "Parameter contentResolver of type ContentResolver is mandatory.");
+        Objects.requireNonNull(context, "Parameter context of type Context is mandatory.");
 
         Transaction newInstance = new Transaction();
         newInstance.mNew = false;
@@ -59,24 +64,25 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         Long paymentMethodId = cursor.getLong(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID));
         String contributors = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS));
         String note = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_NOTE));
+        String photoPath = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.TransactionEntry.COLUMN_PHOTO_PATH));
 
-        Cursor subItemCursor = contentResolver.query(IncomeExpenseContract.AccountEntry.buildInstanceUri(accountId), null, null, null, null);
+        Cursor subItemCursor = context.getContentResolver().query(IncomeExpenseContract.AccountEntry.buildInstanceUri(accountId), null, null, null, null);
         Account account = null;
         if (subItemCursor != null) {
             if (subItemCursor.moveToFirst()) {
-                account = Account.create(subItemCursor, contentResolver);
+                account = Account.create(subItemCursor, context.getContentResolver());
             }
         }
 
-        subItemCursor = contentResolver.query(IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(paymentMethodId), null, null, null, null);
+        subItemCursor = context.getContentResolver().query(IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(paymentMethodId), null, null, null, null);
         PaymentMethod paymentMethod = null;
         if (subItemCursor != null) {
             if (subItemCursor.moveToFirst()) {
-                paymentMethod = PaymentMethod.create(subItemCursor, contentResolver);
+                paymentMethod = PaymentMethod.create(subItemCursor, context.getContentResolver());
             }
         }
 
-        subItemCursor = contentResolver.query(IncomeExpenseContract.CategoryEntry.buildInstanceUri(categoryId), null, null, null, null);
+        subItemCursor = context.getContentResolver().query(IncomeExpenseContract.CategoryEntry.buildInstanceUri(categoryId), null, null, null, null);
         Category category = null;
         if (subItemCursor != null) {
             if (subItemCursor.moveToFirst()) {
@@ -93,8 +99,14 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mCurrency = currency;
         newInstance.mExchangeRate = exchangeRate;
         newInstance.mPaymentMethod = paymentMethod;
-        newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(contentResolver, IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
+        newInstance.mContributors = IdToItemConvertor.ConvertIdsToContributors(context.getContentResolver(), IncomeExpenseContract.ContributorEntry.CONTENT_URI, contributors, ";");
         newInstance.mNote = note;
+        newInstance.mPhoto = null;
+//        if (null != photoPath) {
+//            Photo photo = Photo.create(photoPath);
+//            photo = PhotoManager.Create(context, photo);
+//            newInstance.mPhoto = photo;
+//        }
 
         return newInstance;
     }
@@ -107,13 +119,14 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         newInstance.mAccount = null;
         newInstance.mCategory = null;
         newInstance.mType = TransactionType.Expense;
-        newInstance.mDate = Tools.now();
+        newInstance.mDate = Tools.formatDate(LocalDate.now(), ApplicationConstant.dateFormat1);
         newInstance.mAmount = 0.0;
         newInstance.mCurrency = "";
         newInstance.mExchangeRate = 1.0;
         newInstance.mPaymentMethod = null;
         newInstance.mContributors = new ArrayList<>();
         newInstance.mNote = "";
+        newInstance.mPhoto = null;
 
         return newInstance;
 
@@ -133,6 +146,17 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         }
     }
 
+    public Photo getPhoto() {
+        return mPhoto;
+    }
+
+    public void setPhoto(Photo photo) {
+
+        if (null == photo || !mPhoto.equals(photo)) {
+            mDirty = true;
+            this.mPhoto = photo;
+        }
+    }
 
     public Account getAccount() {
         return mAccount;
@@ -274,7 +298,6 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
     @Override
     public boolean equals(Object o) {
-        if (null == o) return false;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -289,7 +312,8 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         if (!mExchangeRate.equals(that.mExchangeRate)) return false;
         if (!mPaymentMethod.equals(that.mPaymentMethod)) return false;
         if (!mContributors.equals(that.mContributors)) return false;
-        return mNote != null ? mNote.equals(that.mNote) : that.mNote == null;
+        if (mNote != null ? !mNote.equals(that.mNote) : that.mNote != null) return false;
+        return mPhoto != null ? mPhoto.equals(that.mPhoto) : that.mPhoto == null;
 
     }
 
@@ -305,6 +329,7 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         result = 31 * result + mPaymentMethod.hashCode();
         result = 31 * result + mContributors.hashCode();
         result = 31 * result + (mNote != null ? mNote.hashCode() : 0);
+        result = 31 * result + (mPhoto != null ? mPhoto.hashCode() : 0);
         return result;
     }
 
