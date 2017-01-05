@@ -69,6 +69,7 @@
     <string name="title_this_week">This Week</string>
     <string name="title_this_month">This Month</string>
     <string name="title_this_year">This Year</string>
+    <string name="title_last_year">Last Year</string>
     <string name="title_income">Income</string>
     <string name="title_expense">Expense</string>
     <string name="title_transaction_list">Transactions</string>
@@ -177,6 +178,9 @@
 
     <string name="account_active">Account Active</string>
     <string name="account_close">Account Close</string>
+
+    <string name="account_display_last_year_data">Display Last Year Data</string>
+    <string name="account_not_display_last_year_data">Do Not Display Last Year Data</string>
 
     <string name="text_view_account">Account</string>
     <string name="text_view_category">Category</string>

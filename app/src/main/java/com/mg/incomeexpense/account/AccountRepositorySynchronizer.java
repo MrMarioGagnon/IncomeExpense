@@ -62,6 +62,7 @@ public class AccountRepositorySynchronizer extends RepositorySynchronizerBase {
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES, itemToBeSave.getCategoriesAsIds());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_BUDGET, itemToBeSave.getBudget());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_POSITION, itemToBeSave.getPosition());
+                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_DISPLAYLASTYEARDATA, itemToBeSave.getDisplayLastYearData());
                 Uri newUri = mContentResolver.insert(mItemUri, itemValues);
                 id = IncomeExpenseContract.AccountEntry.getIdFromUri(newUri);
                 rowsAffected = (id != null) ? 1 : 0;
@@ -79,6 +80,7 @@ public class AccountRepositorySynchronizer extends RepositorySynchronizerBase {
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES, itemToBeSave.getCategoriesAsIds());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_BUDGET, itemToBeSave.getBudget());
                 itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_POSITION, itemToBeSave.getPosition());
+                itemValues.put(IncomeExpenseContract.AccountEntry.COLUMN_DISPLAYLASTYEARDATA, itemToBeSave.getDisplayLastYearData());
                 rowsAffected = mContentResolver.update(mItemUri, itemValues, selection, selectionArgs);
                 Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_updated_item), itemType, rowsAffected, id));
             }

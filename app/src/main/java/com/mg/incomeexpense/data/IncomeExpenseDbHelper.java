@@ -12,7 +12,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = IncomeExpenseDbHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "incexp.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public IncomeExpenseDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,7 +37,8 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.AccountEntry.COLUMN_CONTRIBUTORS + " TEXT NOT NULL," +
                 IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES + " TEXT NOT NULL," +
                 IncomeExpenseContract.AccountEntry.COLUMN_BUDGET + " NUMERIC," +
-                IncomeExpenseContract.AccountEntry.COLUMN_CLOSE + " INTEGER NOT NULL DEFAULT 0" +
+                IncomeExpenseContract.AccountEntry.COLUMN_CLOSE + " INTEGER NOT NULL DEFAULT 0," +
+                IncomeExpenseContract.AccountEntry.COLUMN_DISPLAYLASTYEARDATA + " INTEGER NOT NULL DEFAULT 0" +
                 " );";
 
         final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + IncomeExpenseContract.CategoryEntry.TABLE_NAME + " (" +
@@ -83,12 +84,16 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(LOG_TAG, String.format("Upgrading database from version %1$d to %2$d.", oldVersion, newVersion));
 
-        switch(oldVersion){
+        switch (oldVersion) {
             case 1:
                 DatabaseMigration.moveTo2(db);
                 break;
             case 2:
                 DatabaseMigration.moveTo3(db);
+                break;
+            case 3:
+                DatabaseMigration.moveTo4(db);
+                break;
         }
 
     }

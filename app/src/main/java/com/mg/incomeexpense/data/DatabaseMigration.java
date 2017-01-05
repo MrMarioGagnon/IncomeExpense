@@ -19,4 +19,11 @@ public class DatabaseMigration {
 
     }
 
+    public final static void moveTo4(SQLiteDatabase db) {
+
+        db.execSQL(String.format("alter table %1$s add %2$s INTEGER NOT NULL DEFAULT 0", IncomeExpenseContract.AccountEntry.TABLE_NAME, IncomeExpenseContract.AccountEntry.COLUMN_DISPLAYLASTYEARDATA));
+
+    }
+
+
 }

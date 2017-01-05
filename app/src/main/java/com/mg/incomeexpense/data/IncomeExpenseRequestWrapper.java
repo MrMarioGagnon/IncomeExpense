@@ -332,6 +332,9 @@ public class IncomeExpenseRequestWrapper {
         LocalDate dFirstDateWeek = DateUtil.getFirstDateOfWeek(date);
         LocalDate dLastDateWeek = DateUtil.getLastDateOfWeek(date);
 
+        LocalDate dFirstDateLastYear = DateUtil.getFirstDateOfYear(date.minusYears(1));
+        LocalDate dLastDateLastYear = DateUtil.getLastDateOfYear(date.minusYears(1));
+
         Integer firstDateYear = Integer.parseInt(Tools.formatDate(dFirstDateYear, ApplicationConstant.dateFormat2));
         Integer lastDateYear = Integer.parseInt(Tools.formatDate(dLastDateYear, ApplicationConstant.dateFormat2));
         Integer firstDateMonth = Integer.parseInt(Tools.formatDate(dFirstDateMonth, ApplicationConstant.dateFormat2));
@@ -339,16 +342,20 @@ public class IncomeExpenseRequestWrapper {
         Integer firstDateWeek = Integer.parseInt(Tools.formatDate(dFirstDateWeek, ApplicationConstant.dateFormat2));
         Integer lastDateWeek = Integer.parseInt(Tools.formatDate(dLastDateWeek, ApplicationConstant.dateFormat2));
         Integer today = Integer.parseInt(Tools.formatDate(date, ApplicationConstant.dateFormat2));
+        Integer firstDateLastYear = Integer.parseInt(Tools.formatDate(dFirstDateLastYear, ApplicationConstant.dateFormat2));
+        Integer lastDateLastYear = Integer.parseInt(Tools.formatDate(dLastDateLastYear, ApplicationConstant.dateFormat2));
 
         String sToday = Tools.formatDate(date, ApplicationConstant.dateFormat1);
         String sThisWeek = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateWeek, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateWeek, ApplicationConstant.dateFormat1));
         String sThisMonth = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateMonth, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateMonth, ApplicationConstant.dateFormat1));
         String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateYear, ApplicationConstant.dateFormat1));
+        String sLastYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateLastYear, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateLastYear, ApplicationConstant.dateFormat1));
 
         DashboardAmountAccumulator todayTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_today), sToday));
         DashboardAmountAccumulator thisWeekTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_week), sThisWeek));
         DashboardAmountAccumulator thisMonthTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_month), sThisMonth));
         DashboardAmountAccumulator thisYearTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_year), sThisYear));
+        DashboardAmountAccumulator lastYearTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_last_year), sLastYear));
 
         Cursor cursor = null;
         try {
@@ -379,6 +386,12 @@ public class IncomeExpenseRequestWrapper {
                         todayTotal.Add(transaction.getContributors(), transaction.getType(), amount);
 
                 }
+                if (transactionDate >= firstDateLastYear && transactionDate <= lastDateLastYear) {
+
+                    lastYearTotal.Add(transaction.getContributors(), transaction.getType(), amount);
+
+                }
+
             }
         } finally {
             if (null != cursor) {
@@ -386,7 +399,7 @@ public class IncomeExpenseRequestWrapper {
             }
         }
 
-        return new DashboardPeriodTotal(todayTotal.getPeriodAmountTotal(), thisWeekTotal.getPeriodAmountTotal(), thisMonthTotal.getPeriodAmountTotal(), thisYearTotal.getPeriodAmountTotal());
+        return new DashboardPeriodTotal(todayTotal.getPeriodAmountTotal(), thisWeekTotal.getPeriodAmountTotal(), thisMonthTotal.getPeriodAmountTotal(), thisYearTotal.getPeriodAmountTotal(), lastYearTotal.getPeriodAmountTotal());
     }
 
 }

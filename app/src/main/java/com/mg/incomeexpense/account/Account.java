@@ -14,8 +14,6 @@ import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +28,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
     private Double mBudget;
     private Boolean mIsClose;
     private Integer mPosition;
+    private Boolean mDisplayLastYearData;
 
     private Account() {
 
@@ -51,6 +50,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         String categories = cursor.getString(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES));
         Double budget = cursor.getDouble(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_BUDGET));
         Integer position = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_POSITION));
+        Integer displayLastYearData = cursor.getInt(cursor.getColumnIndex(IncomeExpenseContract.AccountEntry.COLUMN_DISPLAYLASTYEARDATA));
 
         newInstance.mId = id;
         newInstance.mName = name;
@@ -59,6 +59,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mCategories = IdToItemConvertor.ConvertIdsToCategories(contentResolver, IncomeExpenseContract.CategoryEntry.CONTENT_URI, categories, ApplicationConstant.storageSeparator);
         newInstance.mBudget = null == budget ? 0d : budget;
         newInstance.mPosition = null == position ? 9999 : position;
+        newInstance.mDisplayLastYearData = displayLastYearData == 1 ? true : false;
 
         return newInstance;
     }
@@ -74,6 +75,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         newInstance.mCategories = new ArrayList<>();
         newInstance.mBudget = 0d;
         newInstance.mPosition = 9999;
+        newInstance.mDisplayLastYearData = false;
 
         return newInstance;
 
@@ -140,7 +142,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         }
     }
 
-    public String getBudgetAsString(){
+    public String getBudgetAsString() {
         return Tools.formatAmount(getBudget());
     }
 
@@ -156,6 +158,21 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         if (!mIsClose.equals(isClose)) {
             mDirty = true;
             mIsClose = isClose;
+        }
+    }
+
+    public Boolean getDisplayLastYearData() {
+        return mDisplayLastYearData;
+    }
+
+    public void setDisplayLastYearData(Boolean displayLastYearData) {
+
+        if (null == displayLastYearData)
+            displayLastYearData = false;
+
+        if (!mDisplayLastYearData.equals(displayLastYearData)) {
+            mDirty = true;
+            mDisplayLastYearData = displayLastYearData;
         }
     }
 
@@ -185,6 +202,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         if (!mCategories.equals(account.mCategories)) return false;
         if (!mBudget.equals(account.mBudget)) return false;
         if (!mIsClose.equals(account.mIsClose)) return false;
+        if (!mDisplayLastYearData.equals(account.mDisplayLastYearData)) return false;
         return mPosition.equals(account.mPosition);
 
     }
@@ -196,6 +214,7 @@ public class Account extends ObjectBase implements Serializable, Comparable<Acco
         result = 31 * result + mCategories.hashCode();
         result = 31 * result + mBudget.hashCode();
         result = 31 * result + mIsClose.hashCode();
+        result = 31 * result + mDisplayLastYearData.hashCode();
         result = 31 * result + mPosition.hashCode();
         return result;
     }

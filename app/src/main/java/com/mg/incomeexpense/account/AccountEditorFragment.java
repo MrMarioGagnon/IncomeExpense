@@ -48,6 +48,7 @@ public class AccountEditorFragment extends FragmentBase {
     private AccountValidator mObjectValidator;
     private ArrayList<String> mNames;
     private Switch mSwitchClose;
+    private Switch mSwitchDisplayLastYearData;
     private View.OnClickListener mOnSwitchClickListener;
     private ImageView mImageViewContributors;
     private View.OnClickListener mOnContributorImageViewClickListener;
@@ -83,7 +84,15 @@ public class AccountEditorFragment extends FragmentBase {
 
                 Switch s = (Switch) v;
 
-                s.setText(s.isChecked() ? getString(R.string.account_close) : getString(R.string.account_active));
+                switch (s.getId()) {
+                    case R.id.switch_close:
+                        s.setText(s.isChecked() ? getString(R.string.account_close) : getString(R.string.account_active));
+                        break;
+                    case R.id.switch_display_last_year_data:
+                        s.setText(s.isChecked() ? getString(R.string.account_display_last_year_data) : getString(R.string.account_not_display_last_year_data));
+                        break;
+                }
+
 
             }
         };
@@ -208,6 +217,7 @@ public class AccountEditorFragment extends FragmentBase {
         mEditTextBudget = (EditText) rootView.findViewById(R.id.edit_text_budget);
 
         mSwitchClose = (Switch) rootView.findViewById(R.id.switch_close);
+        mSwitchDisplayLastYearData = (Switch) rootView.findViewById(R.id.switch_display_last_year_data);
 
         mImageViewContributors = (ImageView) rootView.findViewById(R.id.image_view_contributors);
         mImageViewContributors.setOnClickListener(mOnContributorImageViewClickListener);
@@ -227,6 +237,9 @@ public class AccountEditorFragment extends FragmentBase {
         }
         mSwitchClose.setChecked(mAccount.getIsClose());
         mSwitchClose.setText(mAccount.getIsClose() ? getString(R.string.account_close) : getString(R.string.account_active));
+        mSwitchDisplayLastYearData.setChecked(mAccount.getDisplayLastYearData());
+        mSwitchDisplayLastYearData.setText(mAccount.getDisplayLastYearData() ? getString(R.string.account_display_last_year_data) : getString(R.string.account_not_display_last_year_data));
+
         mTextViewContributors.setText(mAccount.getContributorsForDisplay());
         mEditTextPosition.setText(mAccount.getPosition().toString());
 
@@ -242,6 +255,7 @@ public class AccountEditorFragment extends FragmentBase {
         super.onResume();
 
         mSwitchClose.setOnClickListener(mOnSwitchClickListener);
+        mSwitchDisplayLastYearData.setOnClickListener(mOnSwitchClickListener);
 
     }
 
@@ -299,6 +313,7 @@ public class AccountEditorFragment extends FragmentBase {
                     mAccount.setBudget(Double.parseDouble(budget));
 
                 mAccount.setIsClose(mSwitchClose.isChecked());
+                mAccount.setDisplayLastYearData(mSwitchDisplayLastYearData.isChecked());
 
                 mAccount.setContributors(mSelectedContributors);
 

@@ -18,7 +18,6 @@ import com.mg.incomeexpense.transaction.TransactionListActivity;
 
 import org.threeten.bp.LocalDate;
 
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -30,6 +29,7 @@ public class DashboardFragment extends Fragment {
     private DashboardSectionAdapter mThisWeekAdapter;
     private DashboardSectionAdapter mThisMonthAdapter;
     private DashboardSectionAdapter mThisYearAdapter;
+    private DashboardSectionAdapter mLastYearAdapter;
 
     private Account mAccount;
 
@@ -37,6 +37,7 @@ public class DashboardFragment extends Fragment {
     private ListView mListViewThisWeek;
     private ListView mListViewThisMonth;
     private ListView mListViewThisYear;
+    private ListView mListViewLastYear;
 
     public DashboardFragment() {
 
@@ -70,7 +71,7 @@ public class DashboardFragment extends Fragment {
         linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if(mAccount.getId() != 0)
+                if (mAccount.getId() != 0)
                     ShowTransactionList();
                 return false;
             }
@@ -80,6 +81,11 @@ public class DashboardFragment extends Fragment {
         mListViewThisWeek = (ListView) rootView.findViewById(R.id.list_view_this_week);
         mListViewThisMonth = (ListView) rootView.findViewById(R.id.list_view_this_month);
         mListViewThisYear = (ListView) rootView.findViewById(R.id.list_view_this_year);
+        mListViewLastYear = (ListView) rootView.findViewById(R.id.list_view_last_year);
+
+        if (!mAccount.getDisplayLastYearData()) {
+            mListViewLastYear.setVisibility(View.GONE);
+        }
 
         refresh();
 
@@ -118,6 +124,9 @@ public class DashboardFragment extends Fragment {
 
             mThisYearAdapter = new DashboardSectionAdapter(getActivity(), data.thisYearData);
             mListViewThisYear.setAdapter(mThisYearAdapter);
+
+            mLastYearAdapter = new DashboardSectionAdapter(getActivity(), data.lastYearData);
+            mListViewLastYear.setAdapter(mLastYearAdapter);
 
         }
 

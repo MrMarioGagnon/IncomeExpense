@@ -64,6 +64,12 @@
         android:layout_height="wrap_content"
         android:text="New Switch" />
 
+    <Switch
+        android:id="@+id/switch_display_last_year_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Switch" />
+
     <TextView
         style="@style/editor_label_style"
         android:layout_width="match_parent"
