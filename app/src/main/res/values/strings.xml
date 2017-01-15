@@ -123,6 +123,7 @@
     <string name="button_label_save">Save</string>
     <string name="button_label_back">Cancel</string>
     <string name="button_add_category">Add Category</string>
+    <string name="button_label_add_new">Add New</string>
 
     <string name="validation_currency_mandatory">no currency selected</string>
     <string name="validation_name_already_exists">Name already exists</string>

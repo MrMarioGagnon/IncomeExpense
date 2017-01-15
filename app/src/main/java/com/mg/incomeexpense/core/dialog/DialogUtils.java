@@ -54,24 +54,25 @@ public class DialogUtils {
 
     }
 
-	public static AlertDialog singleChoicePickerDialog(final Context context,
-			final String title, final CharSequence[] adapter,
-			final SingleChoiceEventHandler positiveCommand,
-			final int itemSelectedId) {
+    public static AlertDialog singleChoicePickerDialog(final Context context,
+                                                       final String title, final CharSequence[] adapter,
+                                                       final SingleChoiceEventHandler positiveCommand,
+                                                       final int itemSelectedId) {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context)
-				.setCancelable(true)
-				.setSingleChoiceItems(adapter, itemSelectedId,
-						new SingleChoiceEventListener(positiveCommand))
-				.setTitle(title).setInverseBackgroundForced(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setCancelable(true)
+                .setSingleChoiceItems(adapter, itemSelectedId,
+                        new SingleChoiceEventListener(positiveCommand))
+                .setTitle(title).setInverseBackgroundForced(true);
 
-		return builder.create();
-	}
+        return builder.create();
+    }
 
     public static AlertDialog childSetterDialog(final Context context,
                                                 final CharSequence[] adapter,
                                                 final MultipleChoiceEventHandler positiveHandler,
-                                                final String dialogTitle) {
+                                                final String dialogTitle,
+                                                final DialogInterface.OnClickListener neutralHandler) {
 
         /* Set the checked item outside, like that
                 dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -97,6 +98,10 @@ public class DialogUtils {
                         R.string.button_label_cancel,
                         new SingleChoiceEventListener(
                                 SingleChoiceEventHandler.NO_OP));
+
+        if(neutralHandler != null){
+            builder.setNeutralButton(R.string.button_label_add_new, neutralHandler);
+        }
 
         AlertDialog ad = builder.create();
 

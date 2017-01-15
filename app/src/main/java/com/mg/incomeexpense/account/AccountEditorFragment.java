@@ -2,6 +2,7 @@ package com.mg.incomeexpense.account;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -19,8 +20,10 @@ import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.category.Category;
+import com.mg.incomeexpense.category.CategoryEditorActivity;
 import com.mg.incomeexpense.category.CategorySpinnerAdapter;
 import com.mg.incomeexpense.contributor.Contributor;
+import com.mg.incomeexpense.contributor.ContributorEditorActivity;
 import com.mg.incomeexpense.core.AppCompatActivityBase;
 import com.mg.incomeexpense.core.FragmentBase;
 import com.mg.incomeexpense.core.ItemStateChangeEvent;
@@ -42,6 +45,9 @@ import java.util.Objects;
  */
 public class AccountEditorFragment extends FragmentBase {
 
+    private static final int ADD_CONTRIBUTOR_ACTIVITY = 1;
+    private static final int ADD_CATEGORY_ACTIVITY = 2;
+
     private Account mAccount = null;
     private EditText mEditTextName;
     private EditText mEditTextBudget;
@@ -53,6 +59,7 @@ public class AccountEditorFragment extends FragmentBase {
     private ImageView mImageViewContributors;
     private View.OnClickListener mOnContributorImageViewClickListener;
     private MultipleChoiceEventHandler mContributorMultipleChoiceEventHandler;
+    private DialogInterface.OnClickListener mNewContributorEventHandler;
     private TextView mTextViewContributors;
     private List<Contributor> mAvailableContributors;
     private List<Contributor> mSelectedContributors;
@@ -64,6 +71,7 @@ public class AccountEditorFragment extends FragmentBase {
     private List<Category> mSelectedCategories;
     private View.OnClickListener mOnCategoryImageViewClickListener;
     private MultipleChoiceEventHandler mCategoryMultipleChoiceEventHandler;
+    private DialogInterface.OnClickListener mNewCategoryEventHandler;
 
     private CategorySpinnerAdapter mCategoryAdapter;
 
@@ -93,7 +101,6 @@ public class AccountEditorFragment extends FragmentBase {
                         break;
                 }
 
-
             }
         };
 
@@ -108,6 +115,39 @@ public class AccountEditorFragment extends FragmentBase {
             @Override
             public void onClick(View v) {
                 showCategorySetterDialog();
+            }
+        };
+
+        mNewContributorEventHandler = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Contributor contributor = Contributor.createNew();
+
+                Intent intent = new Intent(getActivity(), ContributorEditorActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("item", contributor);
+                intent.putExtras(bundle);
+
+                startActivityForResult(intent, ADD_CONTRIBUTOR_ACTIVITY);
+
+            }
+        };
+
+        mNewCategoryEventHandler = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                Category category = Category.createNew();
+
+                Intent intent = new Intent(getActivity(), CategoryEditorActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("item", category);
+                intent.putExtras(bundle);
+
+                startActivityForResult(intent, ADD_CATEGORY_ACTIVITY);
+
             }
         };
 
@@ -352,7 +392,8 @@ public class AccountEditorFragment extends FragmentBase {
                     this.getContext(),
                     contributorArray,
                     mContributorMultipleChoiceEventHandler,
-                    getString(R.string.dialog_title_contributor_setter));
+                    getString(R.string.dialog_title_contributor_setter),
+                    mNewContributorEventHandler);
 
             mCheckedContributor = buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors);
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -390,7 +431,7 @@ public class AccountEditorFragment extends FragmentBase {
                     this.getContext(),
                     categoryArray,
                     mCategoryMultipleChoiceEventHandler,
-                    getString(R.string.dialog_title_category_setter));
+                    getString(R.string.dialog_title_category_setter), mNewCategoryEventHandler);
 
             mCheckedCategory = buildCategoriesCheckedArray(mAvailableCategories, mSelectedCategories);
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -448,4 +489,14 @@ public class AccountEditorFragment extends FragmentBase {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ADD_CONTRIBUTOR_ACTIVITY:
+                mAvailableContributors = IncomeExpenseRequestWrapper.getAvailableContributors(getActivity().getContentResolver());
+                break;
+            case ADD_CATEGORY_ACTIVITY:
+                mAvailableCategories = IncomeExpenseRequestWrapper.getAvailableCategories(getActivity().getContentResolver());
+        }
+    }
 }
