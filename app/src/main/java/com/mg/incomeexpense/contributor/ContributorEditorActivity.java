@@ -1,5 +1,6 @@
 package com.mg.incomeexpense.contributor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -57,7 +58,9 @@ public class ContributorEditorActivity extends AppCompatActivityBase {
                     IncomeExpenseContract.ContributorEntry.CONTENT_URI, ItemRepositorySynchronizerMessageBuilder.build(this, ContributorRepositorySynchronizer.class.getSimpleName()));
 
             synchronizer.Save((Contributor) event.getItem());
-            setResult(RESULT_OK);
+            Intent intent = new Intent();
+            intent.putExtra("item", (Contributor)event.getItem());
+            setResult(RESULT_OK,intent);
         }
 
         finish();
