@@ -1,5 +1,6 @@
 package com.mg.incomeexpense.account;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -496,7 +497,8 @@ public class AccountEditorFragment extends FragmentBase {
                 mAvailableContributors = IncomeExpenseRequestWrapper.getAvailableContributors(getActivity().getContentResolver());
                 break;
             case ADD_CATEGORY_ACTIVITY:
-                mAvailableCategories = IncomeExpenseRequestWrapper.getAvailableCategories(getActivity().getContentResolver());
+                if(resultCode== Activity.RESULT_OK)
+                    mAvailableCategories = IncomeExpenseRequestWrapper.getAvailableCategories(getActivity().getContentResolver());
         }
     }
 }

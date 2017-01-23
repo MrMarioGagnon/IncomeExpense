@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class DatabaseMigration {
     public final static void moveTo2(SQLiteDatabase db) {
 
-        db.execSQL(String.format("alter table %1$s add %2$s INTERGER NOT NULL DEFAULT 9999", IncomeExpenseContract.AccountEntry.TABLE_NAME, IncomeExpenseContract.AccountEntry.COLUMN_POSITION));
+        db.execSQL(String.format("alter table %1$s add %2$s INTEGER NOT NULL DEFAULT 9999", IncomeExpenseContract.AccountEntry.TABLE_NAME, IncomeExpenseContract.AccountEntry.COLUMN_POSITION));
 
     }
 

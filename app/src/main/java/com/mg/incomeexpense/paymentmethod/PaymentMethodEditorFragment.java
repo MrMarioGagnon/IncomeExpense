@@ -29,7 +29,6 @@ import com.mg.incomeexpense.core.dialog.SingleChoiceEventHandler;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.Transaction;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -133,8 +132,7 @@ public class PaymentMethodEditorFragment extends FragmentBase {
         addNewContributor.setName(getString(R.string.title_add_new));
 
         mOwners.add(0,addNewContributor);
-        mOwnerSpinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, mOwners);
-        //mOwnerSpinnerAdapter = new ContributorSplinnerAdapter(getActivity(),R.layout.spinner_item, mOwners);
+        mOwnerSpinnerAdapter = new ContributorSplinnerAdapter(getActivity(),R.layout.spinner_item, mOwners);
         mOwnerSpinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         mSpinnerCurrencyAdapter = ArrayAdapter.createFromResource(
@@ -151,8 +149,6 @@ public class PaymentMethodEditorFragment extends FragmentBase {
         if (actionBar != null) {
             actionBar.setTitle(getString(mPaymentMethod.isNew() ? R.string.title_payment_method_editor_add : R.string.title_payment_method_editor_update));
         }
-
-
 
         View rootView = inflater.inflate(R.layout.payment_method_editor_fragment, container, false);
         mEditTextName = (EditText) rootView.findViewById(R.id.edit_text_payment_method_name);
@@ -279,7 +275,6 @@ public class PaymentMethodEditorFragment extends FragmentBase {
                         addNewContributor.setId(-1l);
                         addNewContributor.setName(getString(R.string.title_add_new));
                         mOwners.add(0,addNewContributor);
-
 
                         Tools.setSpinner(contributor, mSpinnerOwner);
                     }

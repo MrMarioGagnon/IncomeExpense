@@ -1,6 +1,8 @@
 package com.mg.incomeexpense.contributor;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,15 +24,18 @@ public class ContributorSplinnerAdapter extends ArrayAdapter<Contributor> {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        final View rootView = super.getDropDownView(position, convertView, parent);
+
+        View rootView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_dropdown_item, parent, false);
+        TextView textView = (TextView) rootView.findViewById(R.id.text_view_text);
 
         final Contributor contributor = this.getItem(position);
-        if (contributor.getId() < 0) {
-            TextView textView = (TextView) rootView.findViewById(R.id.text_view_text);
-            textView.setTextColor(getContext().getColor(R.color.colorAccent));
+        textView.setText(contributor.getName());
+        if (contributor.getId() < 0l) {
+            textView.setTypeface(null, Typeface.BOLD);
         }
 
         return rootView;
 
     }
+
 }

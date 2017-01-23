@@ -169,13 +169,24 @@ public class Tools {
     }
 
     public static <T> void setSpinner(final T o, final Spinner s) {
+        int position = 0;
+
         SpinnerAdapter adapter = s.getAdapter();
 
         if (o == null && adapter.getCount() == 0)
             return;
 
         if (o == null) {
-            s.setSelection(0);
+
+            // Pour eviter de se positionner sur l'item Add New
+            Object object = adapter.getItem(0);
+            if(object instanceof ObjectBase){
+                if(((ObjectBase) object).getId() == -1 && adapter.getCount() > 1){
+                    position = 1;
+                }
+            }
+
+            s.setSelection(position);
             return;
         }
 

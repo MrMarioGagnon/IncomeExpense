@@ -38,6 +38,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.AccountEntry.COLUMN_CATEGORIES + " TEXT NOT NULL," +
                 IncomeExpenseContract.AccountEntry.COLUMN_BUDGET + " NUMERIC," +
                 IncomeExpenseContract.AccountEntry.COLUMN_CLOSE + " INTEGER NOT NULL DEFAULT 0," +
+                IncomeExpenseContract.AccountEntry.COLUMN_POSITION + " INTEGER NOT NULL DEFAULT 9999," +
                 IncomeExpenseContract.AccountEntry.COLUMN_DISPLAYLASTYEARDATA + " INTEGER NOT NULL DEFAULT 0" +
                 " );";
 
@@ -68,6 +69,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
                 IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID + " INTEGER NOT NULL," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_CONTRIBUTORS + " TEXT NOT NULL," +
                 IncomeExpenseContract.TransactionEntry.COLUMN_NOTE + " TEXT," +
+                IncomeExpenseContract.TransactionEntry.COLUMN_PHOTO_PATH + " TEXT NULL," +
                 "FOREIGN KEY(" + IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID + ") REFERENCES " + IncomeExpenseContract.AccountEntry.TABLE_NAME + "(" + IncomeExpenseContract.AccountEntry._ID + ")," +
                 "FOREIGN KEY(" + IncomeExpenseContract.TransactionEntry.COLUMN_CATEGORY_ID + ") REFERENCES " + IncomeExpenseContract.CategoryEntry.TABLE_NAME + "(" + IncomeExpenseContract.CategoryEntry._ID + ")," +
                 "FOREIGN KEY(" + IncomeExpenseContract.TransactionEntry.COLUMN_PAYMENTMETHOD_ID + ") REFERENCES " + IncomeExpenseContract.PaymentMethodEntry.TABLE_NAME + "(" + IncomeExpenseContract.PaymentMethodEntry._ID + ")" +
@@ -78,6 +80,7 @@ public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_CATEGORY_TABLE);
         db.execSQL(SQL_CREATE_PAYMENT_METHOD_TABLE);
         db.execSQL(SQL_CREATE_TRANSACTION_TABLE);
+
     }
 
     @Override
