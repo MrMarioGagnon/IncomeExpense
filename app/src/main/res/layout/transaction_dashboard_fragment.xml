@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear_layout_dashboard"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/list_view_today"
-        style="@style/dashboard_section_style"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linear_layout_dashboard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/list_view_this_week"
-        style="@style/dashboard_section_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ListView
+            android:id="@+id/list_view_today"
+            style="@style/dashboard_section_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ListView
-        android:id="@+id/list_view_this_month"
-        style="@style/dashboard_section_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ListView
+            android:id="@+id/list_view_this_week"
+            style="@style/dashboard_section_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ListView
-        android:id="@+id/list_view_this_year"
-        style="@style/dashboard_section_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ListView
+            android:id="@+id/list_view_this_month"
+            style="@style/dashboard_section_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ListView
-        android:id="@+id/list_view_last_year"
-        style="@style/dashboard_section_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <ListView
+            android:id="@+id/list_view_this_year"
+            style="@style/dashboard_section_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-</LinearLayout>
+        <ListView
+            android:id="@+id/list_view_last_year"
+            style="@style/dashboard_section_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
+    </LinearLayout>
+
+</ScrollView>

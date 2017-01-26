@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.TransactionListActivity;
 
@@ -78,6 +79,7 @@ public class DashboardFragment extends Fragment {
         });
 
         mListViewToday = (ListView) rootView.findViewById(R.id.list_view_today);
+
         mListViewThisWeek = (ListView) rootView.findViewById(R.id.list_view_this_week);
         mListViewThisMonth = (ListView) rootView.findViewById(R.id.list_view_this_month);
         mListViewThisYear = (ListView) rootView.findViewById(R.id.list_view_this_year);
@@ -115,18 +117,23 @@ public class DashboardFragment extends Fragment {
 
             mTodayAdapter = new DashboardSectionAdapter(getActivity(), data.todayData);
             mListViewToday.setAdapter(mTodayAdapter);
+            Tools.setListViewHeightBasedOnChildren(mListViewToday);
 
             mThisWeekAdapter = new DashboardSectionAdapter(getActivity(), data.thisWeekData);
             mListViewThisWeek.setAdapter(mThisWeekAdapter);
+            Tools.setListViewHeightBasedOnChildren(mListViewThisWeek);
 
             mThisMonthAdapter = new DashboardSectionAdapter(getActivity(), data.thisMonthData);
             mListViewThisMonth.setAdapter(mThisMonthAdapter);
+            Tools.setListViewHeightBasedOnChildren(mListViewThisMonth);
 
             mThisYearAdapter = new DashboardSectionAdapter(getActivity(), data.thisYearData);
             mListViewThisYear.setAdapter(mThisYearAdapter);
+            Tools.setListViewHeightBasedOnChildren(mListViewThisYear);
 
             mLastYearAdapter = new DashboardSectionAdapter(getActivity(), data.lastYearData);
             mListViewLastYear.setAdapter(mLastYearAdapter);
+            Tools.setListViewHeightBasedOnChildren(mListViewLastYear);
 
         }
 
