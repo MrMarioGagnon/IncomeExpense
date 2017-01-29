@@ -22,7 +22,7 @@ public class DashboardAmountAccumulator {
     private final List<Contributor> mAccountContributors;
     private final Long FAKE_GRAND_TOTAL_ID = 999999L;
 
-    public DashboardAmountAccumulator(List<Contributor> accountContributors, String date) {
+    public DashboardAmountAccumulator(List<Contributor> accountContributors, String date, DashboardPeriodAmount.Type type) {
 
         mPeriodTotals = new Hashtable<>();
         mAccountContributors = accountContributors;
@@ -32,18 +32,18 @@ public class DashboardAmountAccumulator {
         Contributor titleContributor = Contributor.createNew();
         titleContributor.setId(0L);
         titleContributor.setName(date);
-        mPeriodTotals.put(0L, new DashboardPeriodAmount(++i, titleContributor));
+        mPeriodTotals.put(0L, new DashboardPeriodAmount(++i, titleContributor, type));
 
         // Contributeurs du compte
         for (Contributor contributor : mAccountContributors) {
-            mPeriodTotals.put(contributor.getId(), new DashboardPeriodAmount(++i, contributor));
+            mPeriodTotals.put(contributor.getId(), new DashboardPeriodAmount(++i, contributor, type));
         }
 
         // Fake contributeur pour le grand total de la date
         Contributor totalContributor = Contributor.createNew();
         totalContributor.setId(FAKE_GRAND_TOTAL_ID);
         totalContributor.setName("Total");
-        mPeriodTotals.put(totalContributor.getId(), new DashboardPeriodAmount(++i, totalContributor));
+        mPeriodTotals.put(totalContributor.getId(), new DashboardPeriodAmount(++i, totalContributor, type));
 
     }
 

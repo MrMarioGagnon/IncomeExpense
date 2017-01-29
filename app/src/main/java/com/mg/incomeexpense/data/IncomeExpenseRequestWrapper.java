@@ -14,6 +14,7 @@ import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.DateUtil;
 import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.dashboard.DashboardAmountAccumulator;
+import com.mg.incomeexpense.dashboard.DashboardPeriodAmount;
 import com.mg.incomeexpense.dashboard.DashboardPeriodTotal;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 import com.mg.incomeexpense.transaction.Transaction;
@@ -351,11 +352,11 @@ public class IncomeExpenseRequestWrapper {
         String sThisYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateYear, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateYear, ApplicationConstant.dateFormat1));
         String sLastYear = String.format("%1$s - %2$s", Tools.formatDate(dFirstDateLastYear, ApplicationConstant.dateFormat1), Tools.formatDate(dLastDateLastYear, ApplicationConstant.dateFormat1));
 
-        DashboardAmountAccumulator todayTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_today), sToday));
-        DashboardAmountAccumulator thisWeekTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_week), sThisWeek));
-        DashboardAmountAccumulator thisMonthTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_month), sThisMonth));
-        DashboardAmountAccumulator thisYearTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_year), sThisYear));
-        DashboardAmountAccumulator lastYearTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_last_year), sLastYear));
+        DashboardAmountAccumulator todayTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_today), sToday), DashboardPeriodAmount.Type.Today);
+        DashboardAmountAccumulator thisWeekTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_week), sThisWeek), DashboardPeriodAmount.Type.Week);
+        DashboardAmountAccumulator thisMonthTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_month), sThisMonth), DashboardPeriodAmount.Type.Month);
+        DashboardAmountAccumulator thisYearTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_this_year), sThisYear), DashboardPeriodAmount.Type.Year);
+        DashboardAmountAccumulator lastYearTotal = new DashboardAmountAccumulator(account.getContributors(), String.format("%1$s : %2$s", context.getString(R.string.title_last_year), sLastYear), DashboardPeriodAmount.Type.LastYear);
 
         Cursor cursor = null;
         try {

@@ -8,17 +8,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.TransactionListActivity;
 
 import org.threeten.bp.LocalDate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,19 +28,9 @@ import java.util.Objects;
  */
 public class DashboardFragment extends Fragment {
 
-    private DashboardSectionAdapter mTodayAdapter;
-    private DashboardSectionAdapter mThisWeekAdapter;
-    private DashboardSectionAdapter mThisMonthAdapter;
-    private DashboardSectionAdapter mThisYearAdapter;
-    private DashboardSectionAdapter mLastYearAdapter;
-
+    private DashboardSectionAdapter mDataAdapter;
     private Account mAccount;
-
-    private ListView mListViewToday;
-    private ListView mListViewThisWeek;
-    private ListView mListViewThisMonth;
-    private ListView mListViewThisYear;
-    private ListView mListViewLastYear;
+    private ListView mListViewData;
 
     public DashboardFragment() {
 
@@ -68,26 +60,15 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.transaction_dashboard_fragment, container, false);
 
-        LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_dashboard);
-        linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+        mListViewData = (ListView) rootView.findViewById(R.id.list_view_data);
+        mListViewData.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mAccount.getId() != 0)
                     ShowTransactionList();
                 return false;
             }
         });
-
-        mListViewToday = (ListView) rootView.findViewById(R.id.list_view_today);
-
-        mListViewThisWeek = (ListView) rootView.findViewById(R.id.list_view_this_week);
-        mListViewThisMonth = (ListView) rootView.findViewById(R.id.list_view_this_month);
-        mListViewThisYear = (ListView) rootView.findViewById(R.id.list_view_this_year);
-        mListViewLastYear = (ListView) rootView.findViewById(R.id.list_view_last_year);
-
-        if (!mAccount.getDisplayLastYearData()) {
-            mListViewLastYear.setVisibility(View.GONE);
-        }
 
         refresh();
 
@@ -115,25 +96,16 @@ public class DashboardFragment extends Fragment {
         @Override
         protected void onPostExecute(DashboardPeriodTotal data) {
 
-            mTodayAdapter = new DashboardSectionAdapter(getActivity(), data.todayData);
-            mListViewToday.setAdapter(mTodayAdapter);
-            Tools.setListViewHeightBasedOnChildren(mListViewToday);
+            List<DashboardPeriodAmount> periodsAmount = new ArrayList<>();
+            periodsAmount.addAll(data.todayData);
+            periodsAmount.addAll(data.thisWeekData);
+            periodsAmount.addAll(data.thisMonthData);
+            periodsAmount.addAll(data.thisYearData);
+            if (mAccount.getDisplayLastYearData())
+                periodsAmount.addAll(data.lastYearData);
 
-            mThisWeekAdapter = new DashboardSectionAdapter(getActivity(), data.thisWeekData);
-            mListViewThisWeek.setAdapter(mThisWeekAdapter);
-            Tools.setListViewHeightBasedOnChildren(mListViewThisWeek);
-
-            mThisMonthAdapter = new DashboardSectionAdapter(getActivity(), data.thisMonthData);
-            mListViewThisMonth.setAdapter(mThisMonthAdapter);
-            Tools.setListViewHeightBasedOnChildren(mListViewThisMonth);
-
-            mThisYearAdapter = new DashboardSectionAdapter(getActivity(), data.thisYearData);
-            mListViewThisYear.setAdapter(mThisYearAdapter);
-            Tools.setListViewHeightBasedOnChildren(mListViewThisYear);
-
-            mLastYearAdapter = new DashboardSectionAdapter(getActivity(), data.lastYearData);
-            mListViewLastYear.setAdapter(mLastYearAdapter);
-            Tools.setListViewHeightBasedOnChildren(mListViewLastYear);
+            mDataAdapter = new DashboardSectionAdapter(getActivity(), periodsAmount);
+            mListViewData.setAdapter(mDataAdapter);
 
         }
 

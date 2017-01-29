@@ -16,14 +16,15 @@ public class DashboardPeriodAmount {
     private Contributor mContributor = null;
     private Double mExpense = 0.0;
     private Double mIncome = 0.0;
-
-    public DashboardPeriodAmount(@NonNull Integer position, @NonNull Contributor contributor) {
+    private Type mType = null;
+    public DashboardPeriodAmount(@NonNull Integer position, @NonNull Contributor contributor, @NonNull Type type) {
 
         Objects.requireNonNull(position, "Parameter position of type Integer is mandatory");
         Objects.requireNonNull(contributor, "Parameter contributor of type Contributor is mandatory");
 
         mPosition = position;
         mContributor = contributor;
+        mType = type;
     }
 
     public Double addIncome(Double amount) {
@@ -48,5 +49,13 @@ public class DashboardPeriodAmount {
 
     public String getIncomeAsString() {
         return Tools.formatAmount(mIncome);
+    }
+
+    public Type getType() {
+        return mType;
+    }
+
+    public enum Type {
+        Today, Week, Month, Year, LastYear
     }
 }

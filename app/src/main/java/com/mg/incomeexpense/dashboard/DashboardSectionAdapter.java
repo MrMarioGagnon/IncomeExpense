@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mg.incomeexpense.R;
@@ -47,6 +48,19 @@ public class DashboardSectionAdapter extends ArrayAdapter<DashboardPeriodAmount>
             viewHolder.textViewIncome.setVisibility(item.getContributor().getId() == 0L ? View.GONE : View.VISIBLE);
             viewHolder.textViewName.setTypeface(item.getContributor().getId() == 0L ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
 
+            if(item.getContributor().getId() == 999999L){
+                // Grand Total
+//                if(parent!=null){
+//                    ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)parent.getLayoutParams();
+//                    mlp.setMargins(0,0,0,100);
+//
+//                    parent.setLayoutParams(mlp);
+//
+//                }
+//                LinearLayout.LayoutParams params = ((LinearLayout.LayoutParams)viewHolder.textViewName.getParent()).getLayoutP
+//                params.setMargins(0,0,0,100);
+//                viewHolder.textViewName.setLayoutParams(params);
+            }
         }
 
         return convertView;
