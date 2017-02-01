@@ -62,13 +62,11 @@ public class TransactionListActivity extends AppCompatActivity implements ItemSe
         mAccount = (Account) bundle.getSerializable("account");
         Objects.requireNonNull(mAccount, "An Account object is mandatory");
 
-
         com.mg.floatingactionbutton.FloatingActionButton fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddExpense);
         fab.setOnClickListener(fabOnclickListener);
 
         fab = (com.mg.floatingactionbutton.FloatingActionButton) findViewById(R.id.fabAddIncome);
         fab.setOnClickListener(fabOnclickListener);
-
 
         mFabMenu = (com.mg.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.floating_action_menu_Type);
 

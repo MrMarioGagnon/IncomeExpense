@@ -13,9 +13,13 @@ import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.FragmentListBase;
 import com.mg.incomeexpense.core.ItemSelectedEvent;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
+
+import org.threeten.bp.LocalDate;
 
 import java.util.Objects;
 
@@ -32,6 +36,8 @@ public class TransactionListFragment extends FragmentListBase {
     private ListView mListView;
 
     private Account mSelectedAccount;
+    private String mFromDate;
+    private String mToDate;
 
     public TransactionListFragment() {
         // Required empty public constructor
@@ -46,6 +52,12 @@ public class TransactionListFragment extends FragmentListBase {
 
         mSelectedAccount = (Account) bundle.getSerializable("account");
         Objects.requireNonNull(mSelectedAccount, "An Account object is mandatory");
+
+        LocalDate dFromDate = (LocalDate) bundle.getSerializable("fromDate");
+        LocalDate dToDate = (LocalDate) bundle.getSerializable("toDate");
+
+        mFromDate = Tools.formatDate(dFromDate, ApplicationConstant.dateFormat1);
+        mToDate = Tools.formatDate(dToDate, ApplicationConstant.dateFormat1);
     }
 
     @Override
@@ -130,8 +142,8 @@ public class TransactionListFragment extends FragmentListBase {
         String[] selectionArgs = null;
 
         if (mSelectedAccount != null) {
-            selection = String.format("%1$s=?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID);
-            selectionArgs = new String[]{mSelectedAccount.getId().toString()};
+            selection = String.format("%1$s=? and %2$s BETWEEN ? AND ?", IncomeExpenseContract.TransactionEntry.COLUMN_ACCOUNT_ID, IncomeExpenseContract.TransactionEntry.COLUMN_DATE);
+            selectionArgs = new String[]{mSelectedAccount.getId().toString(), mFromDate, mToDate};
         }
 
         return new CursorLoader(getActivity(),

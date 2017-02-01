@@ -14,6 +14,9 @@ import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
+import com.mg.incomeexpense.core.ApplicationConstant;
+import com.mg.incomeexpense.core.DateUtil;
+import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.TransactionListActivity;
 
@@ -36,9 +39,38 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    private void ShowTransactionList() {
+    private void ShowTransactionList(DashboardPeriodAmount.Type type) {
+
+        LocalDate dFromDate=null;
+        LocalDate dToDate=null;
+        LocalDate dNow = LocalDate.now();
+        switch(type){
+            case Today:
+                dFromDate = dNow;
+                dToDate = dNow;
+                break;
+            case Week:
+                dFromDate = DateUtil.getFirstDateOfWeek(dNow);
+                dToDate = DateUtil.getLastDateOfWeek(dNow);
+                break;
+            case Month:
+                dFromDate = DateUtil.getFirstDateOfMonth(dNow);
+                dToDate = DateUtil.getLastDateOfMonth(dNow);
+                break;
+            case Year:
+                dFromDate = DateUtil.getFirstDateOfYear(LocalDate.now());
+                dToDate = DateUtil.getLastDateOfYear(LocalDate.now());
+                break;
+            case LastYear:
+                dFromDate = DateUtil.getFirstDateOfYear(dNow.minusYears(1));
+                dToDate = DateUtil.getLastDateOfYear(dNow.minusYears(1));
+                break;
+        }
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("account", mAccount);
+        bundle.putSerializable("fromDate",dFromDate);
+        bundle.putSerializable("toDate",dToDate);
         Intent intent = new Intent(getActivity(), TransactionListActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -60,12 +92,24 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.transaction_dashboard_fragment, container, false);
 
+//        LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.linear_layout_dashboard);
+//        linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                if (mAccount.getId() != 0)
+//                    ShowTransactionList();
+//                return false;
+//            }
+//        });
+
         mListViewData = (ListView) rootView.findViewById(R.id.list_view_data);
         mListViewData.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mAccount.getId() != 0)
-                    ShowTransactionList();
+                if (mAccount.getId() != 0) {
+                    DashboardPeriodAmount dpa = mDataAdapter.getItem(position);
+                    ShowTransactionList(dpa.getType());
+                }
                 return false;
             }
         });

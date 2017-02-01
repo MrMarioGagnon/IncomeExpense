@@ -126,7 +126,7 @@
     <string name="button_add_category">Add Category</string>
     <string name="button_label_add_new">Add New</string>
 
-    <string name="validation_currency_mandatory">no currency selected</string>
+    <string name="validation_currency_mandatory">No currency selected</string>
     <string name="validation_name_already_exists">Name already exists</string>
     <string name="validation_name_mandatory">Name is mandatory</string>
     <string name="validation_exchange_rate_mandatory">Exchange rate must be greater than 0</string>

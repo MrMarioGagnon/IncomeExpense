@@ -274,8 +274,6 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
 
     public void setPaymentMethod(@NonNull PaymentMethod paymentMethod) {
 
-        Objects.requireNonNull(paymentMethod, "Parameter paymentMethod of type PaymentMethod is mandatory");
-
         if (mPaymentMethod == null || !mPaymentMethod.equals(paymentMethod)) {
             mDirty = true;
             mPaymentMethod = paymentMethod;
