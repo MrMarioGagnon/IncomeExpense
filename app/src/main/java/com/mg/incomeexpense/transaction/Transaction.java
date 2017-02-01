@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.mg.incomeexpense.Photo.Photo;
-import com.mg.incomeexpense.Photo.PhotoManager;
 import com.mg.incomeexpense.account.Account;
 import com.mg.incomeexpense.category.Category;
 import com.mg.incomeexpense.contributor.Contributor;

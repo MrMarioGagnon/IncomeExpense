@@ -411,7 +411,7 @@ public class TransactionEditorFragment extends FragmentBase implements DatePicke
                     this.getContext(),
                     contributorArray,
                     mContributorMultipleChoiceEventHandler,
-                    getString(R.string.dialog_title_contributor_setter),null);
+                    getString(R.string.dialog_title_contributor_setter), null);
 
             mCheckedContributor = buildContributorsCheckedArray(mAvailableContributors, mSelectedContributors);
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {

@@ -9,10 +9,8 @@ import android.util.Log;
 import com.mg.incomeexpense.Photo.Photo;
 import com.mg.incomeexpense.Photo.PhotoManager;
 import com.mg.incomeexpense.R;
-import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.ObjectBase;
 import com.mg.incomeexpense.core.RepositorySynchronizerBase;
-import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseContract;
 
 import java.util.Map;
@@ -53,7 +51,7 @@ public class TransactionRepositorySynchronizer extends RepositorySynchronizerBas
             selectionArgs = new String[]{id.toString()};
             Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_deleting_item), itemType, id));
             rowsAffected = mContentResolver.delete(mItemUri, selection, selectionArgs);
-            if(itemToBeSave.getPhoto() != null)
+            if (itemToBeSave.getPhoto() != null)
                 PhotoManager.delete(itemToBeSave.getPhoto());
             Log.i(LOG_TAG, String.format(mMessages.get(R.string.log_info_deleted_item), itemType, rowsAffected, id));
         } else {
