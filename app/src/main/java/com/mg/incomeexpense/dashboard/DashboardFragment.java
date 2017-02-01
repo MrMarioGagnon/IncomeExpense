@@ -9,14 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
-import com.mg.incomeexpense.core.ApplicationConstant;
 import com.mg.incomeexpense.core.DateUtil;
-import com.mg.incomeexpense.core.Tools;
 import com.mg.incomeexpense.data.IncomeExpenseRequestWrapper;
 import com.mg.incomeexpense.transaction.TransactionListActivity;
 
@@ -41,10 +38,10 @@ public class DashboardFragment extends Fragment {
 
     private void ShowTransactionList(DashboardPeriodAmount.Type type) {
 
-        LocalDate dFromDate=null;
-        LocalDate dToDate=null;
+        LocalDate dFromDate = null;
+        LocalDate dToDate = null;
         LocalDate dNow = LocalDate.now();
-        switch(type){
+        switch (type) {
             case Today:
                 dFromDate = dNow;
                 dToDate = dNow;
@@ -69,8 +66,8 @@ public class DashboardFragment extends Fragment {
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("account", mAccount);
-        bundle.putSerializable("fromDate",dFromDate);
-        bundle.putSerializable("toDate",dToDate);
+        bundle.putSerializable("fromDate", dFromDate);
+        bundle.putSerializable("toDate", dToDate);
         Intent intent = new Intent(getActivity(), TransactionListActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
