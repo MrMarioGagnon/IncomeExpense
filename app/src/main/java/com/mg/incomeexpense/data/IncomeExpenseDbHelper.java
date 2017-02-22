@@ -3,6 +3,7 @@ package com.mg.incomeexpense.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
 /**
@@ -10,12 +11,17 @@ import android.util.Log;
  */
 public class IncomeExpenseDbHelper extends SQLiteOpenHelper {
 
+    public static final String DATABASE_NAME = "incexp.db";
     private static final String LOG_TAG = IncomeExpenseDbHelper.class.getSimpleName();
-    private static final String DATABASE_NAME = "incexp.db";
     private static final int DATABASE_VERSION = 4;
 
     public IncomeExpenseDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static String getDatabaseFullPath() {
+        return Environment.getDataDirectory().getPath()
+                + "/data/com.mg.incomeexpense/databases/incexp.db";
     }
 
     @Override

@@ -378,6 +378,10 @@ public class IncomeExpenseProvider extends ContentProvider {
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
+
+        if(db.isOpen())
+            db.close();
+
         return rowsDeleted;
     }
 
@@ -411,6 +415,10 @@ public class IncomeExpenseProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
+
+        if(db.isOpen())
+            db.close();
+
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }

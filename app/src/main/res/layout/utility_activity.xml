@@ -7,13 +7,37 @@
     android:fitsSystemWindows="true"
     tools:context="com.mg.incomeexpense.utility.UtilityActivity">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/utility_fragment_container"
-        android:name="com.mg.incomeexpense.utility.UtilityFragment"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/utility_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_backup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Backup" />
+
+            <Button
+                android:id="@+id/button_restore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Restore" />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

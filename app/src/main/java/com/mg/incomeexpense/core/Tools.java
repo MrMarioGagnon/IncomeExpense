@@ -2,11 +2,9 @@ package com.mg.incomeexpense.core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +16,16 @@ import android.widget.SpinnerAdapter;
 import com.mg.incomeexpense.R;
 
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -67,6 +69,10 @@ public class Tools {
     }
 
     public static String formatDate(LocalDate date, String stringFormat) {
+        return date.format(DateTimeFormatter.ofPattern(stringFormat));
+    }
+
+    public static String formatDateTime(LocalDateTime date, String stringFormat) {
         return date.format(DateTimeFormatter.ofPattern(stringFormat));
     }
 
@@ -185,8 +191,8 @@ public class Tools {
 
             // Pour eviter de se positionner sur l'item Add New
             Object object = adapter.getItem(0);
-            if(object instanceof ObjectBase){
-                if(((ObjectBase) object).getId() == -1 && adapter.getCount() > 1){
+            if (object instanceof ObjectBase) {
+                if (((ObjectBase) object).getId() == -1 && adapter.getCount() > 1) {
                     position = 1;
                 }
             }
@@ -208,7 +214,7 @@ public class Tools {
     public static File createFile(final File storageDir, final String suffix) throws IOException {
 
         final String prefix = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File file = File.createTempFile(prefix,suffix,storageDir);
+        File file = File.createTempFile(prefix, suffix, storageDir);
 
         return file;
 
@@ -233,5 +239,64 @@ public class Tools {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    public static byte[] readBytesFromFile(@NonNull final String filePath) {
+
+        Objects.requireNonNull(filePath, "Parameter filePath of type String is mandatory");
+
+        FileInputStream fileInputStream = null;
+        byte[] bytesArray = null;
+
+        try {
+
+            File file = new File(filePath);
+            bytesArray = new byte[(int) file.length()];
+
+            //read file into bytes[]
+            fileInputStream = new FileInputStream(file);
+            fileInputStream.read(bytesArray);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        return bytesArray;
+    }
+
+    public static void writeBytesToFile(@NonNull final InputStream inputStream, @NonNull final String filePath) {
+
+        Objects.requireNonNull(inputStream, "Parameter inputStream of type 'InputStream' is mandatory");
+        Objects.requireNonNull(filePath, "Parameter filePath of type 'String' is mandatory");
+
+        OutputStream outputStream = null;
+
+        try {
+            outputStream = new FileOutputStream(filePath);
+            byte[] buffer = new byte[1024];
+            int read;
+
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
+            }
+
+            outputStream.flush();
+            inputStream.close();
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
