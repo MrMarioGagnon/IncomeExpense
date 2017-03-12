@@ -168,7 +168,8 @@ public class IncomeExpenseProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new IncomeExpenseDbHelper(getContext());
+
+        mOpenHelper = IncomeExpenseDbHelper.getInstance(getContext());
         return true;
     }
 

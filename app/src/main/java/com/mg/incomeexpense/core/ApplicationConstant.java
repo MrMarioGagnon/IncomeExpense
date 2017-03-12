@@ -10,4 +10,5 @@ public final class ApplicationConstant {
     public final static String dateFormat1 = "yyyy-MM-dd";
     public final static String dateFormat2 = "yyyyMMdd";
     public final static String dateTimeFormat = "yyyyMMddHHmmss";
+    public final static String backupDirectoryName = "IncomeExpense";
 }

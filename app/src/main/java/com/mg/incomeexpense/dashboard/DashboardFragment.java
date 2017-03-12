@@ -137,16 +137,19 @@ public class DashboardFragment extends Fragment {
         @Override
         protected void onPostExecute(DashboardPeriodTotal data) {
 
-            List<DashboardPeriodAmount> periodsAmount = new ArrayList<>();
-            periodsAmount.addAll(data.todayData);
-            periodsAmount.addAll(data.thisWeekData);
-            periodsAmount.addAll(data.thisMonthData);
-            periodsAmount.addAll(data.thisYearData);
-            if (mAccount.getDisplayLastYearData())
-                periodsAmount.addAll(data.lastYearData);
+            if (data != null) {
+                List<DashboardPeriodAmount> periodsAmount = new ArrayList<>();
+                periodsAmount.addAll(data.todayData);
+                periodsAmount.addAll(data.thisWeekData);
+                periodsAmount.addAll(data.thisMonthData);
+                periodsAmount.addAll(data.thisYearData);
+                if (mAccount.getDisplayLastYearData())
+                    periodsAmount.addAll(data.lastYearData);
 
-            mDataAdapter = new DashboardSectionAdapter(getActivity(), periodsAmount);
-            mListViewData.setAdapter(mDataAdapter);
+                mDataAdapter = new DashboardSectionAdapter(getActivity(), periodsAmount);
+                mListViewData.setAdapter(mDataAdapter);
+
+            }
 
         }
 

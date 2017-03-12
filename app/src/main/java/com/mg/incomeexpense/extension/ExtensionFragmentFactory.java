@@ -19,6 +19,9 @@ public final class ExtensionFragmentFactory {
             case FUEL:
                 fragment = new ExtensionFragmentFuel();
                 break;
+            case FOOD:
+                fragment = new ExtensionFragmentFood();
+                break;
             default:
                 fragment = new ExtensionFragmentNote();
         }
@@ -27,7 +30,7 @@ public final class ExtensionFragmentFactory {
     }
 
     public enum ExtensionType {
-        NOTE, FUEL;
+        NOTE, FUEL,FOOD;
     }
 
 }

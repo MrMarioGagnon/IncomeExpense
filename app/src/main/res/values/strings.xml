@@ -111,6 +111,7 @@
     <string name="label_extension_type">Extension Type</string>
     <string name="label_position">Position</string>
     <string name="label_account_type">Type:</string>
+    <string name="label_marchand">Marchand</string>
 
     <string name="hint_contributor_name">Contributor name</string>
     <string name="hint_account_name">Account name</string>

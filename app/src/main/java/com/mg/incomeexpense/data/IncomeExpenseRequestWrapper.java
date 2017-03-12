@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mg.incomeexpense.R;
 import com.mg.incomeexpense.account.Account;
@@ -18,6 +19,7 @@ import com.mg.incomeexpense.dashboard.DashboardPeriodAmount;
 import com.mg.incomeexpense.dashboard.DashboardPeriodTotal;
 import com.mg.incomeexpense.paymentmethod.PaymentMethod;
 import com.mg.incomeexpense.transaction.Transaction;
+import com.mg.incomeexpense.utility.UtilityActivity;
 
 import org.threeten.bp.LocalDate;
 
@@ -29,6 +31,8 @@ import java.util.Objects;
  * Created by mario on 2016-07-23.
  */
 public class IncomeExpenseRequestWrapper {
+
+    private static final String LOG_TAG = IncomeExpenseRequestWrapper.class.getSimpleName();
 
     public static ArrayList<Transaction> getAllTransactionForAccount(@NonNull Context context, @NonNull Account account) {
 

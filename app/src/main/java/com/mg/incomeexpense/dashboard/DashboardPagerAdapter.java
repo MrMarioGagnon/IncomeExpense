@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import com.mg.incomeexpense.account.Account;
 
@@ -16,6 +17,8 @@ import java.util.Objects;
  * Created by mario on 2016-08-16.
  */
 public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
+
+    private static final String LOG_TAG = DashboardPagerAdapter.class.getSimpleName();
 
     private List<Account> mAccount;
     private HashMap<Integer, DashboardFragment> mDashboards;
@@ -39,7 +42,6 @@ public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-
         if (mDashboards.containsKey(position)) {
             return mDashboards.get(position);
         }
@@ -48,12 +50,15 @@ public class DashboardPagerAdapter extends FragmentStatePagerAdapter {
         if (null != dashboardFragment)
             return dashboardFragment;
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("item", mAccount.get(position));
+        DashboardFragment fragment = null;
+        synchronized (mDashboards) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("item", mAccount.get(position));
 
-        DashboardFragment fragment = new DashboardFragment();
-        fragment.setArguments(bundle);
-        mDashboards.put(position, fragment);
+            fragment = new DashboardFragment();
+            fragment.setArguments(bundle);
+            mDashboards.put(position, fragment);
+        }
 
         return fragment;
     }
