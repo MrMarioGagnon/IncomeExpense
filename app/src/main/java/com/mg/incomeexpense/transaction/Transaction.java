@@ -68,24 +68,39 @@ public class Transaction extends ObjectBase implements Serializable, Comparable<
         Cursor subItemCursor = context.getContentResolver().query(IncomeExpenseContract.AccountEntry.buildInstanceUri(accountId), null, null, null, null);
         Account account = null;
         if (subItemCursor != null) {
-            if (subItemCursor.moveToFirst()) {
-                account = Account.create(subItemCursor, context.getContentResolver());
+            try {
+                if (subItemCursor.moveToFirst()) {
+                    account = Account.create(subItemCursor, context.getContentResolver());
+                }
+            }finally{
+                if(!subItemCursor.isClosed())
+                    subItemCursor.close();
             }
         }
 
         subItemCursor = context.getContentResolver().query(IncomeExpenseContract.PaymentMethodEntry.buildInstanceUri(paymentMethodId), null, null, null, null);
         PaymentMethod paymentMethod = null;
         if (subItemCursor != null) {
-            if (subItemCursor.moveToFirst()) {
-                paymentMethod = PaymentMethod.create(subItemCursor, context.getContentResolver());
+            try {
+                if (subItemCursor.moveToFirst()) {
+                    paymentMethod = PaymentMethod.create(subItemCursor, context.getContentResolver());
+                }
+            }finally{
+                if(!subItemCursor.isClosed())
+                    subItemCursor.close();
             }
         }
 
         subItemCursor = context.getContentResolver().query(IncomeExpenseContract.CategoryEntry.buildInstanceUri(categoryId), null, null, null, null);
         Category category = null;
         if (subItemCursor != null) {
-            if (subItemCursor.moveToFirst()) {
-                category = Category.create(subItemCursor);
+            try {
+                if (subItemCursor.moveToFirst()) {
+                    category = Category.create(subItemCursor);
+                }
+            }finally{
+                if(!subItemCursor.isClosed())
+                    subItemCursor.close();
             }
         }
 

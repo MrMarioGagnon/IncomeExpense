@@ -3,6 +3,7 @@ package com.mg.incomeexpense;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -53,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+//        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                .detectAll()
+//                .penaltyLog()
+//                .penaltyDialog()
+//                .build());
+//        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll()
+//                .penaltyLog()
+//                .build());
+
         setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // Permet d'afficher la barre au haut de l'ecran

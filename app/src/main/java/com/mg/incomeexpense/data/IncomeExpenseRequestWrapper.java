@@ -60,7 +60,7 @@ public class IncomeExpenseRequestWrapper {
                     transactions.add(transaction);
                 }
             } finally {
-                if (null != cursor) {
+                if (null != cursor && !cursor.isClosed()) {
                     cursor.close();
                 }
             }
@@ -92,7 +92,7 @@ public class IncomeExpenseRequestWrapper {
                     transactions.add(transaction);
                 }
             } finally {
-                if (null != cursor) {
+                if (null != cursor && !cursor.isClosed()) {
                     cursor.close();
                 }
             }
@@ -124,7 +124,7 @@ public class IncomeExpenseRequestWrapper {
                 names.add(name.toUpperCase());
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -154,7 +154,7 @@ public class IncomeExpenseRequestWrapper {
                 names.add(name.toUpperCase());
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -184,7 +184,7 @@ public class IncomeExpenseRequestWrapper {
                 names.add(name.toUpperCase());
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -214,7 +214,7 @@ public class IncomeExpenseRequestWrapper {
                 names.add(name.toUpperCase());
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -235,7 +235,7 @@ public class IncomeExpenseRequestWrapper {
                 contributors.add(Contributor.create(cursor));
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -256,7 +256,7 @@ public class IncomeExpenseRequestWrapper {
                 categories.add(Category.create(cursor));
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -278,7 +278,7 @@ public class IncomeExpenseRequestWrapper {
                 assets.add(Account.create(cursor, contentResolver));
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -307,7 +307,7 @@ public class IncomeExpenseRequestWrapper {
 
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
@@ -399,7 +399,7 @@ public class IncomeExpenseRequestWrapper {
 
             }
         } finally {
-            if (null != cursor) {
+            if (null != cursor && !cursor.isClosed()) {
                 cursor.close();
             }
         }
